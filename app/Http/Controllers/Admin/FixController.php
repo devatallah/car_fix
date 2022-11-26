@@ -22,6 +22,13 @@ class FixController extends Controller
         return view('portals.admin.fixes.index', compact('categories', 'manufacturers'));
 
     }
+    public function create(Request $request)
+    {
+        $categories = Category::all();
+        $manufacturers = Manufacturer::all();
+        return view('portals.admin.fixes.create', compact('categories', 'manufacturers'));
+
+    }
 
     public function update(Fix $fix, Request $request)
     {

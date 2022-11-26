@@ -101,6 +101,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(),
         Route::group(['prefix' => 'fixes'], function () {
 //        Route::group(['prefix' => 'categories', 'middleware' => ['permission:categories']], function () {
             Route::get('/', [FixController::class, 'index']);
+            Route::get('/create', [FixController::class, 'create']);
             Route::post('/', [FixController::class, 'store']);
             Route::put('/{category}', [FixController::class, 'update']);
             Route::delete('/{category}', [FixController::class, 'destroy']);

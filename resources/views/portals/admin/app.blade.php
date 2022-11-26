@@ -309,6 +309,10 @@
                         data-feather="grid"></i><span class="menu-title text-truncate"
                                                       data-i18n="File">@lang('files')</span></a>
             </li>
+            <li class=" nav-item"><a class="d-flex align-items-center" href="{{url('admin/fixes/create')}}"><i
+                        data-feather="grid"></i><span class="menu-title text-truncate"
+                                                      data-i18n="Fixe">@lang('create_fix')</span></a>
+            </li>
             <li class=" nav-item"><a class="d-flex align-items-center" href="{{url('admin/fixes')}}"><i
                         data-feather="grid"></i><span class="menu-title text-truncate"
                                                       data-i18n="Fixe">@lang('fixes')</span></a>
