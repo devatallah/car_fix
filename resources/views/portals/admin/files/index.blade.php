@@ -234,7 +234,7 @@
                         <i class="fa fa-spinner fa-spin" style="display: none;"></i>
                         @lang('save')
                     </button>
-                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">@lang('close')
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">@lang('close')
                     </button>{{--                            <button type="button" form="create_form" class="btn btn-primary">Send message</button>--}}
                 </div>
             </div>
