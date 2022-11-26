@@ -40,18 +40,6 @@
                                 <div class="head-label">
                                     <h4 class="card-title">@lang('fixes')</h4>
                                 </div>
-                                <div class="text-right">
-                                    <div class="form-gruop">
-                                        <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal"
-                                                data-bs-target="#create_modal"><span><i class="fa fa-plus"></i> @lang('add_new_record')</span>
-                                        </button>
-                                        <button disabled="" id="delete_btn"
-                                                class="delete-btn btn btn-outline-danger">
-                                            <span><i class="fa fa-lg fa-trash-alt" aria-hidden="true"></i> @lang('delete')</span>
-                                        </button>
-
-                                    </div>
-                                </div>
                             </div>
                             <div class="card-body">
                                 <form action="{{url(app()->getLocale()."/user/fixes")}}" id="create_form" method="POST"
@@ -136,7 +124,7 @@
                                         </div>
                                         <div class="col-6">
                                             <button type="submit" form="create_form" class="btn btn-primary">
-                                                @lang('save')
+                                                @lang('fix')
                                             </button>
                                         </div>
                                     </div>
