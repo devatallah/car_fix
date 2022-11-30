@@ -1,6 +1,6 @@
-@extends('portals.user.app')
+@extends('portals.admin.app')
 @section('title')
-    @lang('fixes')
+    @lang('ecus')
 @endsection
 @section('styles')
     <style>
@@ -17,13 +17,13 @@
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">@lang('fixes')</h2>
+                        <h2 class="content-header-title float-left mb-0">@lang('ecus')</h2>
                         <div class="breadcrumb-wrapper">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{url('/user')}}">@lang('home')</a>
+                                <li class="breadcrumb-item"><a href="{{url('/admin')}}">@lang('home')</a>
                                 </li>
                                 <li class="breadcrumb-item"><a
-                                        href="{{url('/user/fixes')}}">@lang('fixes')</a>
+                                        href="{{url('/admin/ecus')}}">@lang('ecus')</a>
                                 </li>
                             </ol>
                         </div>
@@ -39,7 +39,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="head-label">
-                                    <h4 class="card-title">@lang('fixes')</h4>
+                                    <h4 class="card-title">@lang('ecus')</h4>
                                 </div>
                                 <div class="text-right">
                                     <div class="form-gruop">
@@ -66,35 +66,26 @@
                                         </div>
                                         <div class="col-3">
                                             <div class="form-group">
-                                                <label for="s_category_uuid">@lang('category')</label>
-                                                <select name="s_category_uuid" id="s_category_uuid"
+                                                <label for="s_solution_uuid">@lang('solution')</label>
+                                                <select name="s_solution_uuid" id="s_solution_uuid"
                                                         class="form-control">
                                                     <option value="">@lang('select')</option>
-                                                    @foreach($categories as $category)
-                                                        <option value="{{$category->uuid}}">{{$category->name}}</option>
+                                                    @foreach($solutions as $solution)
+                                                        <option value="{{$solution->uuid}}">{{$solution->name}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-3">
                                             <div class="form-group">
-                                                <label for="s_manufacturer_uuid">@lang('manufacturer')</label>
-                                                <select name="s_manufacturer_uuid" id="s_manufacturer_uuid"
+                                                <label for="s_brand_uuid">@lang('brand')</label>
+                                                <select name="s_brand_uuid" id="s_brand_uuid"
                                                         class="form-control">
                                                     <option value="">@lang('select')</option>
-                                                    @foreach($manufacturers as $manufacturer)
+                                                    @foreach($brands as $brand)
                                                         <option
-                                                            value="{{$manufacturer->uuid}}">{{$manufacturer->name}}</option>
+                                                            value="{{$brand->uuid}}">{{$brand->name}}</option>
                                                     @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-3">
-                                            <div class="form-group">
-                                                <label for="s_car_model_uuid">@lang('car_model')</label>
-                                                <select name="s_car_model_uuid" id="s_car_model_uuid"
-                                                        class="form-control">
-                                                    <option value="">@lang('select')</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -126,11 +117,10 @@
                                             </div>
                                         </th>
                                         <th>@lang('uuid')</th>
-                                        <th>@lang('broken_file')</th>
-                                        <th>@lang('fixed_file')</th>
-                                        <th>@lang('category')</th>
-                                        <th>@lang('manufacturer')</th>
-                                        <th>@lang('car_model')</th>
+                                        <th>@lang('name')</th>
+                                        <th>@lang('file')</th>
+                                        <th>@lang('solution')</th>
+                                        <th>@lang('brand')</th>
                                         <th style="width: 225px;">@lang('actions')</th>
                                     </tr>
                                     </thead>
@@ -159,25 +149,23 @@
                           novalidate>
                         {{csrf_field()}}
                         <div class="row">
-                            @foreach(locales() as $key => $value)
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label for="name_{{$key}}">@lang('name') @lang($value)</label>
-                                        <input type="text" class="form-control"
-                                               placeholder="@lang('name') @lang($value)"
-                                               name="name_{{$key}}" id="name_{{$key}}">
-                                        <div class="invalid-feedback"></div>
-                                    </div>
-                                </div>
-                            @endforeach
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="category_uuid">@lang('category')</label>
-                                    <select class="category_uuid form-control" id="category_uuid" name="category_uuid"
+                                    <label for="name">@lang('name')</label>
+                                    <input type="text" class="form-control"
+                                           placeholder="@lang('name')"
+                                           name="name" id="name">
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="solution_uuid">@lang('solution')</label>
+                                    <select class="solution_uuid form-control" id="solution_uuid" name="solution_uuid"
                                             required>
                                         <option value="">@lang('select')</option>
-                                        @foreach($categories as $category)
-                                            <option value="{{$category->uuid}}">{{$category->name}}</option>
+                                        @foreach($solutions as $solution)
+                                            <option value="{{$solution->uuid}}">{{$solution->name}}</option>
                                         @endforeach
                                     </select>
                                     <div class="invalid-feedback"></div>
@@ -185,29 +173,20 @@
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="manufacturer_uuid">@lang('manufacturer')</label>
-                                    <select class="manufacturer_uuid form-control" id="manufacturer_uuid"
-                                            name="manufacturer_uuid" required>
+                                    <label for="brand_uuid">@lang('brand')</label>
+                                    <select class="brand_uuid form-control" id="brand_uuid"
+                                            name="brand_uuid" required>
                                         <option value="">@lang('select')</option>
-                                        @foreach($manufacturers as $manufacturer)
-                                            <option value="{{$manufacturer->uuid}}">{{$manufacturer->name}}</option>
+                                        @foreach($brands as $brand)
+                                            <option value="{{$brand->uuid}}">{{$brand->name}}</option>
                                         @endforeach
-                                    </select>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="car_model_uuid">@lang('car_model')</label>
-                                    <select name="car_model_uuid" id="car_model_uuid" class="form-control">
-                                        <option value="">@lang('select')</option>
                                     </select>
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
 
                             <div class="col-12">
-                                <label for="file">@lang('broken_file')</label>
+                                <label for="file">@lang('file')</label>
                                 <div class="form-group">
                                     <div class="fileinput fileinput-exists"
                                          data-provides="fileinput">
@@ -222,7 +201,7 @@
                                                                     class="fileinput-new"> @lang('select_file')</span>
                                                                 <span
                                                                     class="fileinput-exists"> @lang('select_file')</span>
-                                                        <input type="file" name="broken_file"></span>
+                                                        <input type="file" name="file"></span>
                                         </div>
                                         <div class="invalid-feedback"></div>
                                     </div>
@@ -260,25 +239,23 @@
                         {{csrf_field()}}
                         {{method_field('PUT')}}
                         <div class="row">
-                            @foreach(locales() as $key => $value)
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label for="edit_name_{{$key}}">@lang('name') @lang($value)</label>
-                                        <input type="text" class="form-control"
-                                               placeholder="@lang('name') @lang($value)"
-                                               name="name_{{$key}}" id="edit_name_{{$key}}">
-                                        <div class="invalid-feedback"></div>
-                                    </div>
-                                </div>
-                            @endforeach
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="edit_category_uuid">@lang('category')</label>
-                                    <select class="category_uuid form-control" id="edit_category_uuid"
-                                            name="category_uuid" required>
+                                    <label for="edit_name">@lang('name')</label>
+                                    <input type="text" class="form-control"
+                                           placeholder="@lang('name')"
+                                           name="name" id="edit_name">
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="edit_solution_uuid">@lang('solution')</label>
+                                    <select class="solution_uuid form-control" id="edit_solution_uuid"
+                                            name="solution_uuid" required>
                                         <option value="">@lang('select')</option>
-                                        @foreach($categories as $category)
-                                            <option value="{{$category->uuid}}">{{$category->name}}</option>
+                                        @foreach($solutions as $solution)
+                                            <option value="{{$solution->uuid}}">{{$solution->name}}</option>
                                         @endforeach
                                     </select>
                                     <div class="invalid-feedback"></div>
@@ -286,29 +263,19 @@
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="edit_manufacturer_uuid">@lang('manufacturer')</label>
-                                    <select class="manufacturer_uuid form-control" id="edit_manufacturer_uuid"
-                                            name="manufacturer_uuid" required>
+                                    <label for="edit_brand_uuid">@lang('brand')</label>
+                                    <select class="brand_uuid form-control" id="edit_brand_uuid"
+                                            name="brand_uuid" required>
                                         <option value="">@lang('select')</option>
-                                        @foreach($manufacturers as $manufacturer)
-                                            <option value="{{$manufacturer->uuid}}">{{$manufacturer->name}}</option>
+                                        @foreach($brands as $brand)
+                                            <option value="{{$brand->uuid}}">{{$brand->name}}</option>
                                         @endforeach
                                     </select>
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="edit_car_model_uuid">@lang('car_model')</label>
-                                    <select name="car_model_uuid" id="edit_car_model_uuid" class="form-control">
-                                        <option value="">@lang('select')</option>
-                                    </select>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-
                             <div class="col-12">
-                                <label for="edit_file">@lang('broken_file')</label>
+                                <label for="edit_file">@lang('file')</label>
                                 <div class="form-group">
                                     <div class="fileinput fileinput-exists"
                                          data-provides="fileinput">
@@ -323,7 +290,7 @@
                                                                     class="fileinput-new"> @lang('select_file')</span>
                                                                 <span
                                                                     class="fileinput-exists"> @lang('select_file')</span>
-                                                        <input type="file" name="broken_file"></span>
+                                                        <input type="file" name="file"></span>
                                         </div>
                                         <div class="invalid-feedback"></div>
                                     </div>
@@ -349,7 +316,7 @@
 @endsection
 @section('scripts')
     <script>
-        var url = '{{url("/user/fixes")}}/';
+        var url = '{{url("/admin/ecus")}}/';
 
         var oTable = $('#datatable').DataTable({
             dom: '<"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
@@ -394,12 +361,12 @@
             serverSide: true,
             searching: false,
             ajax: {
-                url: '{{ url('/user/fixes/indexTable')}}',
+                url: '{{ url('/admin/ecus/indexTable')}}',
                 data: function (d) {
                     d.name = $('#s_name').val();
-                    d.category_uuid = $('#s_category_uuid').val();
-                    d.manufacturer_uuid = $('#s_manufacturer_uuid').val();
-                    d.car_model_uuid = $('#s_car_model_uuid').val();
+                    d.file = $('#s_file').val();
+                    d.solution_uuid = $('#s_solution_uuid').val();
+                    d.brand_uuid = $('#s_brand_uuid').val();
                 }
             },
             columns: [
@@ -415,71 +382,30 @@
                 },
 
                 {data: 'uuid', name: 'uuid'},
+                {data: 'name', name: 'name'},
                 {
                     "render": function (data, type, full, meta) {
-                        return `<a href="` + full.broken_file + `" target="_blank">@lang('download_file')</a>`;
+                        return `<a href="` + full.file + `" target="_blank">@lang('download_file')</a>`;
                     }
                 },
-                {
-                    "render": function (data, type, full, meta) {
-                        return `<a href="` + full.fixed_file + `" target="_blank">@lang('download_file')</a>`;
-                    }
-                },
-                {data: 'category_name', name: 'category_uuid'},
-                {data: 'manufacturer_name', name: 'manufacturer_uuid'},
-                {data: 'car_model_name', name: 'car_model_uuid'},
+                // {data: 'file', name: 'file'},
+                {data: 'solution_name', name: 'solution_uuid'},
+                {data: 'brand_name', name: 'brand_uuid'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
 
         $(document).ready(function () {
-            var car_models_list = {
-                @foreach($manufacturers as $manufacturer)
-                'manufacturer_{{$manufacturer->uuid}}': [
-                        @foreach($manufacturer->car_models as $car_model)
-                    {
-                        id: '{{$car_model->uuid}}',
-                        text: '{{$car_model->name}}',
-                    },
 
-                    @endforeach
-                ],
-                @endforeach
-            };
-
-            $(document).on("change", "#manufacturer_uuid", function (e) {
-                var value = $(this).val();
-                $("#car_model_uuid").html('<option selected value="">@lang('select')</option>')
-                $("#car_model_uuid").select2({
-                    data: car_models_list['manufacturer_' + value]
-                }).trigger("change");
-            });
-            $(document).on("change", "#s_manufacturer_uuid", function (e) {
-                var value = $(this).val();
-                $("#s_car_model_uuid").html('<option selected value="">@lang('select')</option>')
-                $("#s_car_model_uuid").select2({
-                    data: car_models_list['manufacturer_' + value]
-                }).trigger("change");
-            });
-            $(document).on("change", "#edit_manufacturer_uuid", function (e) {
-                var value = $(this).val();
-                $("#edit_car_model_uuid").html('<option selected value="">@lang('select')</option>')
-                $("#edit_car_model_uuid").select2({
-                    data: car_models_list['manufacturer_' + value]
-                }).trigger("change");
-            });
 
             $(document).on('click', '.edit_btn', function (event) {
                 var button = $(this)
                 var uuid = button.data('uuid')
                 $('#edit_form').attr('action', url + uuid)
-                @foreach(locales() as $key => $value)
-                $('#edit_name_{{$key}}').val(button.data('name_{{$key}}'))
-                @endforeach
+                $('#edit_name').val(button.data('name'))
                 var user_uuid = button.data('user_uuid')
-                $('#edit_category_uuid').val(button.data('category_uuid')).trigger('change')
-                $('#edit_manufacturer_uuid').val(button.data('manufacturer_uuid')).trigger('change')
-                $('#edit_car_model_uuid').val(button.data('car_model_uuid')).trigger('change')
+                $('#edit_solution_uuid').val(button.data('solution_uuid')).trigger('change')
+                $('#edit_brand_uuid').val(button.data('brand_uuid')).trigger('change')
                 $('#edit_src_file').attr('src', button.data('file'))
             });
             $(document).on('click', '#create_btn', function (event) {

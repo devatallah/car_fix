@@ -2,17 +2,15 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Translatable\HasTranslations;
 use Webpatser\Uuid\Uuid;
 
-class Fix extends Model
+class Solution extends Model
 {
-    use HasFactory, SoftDeletes, HasTranslations;
+    use HasFactory, SoftDeletes;
 
     /*
     |--------------------------------------------------------------------------
@@ -22,9 +20,8 @@ class Fix extends Model
 
     public $incrementing = false;
     protected $guarded = [];
-    protected $appends = ['ecu_name', 'solution_name', 'brand_name'];
-    protected $hidden = ['id', 'name', 'created_at', 'updated_at', 'deleted_at', 'solution', 'brand', 'ecu'];
-    protected $translatable = ['name'];
+    protected $appends = [];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
     protected $primaryKey = 'uuid';
 
 
@@ -59,26 +56,20 @@ class Fix extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-
-    public function ownerable()
+    public function brands()
     {
-        return $this->morphTo();
+        return $this->belongsToMany(Brand::class, 'ecus', 'solution_uuid', 'brand_uuid', 'uuid', 'uuid')->distinct();
     }
 
-    public function solution(){
-        return $this->belongsTo(Solution::class)->withTrashed();
-    }
-    public function brand(){
-        return $this->belongsTo(Brand::class)->withTrashed();
-    }
-    public function ecu(){
-        return $this->belongsTo(ECU::class)->withTrashed();
+    public function ecus()
+    {
+        return $this->hasMany(ECU::class);
     }
     /*
-    |--------------------------------------------------------------------------
-    | SCOPES
-    |--------------------------------------------------------------------------
-    */
+        |--------------------------------------------------------------------------
+        | SCOPES
+        |--------------------------------------------------------------------------
+        */
 
     /*
     |--------------------------------------------------------------------------
@@ -93,25 +84,9 @@ class Fix extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function getECUNameAttribute()
+    public function getSolutionNameAttribute($value)
     {
-        return @$this->ecu->name;
-    }
-    public function getFixedFileAttribute()
-    {
-        return @$this->ecu->file;
-    }
-    public function getSolutionNameAttribute()
-    {
-        return @$this->solution->name;
-    }
-    public function getBrandNameAttribute()
-    {
-        return @$this->brand->name;
-    }
-    public function getBrokenFileAttribute($value)
-    {
-        return !is_null($value) ? asset(Storage::url($value)) : '';
+        return @$this->name . " " . ($this->is_free ? 'free' : ('price (' . $this->price . ')'));
     }
 
 

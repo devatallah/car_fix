@@ -293,21 +293,17 @@
                         data-feather="home"></i><span class="menu-title text-truncate"
                                                       data-i18n="Dashboard">Dashboard</span></a>
             </li>
-            <li class=" nav-item"><a class="d-flex align-items-center" href="{{url('admin/categories')}}"><i
+            <li class=" nav-item"><a class="d-flex align-items-center" href="{{url('admin/solutions')}}"><i
                         data-feather="grid"></i><span class="menu-title text-truncate"
-                                                      data-i18n="Categories">@lang('categories')</span></a>
+                                                      data-i18n="Solutions">@lang('solutions')</span></a>
             </li>
-            <li class=" nav-item"><a class="d-flex align-items-center" href="{{url('admin/manufacturers')}}"><i
+            <li class=" nav-item"><a class="d-flex align-items-center" href="{{url('admin/brands')}}"><i
                         data-feather="grid"></i><span class="menu-title text-truncate"
-                                                      data-i18n="Manufacturers">@lang('manufacturers')</span></a>
+                                                      data-i18n="Brands">@lang('brands')</span></a>
             </li>
-            <li class=" nav-item"><a class="d-flex align-items-center" href="{{url('admin/car_models')}}"><i
+            <li class=" nav-item"><a class="d-flex align-items-center" href="{{url('admin/ecus')}}"><i
                         data-feather="grid"></i><span class="menu-title text-truncate"
-                                                      data-i18n="CarModel">@lang('car_models')</span></a>
-            </li>
-            <li class=" nav-item"><a class="d-flex align-items-center" href="{{url('admin/files')}}"><i
-                        data-feather="grid"></i><span class="menu-title text-truncate"
-                                                      data-i18n="File">@lang('files')</span></a>
+                                                      data-i18n="ECUs">@lang('ecus')</span></a>
             </li>
             <li class=" nav-item"><a class="d-flex align-items-center" href="{{url('admin/fixes/create')}}"><i
                         data-feather="grid"></i><span class="menu-title text-truncate"

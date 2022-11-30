@@ -25,12 +25,15 @@ class UserController extends Controller
             'email' => 'string|email|max:255|unique:users',
             'mobile' => 'string|digits_between:8,14|unique:users',
             'password' => 'nullable|string|min:6',
+            'license_expire_date' => 'required|date',
+            'subscription_expire_date' => 'required|date',
+            'balance' => 'required',
 //            'image' => 'nullable|image',
         ];
 
         $this->validate($request, $rules);
 
-        $data = $request->only('name', 'email', 'mobile');
+        $data = $request->only('name', 'email', 'mobile', 'license_expire_date', 'subscription_expire_date', 'balance');
         $data['password'] = bcrypt($request->password);
 
 //        if ($request->hasFile('image')) {
@@ -60,12 +63,15 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'mobile' => 'string|digits_between:8,14|unique:users,mobile,' . $id . ',uuid',
             'password' => 'nullable|string|min:6',
+            'license_expire_date' => 'required|date',
+            'subscription_expire_date' => 'required|date',
+            'balance' => 'required',
 //            'image' => 'nullable|image',
         ];
 
         $this->validate($request, $rules);
 
-        $data = $request->only('name', 'email', 'mobile');
+        $data = $request->only('name', 'email', 'mobile', 'license_expire_date', 'subscription_expire_date', 'balance');
 
         if ($request->password) {
             $data['password'] = bcrypt($request->password);
@@ -130,6 +136,9 @@ class UserController extends Controller
                 $data_attr .= 'data-email="' . $user->email . '" ';
                 $data_attr .= 'data-mobile="' . $user->mobile . '" ';
                 $data_attr .= 'data-password="' . $user->password . '" ';
+                $data_attr .= 'data-license_expire_date="' . $user->license_expire_date . '" ';
+                $data_attr .= 'data-subscription_expire_date="' . $user->subscription_expire_date . '" ';
+                $data_attr .= 'data-balance="' . $user->balance . '" ';
 //                $data_attr .= 'data-image="' . $user->image . '" ';
                 $string = '';
                 $string .= '<button class="edit_btn btn btn-sm btn-outline-primary" data-bs-toggle="modal"

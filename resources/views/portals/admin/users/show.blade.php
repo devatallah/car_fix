@@ -167,7 +167,7 @@
 @endsection
 @section('scripts')
     <script>
-        var url = '{{url(app()->getLocale()."/admin/subscriptions")}}/';
+        var url = '{{url("/admin/subscriptions")}}/';
 
         var oTable = $('#datatable').DataTable({
             dom: '<"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
@@ -212,7 +212,7 @@
             serverSide: true,
             searching: false,
             ajax: {
-                url: '{{ url(app()->getLocale().'/admin/subscriptions/indexTable')}}',
+                url: '{{ url('/admin/subscriptions/indexTable')}}',
                 data: function (d) {
                     d.user_uuid = '{{$user->uuid}}';
                     d.restaurant_uuid = $('#s_restaurant_uuid').val();

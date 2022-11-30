@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
-use App\Models\Category;
+use App\Models\ECU;
+use App\Models\Solution;
 use App\Models\File;
 use App\Models\Fix;
-use App\Models\Manufacturer;
+use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\Facades\DataTables;
@@ -17,16 +18,16 @@ class FixController extends Controller
 
     public function index(Request $request)
     {
-        $categories = Category::all();
-        $manufacturers = Manufacturer::all();
-        return view('portals.admin.fixes.index', compact('categories', 'manufacturers'));
+        $solutions = Solution::all();
+        $brands = Brand::all();
+        return view('portals.admin.fixes.index', compact('solutions', 'brands'));
 
     }
     public function create(Request $request)
     {
-        $categories = Category::all();
-        $manufacturers = Manufacturer::all();
-        return view('portals.admin.fixes.create', compact('categories', 'manufacturers'));
+        $solutions = Solution::all();
+        $brands = Brand::all();
+        return view('portals.admin.fixes.create', compact('solutions', 'brands'));
 
     }
 
@@ -34,16 +35,13 @@ class FixController extends Controller
     {
         $rules = [
             'broken_file' => 'nullable|file',
-            'category_uuid' => 'required',
-            'manufacturer_uuid' => 'required',
-            'car_model_uuid' => 'required',
+            'solution_uuid' => 'required',
+            'brand_uuid' => 'required',
+            'ecu_uuid' => 'required',
         ];
         $this->validate($request, $rules);
-        $data = $request->only(['broken_file', 'category_uuid', 'manufacturer_uuid', 'car_model_uuid']);
-        $fixed_file = File::query()->where(['category_uuid' => $request->category_uuid,
-            'manufacturer_uuid' => $request->manufacturer_uuid,
-            'car_model_uuid' => $request->car_model_uuid])->first();
-        $data['file_uuid'] = $fixed_file->uuid;
+        $data = $request->only(['broken_file', 'solution_uuid', 'brand_uuid', 'ecu_uuid']);
+        $fixed_file = ECU::query()->find($request->ecu_uuid);
         if ($request->hasFile('broken_file')) {
             $broken_file = $request->broken_file('broken_file')->store('public');
             $data['broken_file'] = $broken_file;
@@ -63,21 +61,18 @@ class FixController extends Controller
     {
         $rules = [
             'broken_file' => 'required|file',
-            'category_uuid' => 'required',
-            'manufacturer_uuid' => 'required',
-            'car_model_uuid' => 'required',
+            'solution_uuid' => 'required',
+            'brand_uuid' => 'required',
+            'ecu_uuid' => 'required',
         ];
         $this->validate($request, $rules);
-        $data = $request->only(['broken_file', 'category_uuid', 'manufacturer_uuid', 'car_model_uuid']);
-        $file = File::query()->where(['category_uuid' => $request->category_uuid,
-            'manufacturer_uuid' => $request->manufacturer_uuid,
-            'car_model_uuid' => $request->car_model_uuid])->first();
-        $data['file_uuid'] = $file->uuid;
+        $data = $request->only(['broken_file', 'solution_uuid', 'brand_uuid', 'ecu_uuid']);
+        $fixed_file = ECU::query()->find($request->ecu_uuid);
         if ($request->hasFile('broken_file')) {
             $broken_file = $request->file('broken_file')->store('public');
             $data['broken_file'] = $broken_file;
         }
-        $data['fixed_file'] = $file->file;
+        $data['fixed_file'] = $fixed_file->file;
         $data['ownerable_uuid'] = auth()->user()->uuid;
         $data['ownerable_type'] = Admin::class;
         Fix::query()->create($data);
@@ -87,7 +82,7 @@ class FixController extends Controller
         }
         Session::flash('success_message', __('item_added'));
 
-        return redirect('fixes');
+        return redirect()->back();
     }
 
     public function destroy($uuid, Request $request)
@@ -101,21 +96,18 @@ class FixController extends Controller
         $fixes = Fix::query()->orderByDesc('id');
         return Datatables::of($fixes)
             ->filter(function ($query) use ($request) {
-                if ($request->get('manufacturer_uuid')) {
-                    $query->where('manufacturer_uuid', $request->manufacturer_uuid);
+                if ($request->get('brand_uuid')) {
+                    $query->where('brand_uuid', $request->brand_uuid);
                 }
-                if ($request->get('car_model_uuid')) {
-                    $query->where('car_model_uuid', $request->car_model_uuid);
-                }
-                if ($request->get('category_uuid')) {
-                    $query->where('category_uuid', $request->category_uuid);
+                if ($request->get('solution_uuid')) {
+                    $query->where('solution_uuid', $request->solution_uuid);
                 }
             })->addColumn('action', function ($fix) {
                 $data_attr = '';
                 $data_attr .= 'data-uuid="' . $fix->uuid . '" ';
-                $data_attr .= 'data-category_uuid="' . $fix->category_uuid . '" ';
-                $data_attr .= 'data-manufacturer_uuid="' . $fix->manufacturer_uuid . '" ';
-                $data_attr .= 'data-car_model_uuid="' . $fix->car_model_uuid . '" ';
+                $data_attr .= 'data-solution_uuid="' . $fix->solution_uuid . '" ';
+                $data_attr .= 'data-brand_uuid="' . $fix->brand_uuid . '" ';
+                $data_attr .= 'data-ecu_uuid="' . $fix->ecu_uuid . '" ';
                 $string = '';
                 $string .= '<button class="edit_btn btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                     data-bs-target="#edit_modal" ' . $data_attr . '>' . __('edit') . '</button>';

@@ -2,15 +2,16 @@
 
 use App\Http\Controllers\Admin\AdminController;
 //use App\Http\Controllers\Admin\Auth\LoginController;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\FileController;
+use App\Http\Controllers\Admin\SolutionController;
+use App\Http\Controllers\Admin\ECUController;
 use App\Http\Controllers\Admin\FixController;
-use App\Http\Controllers\Admin\ManufacturerController;
+use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CarModelController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +24,30 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 |
 */
 
+Route::get('/get_solution_brands', function (Request $request) {
+    $solution = \App\Models\Solution::query()->with('brands')->find($request->solution_uuid);
+    $json = [];
+    foreach ($solution->brands as $brand) {
+        $json[] = [
+            'id' => $brand->uuid,
+            'text' => $brand->name,
+        ];
+    }
+    return response()->json($json);
+});
+Route::get('/get_solution_brand_ecus', function (Request $request) {
+    $ecus = \App\Models\ECU::query()->where(['solution_uuid' => $request->solution_uuid, 'brand_uuid' => $request->brand_uuid])->get();
+    $json = [];
+    foreach ($ecus as $ecu) {
+        $json[] = [
+            'id' => $ecu->uuid,
+            'text' => $ecu->name,
+        ];
+    }
+    return response()->json($json);
+});
 Route::get('/', function () {
+    dd(\App\Models\Solution::query()->first()->brands);
     \App\Models\Admin::query()->create(['name' => 'Admin',
 'email' => 'admin@email.com',
 'mobile' => '1234567890',
@@ -34,8 +58,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::group(['prefix' => LaravelLocalization::setLocale(),
-    'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']], function () {
+Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
     Route::get('admin/login', [App\Http\Controllers\Admin\Auth\LoginController::class, 'showLoginForm'])->name('login');
     Route::post('admin/login', [App\Http\Controllers\Admin\Auth\LoginController::class, 'login'])->name('admin_login');
     Route::post('admin/logout', [App\Http\Controllers\Admin\Auth\LoginController::class, 'logout'])->name('admin_logout');
@@ -50,56 +73,42 @@ Route::group(['prefix' => LaravelLocalization::setLocale(),
         Route::put('/password', [ProfileController::class, 'changePassword']);
 
 
-        Route::group(['prefix' => 'categories'], function () {
-//        Route::group(['prefix' => 'categories', 'middleware' => ['permission:categories']], function () {
-            Route::get('/', [CategoryController::class, 'index']);
-            Route::post('/', [CategoryController::class, 'store']);
-            Route::put('/{category}', [CategoryController::class, 'update']);
-            Route::delete('/{category}', [CategoryController::class, 'destroy']);
-            Route::get('/indexTable', [CategoryController::class, 'indexTable']);
+        Route::group(['prefix' => 'solutions'], function () {
+            Route::get('/', [SolutionController::class, 'index']);
+            Route::post('/', [SolutionController::class, 'store']);
+            Route::put('/{solution}', [SolutionController::class, 'update']);
+            Route::delete('/{solution}', [SolutionController::class, 'destroy']);
+            Route::get('/indexTable', [SolutionController::class, 'indexTable']);
         });
-        Route::group(['prefix' => 'manufacturers'], function () {
-//        Route::group(['prefix' => 'categories', 'middleware' => ['permission:categories']], function () {
-            Route::get('/', [ManufacturerController::class, 'index']);
-            Route::post('/', [ManufacturerController::class, 'store']);
-            Route::put('/{category}', [ManufacturerController::class, 'update']);
-            Route::delete('/{category}', [ManufacturerController::class, 'destroy']);
-            Route::get('/indexTable', [ManufacturerController::class, 'indexTable']);
+        Route::group(['prefix' => 'brands'], function () {
+            Route::get('/', [BrandController::class, 'index']);
+            Route::post('/', [BrandController::class, 'store']);
+            Route::put('/{brand}', [BrandController::class, 'update']);
+            Route::delete('/{brand}', [BrandController::class, 'destroy']);
+            Route::get('/indexTable', [BrandController::class, 'indexTable']);
         });
-        Route::group(['prefix' => 'car_models'], function () {
-//        Route::group(['prefix' => 'categories', 'middleware' => ['permission:categories']], function () {
-            Route::get('/', [CarModelController::class, 'index']);
-            Route::post('/', [CarModelController::class, 'store']);
-            Route::put('/{category}', [CarModelController::class, 'update']);
-            Route::delete('/{category}', [CarModelController::class, 'destroy']);
-            Route::get('/indexTable', [CarModelController::class, 'indexTable']);
-        });
-        Route::group(['prefix' => 'files'], function () {
-//        Route::group(['prefix' => 'categories', 'middleware' => ['permission:categories']], function () {
-            Route::get('/', [FileController::class, 'index']);
-            Route::post('/', [FileController::class, 'store']);
-            Route::put('/{category}', [FileController::class, 'update']);
-            Route::delete('/{category}', [FileController::class, 'destroy']);
-            Route::get('/indexTable', [FileController::class, 'indexTable']);
+        Route::group(['prefix' => 'ecus'], function () {
+            Route::get('/', [ECUController::class, 'index']);
+            Route::post('/', [ECUController::class, 'store']);
+            Route::put('/{ecu}', [ECUController::class, 'update']);
+            Route::delete('/{ecu}', [ECUController::class, 'destroy']);
+            Route::get('/indexTable', [ECUController::class, 'indexTable']);
         });
         Route::group(['prefix' => 'admins'], function () {
-//        Route::group(['prefix' => 'categories', 'middleware' => ['permission:categories']], function () {
             Route::get('/', [AdminController::class, 'index']);
             Route::post('/', [AdminController::class, 'store']);
-            Route::put('/{category}', [AdminController::class, 'update']);
-            Route::delete('/{category}', [AdminController::class, 'destroy']);
+            Route::put('/{admin}', [AdminController::class, 'update']);
+            Route::delete('/{admin}', [AdminController::class, 'destroy']);
             Route::get('/indexTable', [AdminController::class, 'indexTable']);
         });
         Route::group(['prefix' => 'users'], function () {
-//        Route::group(['prefix' => 'categories', 'middleware' => ['permission:categories']], function () {
             Route::get('/', [UserController::class, 'index']);
             Route::post('/', [UserController::class, 'store']);
-            Route::put('/{category}', [UserController::class, 'update']);
-            Route::delete('/{category}', [UserController::class, 'destroy']);
+            Route::put('/{user}', [UserController::class, 'update']);
+            Route::delete('/{user}', [UserController::class, 'destroy']);
             Route::get('/indexTable', [UserController::class, 'indexTable']);
         });
         Route::group(['prefix' => 'fixes'], function () {
-//        Route::group(['prefix' => 'categories', 'middleware' => ['permission:categories']], function () {
             Route::get('/', [FixController::class, 'index']);
             Route::get('/create', [FixController::class, 'create']);
             Route::post('/', [FixController::class, 'store']);

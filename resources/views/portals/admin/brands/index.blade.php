@@ -1,6 +1,6 @@
 @extends('portals.admin.app')
 @section('title')
-    @lang('car_models')
+    @lang('brands')
 @endsection
 @section('styles')
 @endsection
@@ -11,13 +11,13 @@
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">@lang('car_models')</h2>
+                        <h2 class="content-header-title float-left mb-0">@lang('brands')</h2>
                         <div class="breadcrumb-wrapper">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{url('/admin')}}">@lang('home')</a>
                                 </li>
                                 <li class="breadcrumb-item"><a
-                                        href="{{url('/admin/car_models')}}">@lang('car_models')</a>
+                                        href="{{url('/admin/brands')}}">@lang('brands')</a>
                                 </li>
                             </ol>
                         </div>
@@ -33,7 +33,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="head-label">
-                                    <h4 class="card-title">@lang('car_models')</h4>
+                                    <h4 class="card-title">@lang('brands')</h4>
                                 </div>
                                 <div class="text-right">
                                     <div class="form-gruop">
@@ -56,17 +56,6 @@
                                                 <label for="s_name">@lang('name')</label>
                                                 <input id="s_name" type="text" class="search_input form-control"
                                                        placeholder="@lang('name')">
-                                            </div>
-                                        </div>
-                                        <div class="col-3">
-                                            <div class="form-group">
-                                                <label for="s_manufacturer_uuid">@lang('manufacturer')</label>
-                                                <select class="manufacturer_uuid form-control" id="s_manufacturer_uuid">
-                                                    <option value="">@lang('select')</option>
-                                                    @foreach($manufacturers as $manufacturer)
-                                                        <option value="{{$manufacturer->uuid}}">{{$manufacturer->name}}</option>
-                                                    @endforeach
-                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-3" style="margin-top: 20px">
@@ -98,7 +87,6 @@
                                         </th>
                                         <th>@lang('uuid')</th>
                                         <th>@lang('name')</th>
-                                        <th>@lang('manufacturer')</th>
                                         <th style="width: 225px;">@lang('actions')</th>
                                     </tr>
                                     </thead>
@@ -127,18 +115,6 @@
                           novalidate>
                         {{csrf_field()}}
                         <div class="row">
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="manufacturer_uuid">@lang('manufacturer')</label>
-                                    <select class="manufacturer_uuid form-control" id="manufacturer_uuid" name="manufacturer_uuid" required>
-                                        <option value="">@lang('select')</option>
-                                        @foreach($manufacturers as $manufacturer)
-                                            <option value="{{$manufacturer->uuid}}">{{$manufacturer->name}}</option>
-                                        @endforeach
-                                    </select>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label for="name">@lang('name')</label>
@@ -148,6 +124,7 @@
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
+
                         </div>
                     </form>
                 </div>
@@ -182,18 +159,6 @@
                         <div class="row">
                                 <div class="col-12">
                                     <div class="form-group">
-                                        <label for="edit_manufacturer_uuid">@lang('manufacturer')</label>
-                                        <select class="edit_manufacturer_uuid form-control" id="edit_manufacturer_uuid" name="manufacturer_uuid" required>
-                                            <option value="">@lang('select')</option>
-                                            @foreach($manufacturers as $manufacturer)
-                                                <option value="{{$manufacturer->uuid}}">{{$manufacturer->name}}</option>
-                                            @endforeach
-                                        </select>
-                                        <div class="invalid-feedback"></div>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-group">
                                         <label for="edit_name">@lang('name')</label>
                                         <input type="text" class="form-control"
                                                placeholder="@lang('name')"
@@ -221,7 +186,7 @@
 @endsection
 @section('scripts')
     <script>
-        var url = '{{url("/admin/car_models")}}/';
+        var url = '{{url("/admin/brands")}}/';
 
         var oTable = $('#datatable').DataTable({
             dom: '<"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
@@ -266,10 +231,9 @@
             serverSide: true,
             searching: false,
             ajax: {
-                url: '{{ url('/admin/car_models/indexTable')}}',
+                url: '{{ url('/admin/brands/indexTable')}}',
                 data: function (d) {
                     d.name = $('#s_name').val();
-                    d.manufacturer_uuid = $('#s_manufacturer_uuid').val();
                 }
             },
             columns: [
@@ -286,7 +250,6 @@
 
                 {data: 'uuid', name: 'uuid'},
                 {data: 'name', name: 'name'},
-                {data: 'manufacturer_name', name: 'manufacturer_uuid'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -295,10 +258,10 @@
             $(document).on('click', '.edit_btn', function (event) {
                 var button = $(this)
                 var uuid = button.data('uuid')
-                var manufacturer_uuid = button.data('manufacturer_uuid')
+                var days = ''
                 $('#edit_form').attr('action', url + uuid)
+                // $('#edit_order').val(button.data('order')).trigger('change')
                 $('#edit_name').val(button.data('name'))
-                $('#edit_manufacturer_uuid').val(manufacturer_uuid).trigger('change')
             });
             $(document).on('click', '#create_btn', function (event) {
                 $('#create_form').attr('action', url);

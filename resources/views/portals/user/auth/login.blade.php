@@ -1,51 +1,38 @@
 <!DOCTYPE html>
-<html class="loading" lang="en" data-textdirection="rtl">
+<html class="loading dark-layout" lang="en" data-layout="dark-layout" data-textdirection="ltr">
 <!-- BEGIN: Head-->
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <meta name="description" content="Vuexy user is super flexible, powerful, clean &amp; modern responsive bootstrap 4 user template with unlimited possibilities.">
-    <meta name="keywords" content="user template, Vuexy user template, dashboard template, flat user template, responsive user template, web app">
-    <meta name="author" content="PIXINVENT">
-    <title>Car Fix</title>
-    <link rel="apple-touch-icon" href="{{asset('dashboard/app-assets/images/ico/apple-icon-120.png')}}">
-    <link rel="shortcut icon" type="image/x-icon" href="{{asset('dashboard/app-assets/images/ico/favicon.ico')}}">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui">
+    <title>Login Page</title>
+    <link rel="apple-touch-icon" href="{{asset('portals/app-assets/images/ico/apple-icon-120.png')}}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{asset('portals/app-assets/images/ico/favicon.ico')}}">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600" rel="stylesheet">
 
     <!-- BEGIN: Vendor CSS-->
-    <link rel="stylesheet" type="text/css" href="{{asset('dashboard/app-assets/vendors/css/vendors'.rtl_assets().'.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('portals/app-assets/vendors/css/vendors.min.css')}}">
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
-    <link rel="stylesheet" type="text/css" href="{{asset('dashboard/app-assets/css'.rtl_assets().'/bootstrap.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('dashboard/app-assets/css'.rtl_assets().'/bootstrap-extended.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('dashboard/app-assets/css'.rtl_assets().'/colors.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('dashboard/app-assets/css'.rtl_assets().'/components.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('dashboard/app-assets/css'.rtl_assets().'/themes/dark-layout.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('dashboard/app-assets/css'.rtl_assets().'/themes/bordered-layout.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('dashboard/app-assets/css'.rtl_assets().'/themes/semi-dark-layout.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('portals/app-assets/css/bootstrap.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('portals/app-assets/css/bootstrap-extended.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('portals/app-assets/css/colors.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('portals/app-assets/css/components.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('portals/app-assets/css/themes/dark-layout.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('portals/app-assets/css/themes/bordered-layout.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('portals/app-assets/css/themes/semi-dark-layout.css')}}">
 
     <!-- BEGIN: Page CSS-->
-    <link rel="stylesheet" type="text/css" href="{{asset('dashboard/app-assets/css'.rtl_assets().'/core/menu/menu-types/vertical-menu.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('dashboard/app-assets/css'.rtl_assets().'/plugins/forms/form-validation.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('dashboard/app-assets/css'.rtl_assets().'/pages/page-auth.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('portals/app-assets/css/core/menu/menu-types/vertical-menu.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('portals/app-assets/css/plugins/forms/form-validation.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('portals/app-assets/css/pages/authentication.css')}}">
     <!-- END: Page CSS-->
 
     <!-- BEGIN: Custom CSS-->
-    <link rel="stylesheet" type="text/css" href="{{asset('dashboard/app-assets/css'.rtl_assets().'/custom'.rtl_assets().'.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('dashboard/assets/css/style'.rtl_assets().'.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('portals/assets/css/style.css')}}">
     <!-- END: Custom CSS-->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400&display=swap" rel="stylesheet">
-
-    <style>
-        *{
-            font-family: 'Cairo', sans-serif;
-        }
-
-    </style>
 
 </head>
 <!-- END: Head-->
@@ -61,12 +48,12 @@
         <div class="content-header row">
         </div>
         <div class="content-body">
-            <div class="auth-wrapper auth-v1 px-2">
-                <div class="auth-inner py-2">
-                    <!-- Login v1 -->
+            <div class="auth-wrapper auth-basic px-2">
+                <div class="auth-inner my-2">
+                    <!-- Login basic -->
                     <div class="card mb-0">
                         <div class="card-body">
-                            <a href="javascript:void(0);" class="brand-logo">
+                            <a href="index.html" class="brand-logo">
                                 <svg viewbox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="28">
                                     <defs>
                                         <lineargradient id="linearGradient-1" x1="100%" y1="10.5120544%" x2="50%" y2="89.4879456%">
@@ -90,39 +77,40 @@
                                         </g>
                                     </g>
                                 </svg>
-                                <h2 class="brand-text text-primary ml-1">Car Fix</h2>
+                                <h2 class="brand-text text-primary ms-1">Vuexy</h2>
                             </a>
+
 
                             <form class="auth-login-form mt-2" method="POST" action="{{ route('user_login') }}">
                                 {{ csrf_field() }}
-                                <div class="form-group">
-                                    <label for="login-email" class="form-label">@lang('email')</label>
-                                    <input type="text" class="form-control" id="login-email" name="email"
-                                           placeholder="@lang('email')" aria-describedby="login-email" tabindex="1" autofocus />
-                                    @if ($errors->has('email'))
-                                        <span class="help-block">
+                                <div class="mb-1">
+                                    <div class="form-group">
+                                        <label for="login-email" class="form-label">@lang('email')</label>
+                                        <input type="text" class="form-control" id="login-email" name="email"
+                                               placeholder="@lang('email')" aria-describedby="login-email" tabindex="1" autofocus />
+                                        @if ($errors->has('email'))
+                                            <span class="help-block">
                                         <strong>{{ $errors->first('email') }}</strong>
                                     </span>
-                                    @endif
+                                        @endif
+                                    </div>
                                 </div>
-
-                                <div class="form-group">
+                                <div class="mb-1">
                                     <div class="d-flex justify-content-between">
-                                        <label for="login-password">@lang('password')</label>
+                                        <label class="form-label" for="login-password">@lang('password')</label>
                                     </div>
                                     <div class="input-group input-group-merge form-password-toggle">
-                                        <input type="password" class="form-control form-control-merge"
-                                               id="login-password" name="password" tabindex="2"
-                                               placeholder="@lang('password')" aria-describedby="login-password" />
-                                        <div class="input-group-append">
-                                            <span class="input-group-text cursor-pointer"><i data-feather="eye"></i></span>
-                                        </div>
+                                        <input type="password" class="form-control form-control-merge" id="login-password" name="password" tabindex="2" placeholder="@lang('password')" aria-describedby="login-password" />
+                                        <span class="input-group-text cursor-pointer"><i data-feather="eye"></i></span>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input" type="checkbox" id="remember-me" name="remember" tabindex="3" />
-                                        <label class="custom-control-label" for="remember-me"> @lang('remember_me') </label>
+
+                                <div class="mb-1">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input" type="checkbox" id="remember-me" name="remember" tabindex="3" />
+                                            <label class="custom-control-label" for="remember-me"> @lang('remember_me') </label>
+                                        </div>
                                     </div>
                                 </div>
                                 <button class="btn btn-primary btn-block" tabindex="4">@lang('sign_in')</button>
@@ -132,7 +120,7 @@
 
                         </div>
                     </div>
-                    <!-- /Login v1 -->
+                    <!-- /Login basic -->
                 </div>
             </div>
 
@@ -143,20 +131,20 @@
 
 
 <!-- BEGIN: Vendor JS-->
-<script src="{{asset('dashboard/app-assets/vendors/js/vendors.min.js')}}"></script>
+<script src="{{asset('portals/app-assets/vendors/js/vendors.min.js')}}"></script>
 <!-- BEGIN Vendor JS-->
 
 <!-- BEGIN: Page Vendor JS-->
+<script src="{{asset('portals/app-assets/vendors/js/forms/validation/jquery.validate.min.js')}}"></script>
 <!-- END: Page Vendor JS-->
 
 <!-- BEGIN: Theme JS-->
-<script src="{{asset('dashboard/app-assets/js/core/app-menu.min.js')}}"></script>
-<script src="{{asset('dashboard/app-assets/js/core/app.min.js')}}"></script>
-<script src="{{asset('dashboard/app-assets/js/scripts/customizer.min.js')}}"></script>
+<script src="{{asset('portals/app-assets/js/core/app-menu.js')}}"></script>
+<script src="{{asset('portals/app-assets/js/core/app.js')}}"></script>
 <!-- END: Theme JS-->
 
 <!-- BEGIN: Page JS-->
-<script src="{{asset('dashboard/app-assets/js/scripts/pages/page-auth-login.js')}}"></script>
+<script src="{{asset('portals/app-assets/js/scripts/pages/auth-login.js')}}"></script>
 <!-- END: Page JS-->
 
 <script>

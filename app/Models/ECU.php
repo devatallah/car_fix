@@ -7,12 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Translatable\HasTranslations;
 use Webpatser\Uuid\Uuid;
 
-class Fix extends Model
+class ECU extends Model
 {
-    use HasFactory, SoftDeletes, HasTranslations;
+    use HasFactory, SoftDeletes;
 
     /*
     |--------------------------------------------------------------------------
@@ -21,10 +20,10 @@ class Fix extends Model
     */
 
     public $incrementing = false;
+    protected $table = 'ecus';
     protected $guarded = [];
-    protected $appends = ['ecu_name', 'solution_name', 'brand_name'];
-    protected $hidden = ['id', 'name', 'created_at', 'updated_at', 'deleted_at', 'solution', 'brand', 'ecu'];
-    protected $translatable = ['name'];
+    protected $appends = ['solution_name', 'brand_name'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'solution', 'brand'];
     protected $primaryKey = 'uuid';
 
 
@@ -60,20 +59,13 @@ class Fix extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function ownerable()
-    {
-        return $this->morphTo();
-    }
-
     public function solution(){
         return $this->belongsTo(Solution::class)->withTrashed();
     }
     public function brand(){
         return $this->belongsTo(Brand::class)->withTrashed();
     }
-    public function ecu(){
-        return $this->belongsTo(ECU::class)->withTrashed();
-    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -93,14 +85,6 @@ class Fix extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function getECUNameAttribute()
-    {
-        return @$this->ecu->name;
-    }
-    public function getFixedFileAttribute()
-    {
-        return @$this->ecu->file;
-    }
     public function getSolutionNameAttribute()
     {
         return @$this->solution->name;
@@ -109,7 +93,8 @@ class Fix extends Model
     {
         return @$this->brand->name;
     }
-    public function getBrokenFileAttribute($value)
+
+    public function getECUAttribute($value)
     {
         return !is_null($value) ? asset(Storage::url($value)) : '';
     }

@@ -104,8 +104,9 @@
                                         <th>@lang('name')</th>
                                         <th>@lang('email')</th>
                                         <th>@lang('mobile')</th>
+                                        <th>@lang('license_expire_date')</th>
                                         <th>@lang('balance')</th>
-                                        <th>@lang('expire_date')</th>
+                                        <th>@lang('subscription_expire_date')</th>
                                         <th style="width: 225px;">@lang('actions')</th>
                                     </tr>
                                     </thead>
@@ -181,10 +182,19 @@
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="expire_date">@lang('expire_date')</label>
+                                    <label for="subscription_expire_date">@lang('subscription_expire_date')</label>
                                     <input type="date" class="form-control"
-                                           placeholder="@lang('expire_date')"
-                                           name="expire_date" id="expire_date">
+                                           placeholder="@lang('subscription_expire_date')"
+                                           name="subscription_expire_date" id="subscription_expire_date">
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="license_expire_date">@lang('license_expire_date')</label>
+                                    <input type="date" class="form-control"
+                                           placeholder="@lang('license_expire_date')"
+                                           name="license_expire_date" id="license_expire_date">
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
@@ -254,6 +264,15 @@
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
+                                    <label for="edit_email">@lang('email')</label>
+                                    <input type="text" class="form-control"
+                                           placeholder="@lang('email')"
+                                           name="email" id="edit_email">
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
                                     <label for="edit_mobile">@lang('mobile')</label>
                                     <input type="text" class="form-control"
                                            placeholder="@lang('mobile')"
@@ -281,10 +300,19 @@
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="edit_expire_date">@lang('expire_date')</label>
+                                    <label for="edit_subscription_expire_date">@lang('subscription_expire_date')</label>
                                     <input type="date" class="form-control"
-                                           placeholder="@lang('expire_date')"
-                                           name="expire_date" id="edit_expire_date">
+                                           placeholder="@lang('subscription_expire_date')"
+                                           name="subscription_expire_date" id="edit_subscription_expire_date">
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="edit_license_expire_date">@lang('license_expire_date')</label>
+                                    <input type="date" class="form-control"
+                                           placeholder="@lang('license_expire_date')"
+                                           name="license_expire_date" id="edit_license_expire_date">
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
@@ -331,7 +359,7 @@
 @endsection
 @section('scripts')
     <script>
-        var url = '{{url(app()->getLocale()."/admin/users")}}/';
+        var url = '{{url("/admin/users")}}/';
 
         var oTable = $('#datatable').DataTable({
             dom: '<"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
@@ -376,7 +404,7 @@
             serverSide: true,
             searching: false,
             ajax: {
-                url: '{{ url(app()->getLocale().'/admin/users/indexTable')}}',
+                url: '{{ url('/admin/users/indexTable')}}',
                 data: function (d) {
                     d.name = $('#s_name').val();
                     d.email = $('#s_email').val();
@@ -405,7 +433,8 @@
                 {data: 'email', name: 'email'},
                 {data: 'mobile', name: 'mobile'},
                 {data: 'balance', name: 'balance'},
-                {data: 'expire_date', name: 'expire_date'},
+                {data: 'subscription_expire_date', name: 'subscription_expire_date'},
+                {data: 'license_expire_date', name: 'license_expire_date'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -421,7 +450,8 @@
                 $('#edit_email').val(button.data('email'))
                 $('#edit_mobile').val(button.data('mobile'))
                 $('#edit_balance').val(button.data('balance'))
-                $('#edit_expire_date').val(button.data('expire_date'))
+                $('#edit_subscription_expire_date').val(button.data('subscription_expire_date'))
+                $('#edit_license_expire_date').val(button.data('license_expire_date'))
             });
             $(document).on('click', '#create_btn', function (event) {
                 $('#create_form').attr('action', url);

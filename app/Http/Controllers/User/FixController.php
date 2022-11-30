@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\ECU;
 use App\Models\User;
-use App\Models\Category;
+use App\Models\Solution;
 use App\Models\File;
 use App\Models\Fix;
-use App\Models\Manufacturer;
+use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\Facades\DataTables;
@@ -17,10 +18,10 @@ class FixController extends Controller
 
     public function index(Request $request)
     {
-        $categories = Category::all();
-        $manufacturers = Manufacturer::all();
-        return view('portals.user.fixes.create', compact('categories', 'manufacturers'));
-//        return view('portals.user.fixes.index', compact('categories', 'manufacturers'));
+        $solutions = Solution::all();
+        $brands = Brand::all();
+        return view('portals.user.fixes.create', compact('solutions', 'brands'));
+//        return view('portals.user.fixes.index', compact('solutions', 'brands'));
 
     }
 
@@ -28,16 +29,13 @@ class FixController extends Controller
     {
         $rules = [
             'broken_file' => 'nullable|file',
-            'category_uuid' => 'required',
-            'manufacturer_uuid' => 'required',
-            'car_model_uuid' => 'required',
+            'solution_uuid' => 'required',
+            'brand_uuid' => 'required',
+            'ecu_uuid' => 'required',
         ];
         $this->validate($request, $rules);
-        $data = $request->only(['broken_file', 'category_uuid', 'manufacturer_uuid', 'car_model_uuid']);
-        $fixed_file = File::query()->where(['category_uuid' => $request->category_uuid,
-            'manufacturer_uuid' => $request->manufacturer_uuid,
-            'car_model_uuid' => $request->car_model_uuid])->first();
-        $data['file_uuid'] = $fixed_file->uuid;
+        $data = $request->only(['broken_file', 'solution_uuid', 'brand_uuid', 'ecu_uuid']);
+        $fixed_file = ECU::query()->find($request->ecu_uuid);
         if ($request->hasFile('broken_file')) {
             $broken_file = $request->broken_file('broken_file')->store('public');
             $data['broken_file'] = $broken_file;
@@ -57,25 +55,18 @@ class FixController extends Controller
     {
         $rules = [
             'broken_file' => 'required|file',
-            'category_uuid' => 'required',
-            'manufacturer_uuid' => 'required',
-            'car_model_uuid' => 'required',
+            'solution_uuid' => 'required',
+            'brand_uuid' => 'required',
+            'ecu_uuid' => 'required',
         ];
         $this->validate($request, $rules);
-        $category = Category::query()->where('uuid', $request->category_uuid)->first();
-//        if (!$category->is_free && $category->price < auth()->user()->balance) {
-//            return redirect()->back()->withErrors(['category_uuid' => "You don't have enough balance"]);
-//        }
-        $data = $request->only(['broken_file', 'category_uuid', 'manufacturer_uuid', 'car_model_uuid']);
-        $file = File::query()->where(['category_uuid' => $request->category_uuid,
-            'manufacturer_uuid' => $request->manufacturer_uuid,
-            'car_model_uuid' => $request->car_model_uuid])->firstOrFail();
-        $data['file_uuid'] = $file->uuid;
+        $data = $request->only(['broken_file', 'solution_uuid', 'brand_uuid', 'ecu_uuid']);
+        $fixed_file = ECU::query()->find($request->ecu_uuid);
         if ($request->hasFile('broken_file')) {
             $broken_file = $request->file('broken_file')->store('public');
             $data['broken_file'] = $broken_file;
         }
-        $data['fixed_file'] = $file->file;
+        $data['fixed_file'] = $fixed_file->file;
         $data['ownerable_uuid'] = auth()->user()->uuid;
         $data['ownerable_type'] = User::class;
         Fix::query()->create($data);
@@ -110,9 +101,9 @@ class FixController extends Controller
             })->addColumn('action', function ($fix) {
                 $data_attr = '';
                 $data_attr .= 'data-uuid="' . $fix->uuid . '" ';
-                $data_attr .= 'data-category_uuid="' . $fix->category_uuid . '" ';
-                $data_attr .= 'data-manufacturer_uuid="' . $fix->manufacturer_uuid . '" ';
-                $data_attr .= 'data-car_model_uuid="' . $fix->car_model_uuid . '" ';
+                $data_attr .= 'data-solution_uuid="' . $fix->solution_uuid . '" ';
+                $data_attr .= 'data-brand_uuid="' . $fix->brand_uuid . '" ';
+                $data_attr .= 'data-ecu_uuid="' . $fix->ecu_uuid . '" ';
                 $string = '';
                 $string .= '<button class="edit_btn btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                     data-bs-target="#edit_modal" ' . $data_attr . '>' . __('edit') . '</button>';

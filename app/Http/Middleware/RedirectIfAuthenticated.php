@@ -22,17 +22,17 @@ class RedirectIfAuthenticated
         switch ($guard) {
             case 'admin':
                 if (auth()->guard($guard)->check()) {
-                    return redirect(app()->getLocale().'/admin');
+                    return redirect('/admin');
                 }
                 break;
             case 'web':
                 if (auth()->guard($guard)->check()) {
-                    return redirect(app()->getLocale().'/user');
+                    return redirect('/user');
                 }
                 break;
             default:
                 if (auth()->guard($guard)->check()) {
-                    return redirect(app()->getLocale().'/');
+                    return redirect('/');
                 }
                 break;
         }

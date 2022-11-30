@@ -42,54 +42,52 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <form action="{{url(app()->getLocale()."/user/fixes")}}" id="create_form" method="POST"
+                                <form action="{{url("/user/fixes")}}" id="create_form" method="POST"
                                       data-reset="true" class="form-horizontal" enctype="multipart/form-data"
                                       novalidate>
                                     {{csrf_field()}}
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label for="category_uuid">@lang('category')</label>
-                                                <select class="category_uuid form-control" id="category_uuid"
-                                                        name="category_uuid"
+                                                <label for="solution_uuid">@lang('solution')</label>
+                                                <select class="solution_uuid form-control" id="solution_uuid"
+                                                        name="solution_uuid"
                                                         required>
                                                     <option value="">@lang('select')</option>
-                                                    @foreach($categories as $category)
-                                                        <option value="{{$category->uuid}}">{{$category->category_name}}</option>
-                                                    @endforeach
-                                                </select>
-                                                @if ($errors->has('category_uuid'))
-                                                    <span class="help-block">
-                                        <strong>{{ $errors->first('category_uuid') }}</strong>
-                                    </span>
-                                                @endif
-                                                <div class="invalid-feedback"></div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="manufacturer_uuid">@lang('manufacturer')</label>
-                                                <select class="manufacturer_uuid form-control" id="manufacturer_uuid"
-                                                        name="manufacturer_uuid" required>
-                                                    <option value="">@lang('select')</option>
-                                                    @foreach($manufacturers as $manufacturer)
+                                                    @foreach($solutions as $solution)
                                                         <option
-                                                            value="{{$manufacturer->uuid}}">{{$manufacturer->name}}</option>
+                                                            value="{{$solution->uuid}}">{{$solution->solution_name}}</option>
                                                     @endforeach
                                                 </select>
-                                                @if ($errors->has('manufacturer_uuid'))
+                                                @if ($errors->has('solution_uuid'))
                                                     <span class="help-block">
-                                        <strong>{{ $errors->first('manufacturer_uuid') }}</strong>
+                                        <strong>{{ $errors->first('solution_uuid') }}</strong>
                                     </span>
                                                 @endif
                                                 <div class="invalid-feedback"></div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="car_model_uuid">@lang('car_model')</label>
-                                                <select name="car_model_uuid" id="car_model_uuid" class="form-control">
+                                                <label for="brand_uuid">@lang('brand')</label>
+                                                <select class="brand_uuid form-control" id="brand_uuid"
+                                                        name="brand_uuid" required>
                                                     <option value="">@lang('select')</option>
                                                 </select>
-                                                @if ($errors->has('car_model_uuid'))
+                                                @if ($errors->has('brand_uuid'))
                                                     <span class="help-block">
-                                        <strong>{{ $errors->first('car_model_uuid') }}</strong>
+                                        <strong>{{ $errors->first('brand_uuid') }}</strong>
+                                    </span>
+                                                @endif
+                                                <div class="invalid-feedback"></div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ecu_uuid">@lang('ecu')</label>
+                                                <select name="ecu_uuid" id="ecu_uuid"
+                                                        class="js-example-data-array form-control">
+                                                    <option value="">@lang('select')</option>
+                                                </select>
+                                                @if ($errors->has('ecu_uuid'))
+                                                    <span class="help-block">
+                                        <strong>{{ $errors->first('ecu_uuid') }}</strong>
                                     </span>
                                                 @endif
                                                 <div class="invalid-feedback"></div>
@@ -146,42 +144,39 @@
     <script>
 
         $(document).ready(function () {
-            var car_models_list = {
-                @foreach($manufacturers as $manufacturer)
-                'manufacturer_{{$manufacturer->uuid}}': [
-                        @foreach($manufacturer->car_models as $car_model)
-                    {
-                        id: '{{$car_model->uuid}}',
-                        text: '{{$car_model->name}}',
-                    },
-
-                    @endforeach
-                ],
-                @endforeach
-            };
-
-            $(document).on("change", "#manufacturer_uuid", function (e) {
-                var value = $(this).val();
-                $("#car_model_uuid").html('<option selected value="">@lang('select')</option>')
-                $("#car_model_uuid").select2({
-                    data: car_models_list['manufacturer_' + value]
-                }).trigger("change");
+            $(document).on('change', '#solution_uuid', function (e) {
+                e.preventDefault();
+                var urls = '{{url("/get_solution_brands")}}' + '?solution_uuid='+$(this).val();
+                $.ajax({
+                    url: urls,
+                    method: 'GET',
+                    type: 'GET',
+                    success: function (data) {
+                        console.log(data.status)
+                        $("#brand_uuid").select2({
+                            data: data,
+                            width: 'auto'
+                        });
+                    }
+                });
             });
-            $(document).on("change", "#s_manufacturer_uuid", function (e) {
-                var value = $(this).val();
-                $("#s_car_model_uuid").html('<option selected value="">@lang('select')</option>')
-                $("#s_car_model_uuid").select2({
-                    data: car_models_list['manufacturer_' + value]
-                }).trigger("change");
+            $(document).on('change', '#brand_uuid', function (e) {
+                e.preventDefault();
+                var solution_uuid = $('#solution_uuid').val();
+                var urls = '{{url("/get_solution_brand_ecus")}}' + '?solution_uuid=' + solution_uuid + '&brand_uuid='+$(this).val();
+                $.ajax({
+                    url: urls,
+                    method: 'GET',
+                    type: 'GET',
+                    success: function (data) {
+                        console.log(data.status)
+                        $("#ecu_uuid").select2({
+                            data: data,
+                            width: 'auto'
+                        });
+                    }
+                });
             });
-            $(document).on("change", "#edit_manufacturer_uuid", function (e) {
-                var value = $(this).val();
-                $("#edit_car_model_uuid").html('<option selected value="">@lang('select')</option>')
-                $("#edit_car_model_uuid").select2({
-                    data: car_models_list['manufacturer_' + value]
-                }).trigger("change");
-            });
-
         });
 
 

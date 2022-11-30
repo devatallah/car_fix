@@ -48,7 +48,7 @@
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="profile" aria-labelledby="profile-tab" role="tabpanel">
-                                        <form action="{{url(app()->getLocale().'/admin/profile')}}"
+                                        <form action="{{url('/admin/profile')}}"
                                               id="profile-form"
                                               data-reset="false" method="post"
                                               class="ajax_form form-horizontal" enctype="multipart/form-data"
@@ -110,7 +110,7 @@
                                         </form>
                                     </div>
                                     <div class="tab-pane" id="password" aria-labelledby="password-tab" role="tabpanel">
-                                        <form action="{{url(app()->getLocale().'/admin/password')}}"
+                                        <form action="{{url('/admin/password')}}"
                                               id="password-form"
                                               method="post" data-reset="true"
                                               class="ajax_form form-horizontal" enctype="multipart/form-data"
@@ -255,7 +255,7 @@
 @endsection
 @section('scripts')
     <script>
-        var url = '{{url(app()->getLocale()."/admin/profile")}}/';
+        var url = '{{url("/admin/profile")}}/';
 
         var oTable = $('#datatable').DataTable({
             dom: '<"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
@@ -300,7 +300,7 @@
             serverSide: true,
             searching: false,
             ajax: {
-                url: '{{ url(app()->getLocale().'/admin/profile/indexTable')}}',
+                url: '{{ url('/admin/profile/indexTable')}}',
                 data: function (d) {
                     d.name = $('#s_name').val();
                 }
