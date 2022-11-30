@@ -47,7 +47,6 @@ Route::get('/get_solution_brand_ecus', function (Request $request) {
     return response()->json($json);
 });
 Route::get('/', function () {
-    dd(\App\Models\Solution::query()->first()->brands);
     \App\Models\Admin::query()->create(['name' => 'Admin',
 'email' => 'admin@email.com',
 'mobile' => '1234567890',
