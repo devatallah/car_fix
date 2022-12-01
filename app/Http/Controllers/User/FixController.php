@@ -30,7 +30,6 @@ class FixController extends Controller
         $rules = [
             'broken_file' => 'nullable|file',
             'solution_uuid' => 'required',
-            'brand_uuid' => 'required',
             'ecu_uuid' => 'required',
         ];
         $this->validate($request, $rules);
@@ -40,6 +39,7 @@ class FixController extends Controller
             $broken_file = $request->broken_file('broken_file')->store('public');
             $data['broken_file'] = $broken_file;
         }
+        $data['brand_uuid'] = $fixed_file->brand_uuid;
         $data['fixed_file'] = $fixed_file->file;
         $fix->update($data);
 
@@ -56,16 +56,16 @@ class FixController extends Controller
         $rules = [
             'broken_file' => 'required|file',
             'solution_uuid' => 'required',
-            'brand_uuid' => 'required',
             'ecu_uuid' => 'required',
         ];
         $this->validate($request, $rules);
-        $data = $request->only(['broken_file', 'solution_uuid', 'brand_uuid', 'ecu_uuid']);
+        $data = $request->only(['broken_file', 'solution_uuid', 'ecu_uuid']);
         $fixed_file = ECU::query()->find($request->ecu_uuid);
         if ($request->hasFile('broken_file')) {
             $broken_file = $request->file('broken_file')->store('public');
             $data['broken_file'] = $broken_file;
         }
+        $data['brand_uuid'] = $fixed_file->brand_uuid;
         $data['fixed_file'] = $fixed_file->file;
         $data['ownerable_uuid'] = auth()->user()->uuid;
         $data['ownerable_type'] = User::class;

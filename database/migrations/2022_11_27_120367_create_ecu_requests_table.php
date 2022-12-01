@@ -19,6 +19,7 @@ class CreateEcuRequestsTable extends Migration
             $table->string('ecu')->nullable();
             $table->string('solution')->nullable();
             $table->string('brand')->nullable();
+            $table->string('user_uuid')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <title>Car Fix</title>
+    <title>MagicSolution</title>
     <link rel="apple-touch-icon" href="{{asset('portals/app-assets/images/ico/apple-icon-120.png')}}">
     <link rel="shortcut icon" type="image/x-icon" href="{{asset('portals/app-assets/images/ico/favicon.ico')}}">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600"
@@ -85,159 +85,159 @@
       data-menu="vertical-menu-modern" data-col="">
 
 <!-- BEGIN: Header-->
-<nav style="left: 0;
-    width: 100%;"
-    class="header-navbar navbar navbar-expand-lg align-items-center floating-nav navbar-dark navbar-shadow container-xxl">
-    <div class="navbar-container d-flex content">
-        <ul class="nav navbar-nav align-items-center ms-auto">
-            <li class="nav-item dropdown dropdown-language">
-                <a class="nav-link dropdown-toggle" id="dropdown-flag" href="#" data-bs-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false"><i class="flag-icon flag-icon-{{LaravelLocalization::getCurrentLocaleNative() == 'English' ? 'us' : 'ps'}}"></i><span
-                        class="selected-language">{{ LaravelLocalization::getCurrentLocaleNative() }}</span></a>
-                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-flag">
-                    @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
-                    <a class="dropdown-item"
-                                                                                                href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}"
-                                                                                                data-language="{{ $localeCode }}"><i
-                            class="flag-icon flag-icon-{{$localeCode == 'en' ? 'us' : 'ps'}}"></i>{{ $properties['native'] }}</a>
-                    @endforeach
-</div>
-            </li>
-            <li class="nav-item dropdown dropdown-user"><a class="nav-link dropdown-toggle dropdown-user-link"
-                                                           id="dropdown-user" href="#" data-bs-toggle="dropdown"
-                                                           aria-haspopup="true" aria-expanded="false">
-                    <div class="user-nav d-sm-flex d-none"><span class="user-name fw-bolder">{{auth()->user()->name}}</span><span
-                            class="user-status">User</span></div>
-                    <span class="avatar"><img class="round"
-                                              src="{{asset('portals/app-assets/images/portrait/small/avatar-s-11.jpg')}}"
-                                              alt="avatar" height="40" width="40"><span
-                            class="avatar-status-online"></span></span>
-                </a>
+{{--<nav style="left: 0;--}}
+{{--    width: 100%;"--}}
+{{--    class="header-navbar navbar navbar-expand-lg align-items-center floating-nav navbar-dark navbar-shadow container-xxl">--}}
+{{--    <div class="navbar-container d-flex content">--}}
+{{--        <ul class="nav navbar-nav align-items-center ms-auto">--}}
+{{--            <li class="nav-item dropdown dropdown-language">--}}
+{{--                <a class="nav-link dropdown-toggle" id="dropdown-flag" href="#" data-bs-toggle="dropdown"--}}
+{{--                   aria-haspopup="true" aria-expanded="false"><i class="flag-icon flag-icon-{{LaravelLocalization::getCurrentLocaleNative() == 'English' ? 'us' : 'ps'}}"></i><span--}}
+{{--                        class="selected-language">{{ LaravelLocalization::getCurrentLocaleNative() }}</span></a>--}}
+{{--                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-flag">--}}
+{{--                    @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)--}}
+{{--                    <a class="dropdown-item"--}}
+{{--                                                                                                href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}"--}}
+{{--                                                                                                data-language="{{ $localeCode }}"><i--}}
+{{--                            class="flag-icon flag-icon-{{$localeCode == 'en' ? 'us' : 'ps'}}"></i>{{ $properties['native'] }}</a>--}}
+{{--                    @endforeach--}}
+{{--</div>--}}
+{{--            </li>--}}
+{{--            <li class="nav-item dropdown dropdown-user"><a class="nav-link dropdown-toggle dropdown-user-link"--}}
+{{--                                                           id="dropdown-user" href="#" data-bs-toggle="dropdown"--}}
+{{--                                                           aria-haspopup="true" aria-expanded="false">--}}
+{{--                    <div class="user-nav d-sm-flex d-none"><span class="user-name fw-bolder">{{auth()->user()->name}}</span><span--}}
+{{--                            class="user-status">User</span></div>--}}
+{{--                    <span class="avatar"><img class="round"--}}
+{{--                                              src="{{asset('portals/app-assets/images/portrait/small/avatar-s-11.jpg')}}"--}}
+{{--                                              alt="avatar" height="40" width="40"><span--}}
+{{--                            class="avatar-status-online"></span></span>--}}
+{{--                </a>--}}
 
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user">
-                    <a class="dropdown-item" href="{{url('/user/profile')}}"><i class="mr-50" data-feather="user"></i>
-                        @lang('profile')</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item"
-                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="mr-50" data-feather="power"></i>@lang('logout')</a>
-                    <form id="logout-form" action="{{ route('user_logout') }}" method="POST"
-                          style="display: none;">
-                        {{ csrf_field() }}
-                    </form>
-                </div>
-            </li>
-        </ul>
-    </div>
-</nav>
-<ul class="main-search-list-defaultlist d-none">
-    <li class="d-flex align-items-center"><a href="#">
-            <h6 class="section-label mt-75 mb-0">Files</h6>
-        </a></li>
-    <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between w-100"
-                                   href="app-file-manager.html">
-            <div class="d-flex">
-                <div class="me-75"><img src="{{asset('portals/app-assets/images/icons/xls.png')}}" alt="png"
-                                        height="32"></div>
-                <div class="search-data">
-                    <p class="search-data-title mb-0">Two new item submitted</p><small class="text-muted">Marketing
-                        Manager</small>
-                </div>
-            </div>
-            <small class="search-data-size me-50 text-muted">&apos;17kb</small>
-        </a></li>
-    <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between w-100"
-                                   href="app-file-manager.html">
-            <div class="d-flex">
-                <div class="me-75"><img src="{{asset('portals/app-assets/images/icons/jpg.png')}}" alt="png"
-                                        height="32"></div>
-                <div class="search-data">
-                    <p class="search-data-title mb-0">52 JPG file Generated</p><small class="text-muted">FontEnd
-                        Developer</small>
-                </div>
-            </div>
-            <small class="search-data-size me-50 text-muted">&apos;11kb</small>
-        </a></li>
-    <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between w-100"
-                                   href="app-file-manager.html">
-            <div class="d-flex">
-                <div class="me-75"><img src="{{asset('portals/app-assets/images/icons/pdf.png')}}" alt="png"
-                                        height="32"></div>
-                <div class="search-data">
-                    <p class="search-data-title mb-0">25 PDF File Uploaded</p><small class="text-muted">Digital
-                        Marketing Manager</small>
-                </div>
-            </div>
-            <small class="search-data-size me-50 text-muted">&apos;150kb</small>
-        </a></li>
-    <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between w-100"
-                                   href="app-file-manager.html">
-            <div class="d-flex">
-                <div class="me-75"><img src="{{asset('portals/app-assets/images/icons/doc.png')}}" alt="png"
-                                        height="32"></div>
-                <div class="search-data">
-                    <p class="search-data-title mb-0">Anna_Strong.doc</p><small class="text-muted">Web Designer</small>
-                </div>
-            </div>
-            <small class="search-data-size me-50 text-muted">&apos;256kb</small>
-        </a></li>
-    <li class="d-flex align-items-center"><a href="#">
-            <h6 class="section-label mt-75 mb-0">Members</h6>
-        </a></li>
-    <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between py-50 w-100"
-                                   href="app-user-view-account.html">
-            <div class="d-flex align-items-center">
-                <div class="avatar me-75"><img
-                        src="{{asset('portals/app-assets/images/portrait/small/avatar-s-8.jpg')}}" alt="png"
-                        height="32"></div>
-                <div class="search-data">
-                    <p class="search-data-title mb-0">John Doe</p><small class="text-muted">UI designer</small>
-                </div>
-            </div>
-        </a></li>
-    <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between py-50 w-100"
-                                   href="app-user-view-account.html">
-            <div class="d-flex align-items-center">
-                <div class="avatar me-75"><img
-                        src="{{asset('portals/app-assets/images/portrait/small/avatar-s-1.jpg')}}" alt="png"
-                        height="32"></div>
-                <div class="search-data">
-                    <p class="search-data-title mb-0">Michal Clark</p><small class="text-muted">FontEnd
-                        Developer</small>
-                </div>
-            </div>
-        </a></li>
-    <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between py-50 w-100"
-                                   href="app-user-view-account.html">
-            <div class="d-flex align-items-center">
-                <div class="avatar me-75"><img
-                        src="{{asset('portals/app-assets/images/portrait/small/avatar-s-14.jpg')}}" alt="png"
-                        height="32"></div>
-                <div class="search-data">
-                    <p class="search-data-title mb-0">Milena Gibson</p><small class="text-muted">Digital Marketing
-                        Manager</small>
-                </div>
-            </div>
-        </a></li>
-    <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between py-50 w-100"
-                                   href="app-user-view-account.html">
-            <div class="d-flex align-items-center">
-                <div class="avatar me-75"><img
-                        src="{{asset('portals/app-assets/images/portrait/small/avatar-s-6.jpg')}}" alt="png"
-                        height="32"></div>
-                <div class="search-data">
-                    <p class="search-data-title mb-0">Anna Strong</p><small class="text-muted">Web Designer</small>
-                </div>
-            </div>
-        </a></li>
-</ul>
-<ul class="main-search-list-defaultlist-other-list d-none">
-    <li class="auto-suggestion justify-content-between"><a
-            class="d-flex align-items-center justify-content-between w-100 py-50">
-            <div class="d-flex justify-content-start"><span class="me-75" data-feather="alert-circle"></span><span>No results found.</span>
-            </div>
-        </a></li>
-</ul>
+{{--                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user">--}}
+{{--                    <a class="dropdown-item" href="{{url('/user/profile')}}"><i class="mr-50" data-feather="user"></i>--}}
+{{--                        @lang('profile')</a>--}}
+{{--                    <div class="dropdown-divider"></div>--}}
+{{--                    <a class="dropdown-item"--}}
+{{--                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">--}}
+{{--                        <i class="mr-50" data-feather="power"></i>@lang('logout')</a>--}}
+{{--                    <form id="logout-form" action="{{ route('user_logout') }}" method="POST"--}}
+{{--                          style="display: none;">--}}
+{{--                        {{ csrf_field() }}--}}
+{{--                    </form>--}}
+{{--                </div>--}}
+{{--            </li>--}}
+{{--        </ul>--}}
+{{--    </div>--}}
+{{--</nav>--}}
+{{--<ul class="main-search-list-defaultlist d-none">--}}
+{{--    <li class="d-flex align-items-center"><a href="#">--}}
+{{--            <h6 class="section-label mt-75 mb-0">Files</h6>--}}
+{{--        </a></li>--}}
+{{--    <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between w-100"--}}
+{{--                                   href="app-file-manager.html">--}}
+{{--            <div class="d-flex">--}}
+{{--                <div class="me-75"><img src="{{asset('portals/app-assets/images/icons/xls.png')}}" alt="png"--}}
+{{--                                        height="32"></div>--}}
+{{--                <div class="search-data">--}}
+{{--                    <p class="search-data-title mb-0">Two new item submitted</p><small class="text-muted">Marketing--}}
+{{--                        Manager</small>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--            <small class="search-data-size me-50 text-muted">&apos;17kb</small>--}}
+{{--        </a></li>--}}
+{{--    <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between w-100"--}}
+{{--                                   href="app-file-manager.html">--}}
+{{--            <div class="d-flex">--}}
+{{--                <div class="me-75"><img src="{{asset('portals/app-assets/images/icons/jpg.png')}}" alt="png"--}}
+{{--                                        height="32"></div>--}}
+{{--                <div class="search-data">--}}
+{{--                    <p class="search-data-title mb-0">52 JPG file Generated</p><small class="text-muted">FontEnd--}}
+{{--                        Developer</small>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--            <small class="search-data-size me-50 text-muted">&apos;11kb</small>--}}
+{{--        </a></li>--}}
+{{--    <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between w-100"--}}
+{{--                                   href="app-file-manager.html">--}}
+{{--            <div class="d-flex">--}}
+{{--                <div class="me-75"><img src="{{asset('portals/app-assets/images/icons/pdf.png')}}" alt="png"--}}
+{{--                                        height="32"></div>--}}
+{{--                <div class="search-data">--}}
+{{--                    <p class="search-data-title mb-0">25 PDF File Uploaded</p><small class="text-muted">Digital--}}
+{{--                        Marketing Manager</small>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--            <small class="search-data-size me-50 text-muted">&apos;150kb</small>--}}
+{{--        </a></li>--}}
+{{--    <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between w-100"--}}
+{{--                                   href="app-file-manager.html">--}}
+{{--            <div class="d-flex">--}}
+{{--                <div class="me-75"><img src="{{asset('portals/app-assets/images/icons/doc.png')}}" alt="png"--}}
+{{--                                        height="32"></div>--}}
+{{--                <div class="search-data">--}}
+{{--                    <p class="search-data-title mb-0">Anna_Strong.doc</p><small class="text-muted">Web Designer</small>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--            <small class="search-data-size me-50 text-muted">&apos;256kb</small>--}}
+{{--        </a></li>--}}
+{{--    <li class="d-flex align-items-center"><a href="#">--}}
+{{--            <h6 class="section-label mt-75 mb-0">Members</h6>--}}
+{{--        </a></li>--}}
+{{--    <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between py-50 w-100"--}}
+{{--                                   href="app-user-view-account.html">--}}
+{{--            <div class="d-flex align-items-center">--}}
+{{--                <div class="avatar me-75"><img--}}
+{{--                        src="{{asset('portals/app-assets/images/portrait/small/avatar-s-8.jpg')}}" alt="png"--}}
+{{--                        height="32"></div>--}}
+{{--                <div class="search-data">--}}
+{{--                    <p class="search-data-title mb-0">John Doe</p><small class="text-muted">UI designer</small>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </a></li>--}}
+{{--    <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between py-50 w-100"--}}
+{{--                                   href="app-user-view-account.html">--}}
+{{--            <div class="d-flex align-items-center">--}}
+{{--                <div class="avatar me-75"><img--}}
+{{--                        src="{{asset('portals/app-assets/images/portrait/small/avatar-s-1.jpg')}}" alt="png"--}}
+{{--                        height="32"></div>--}}
+{{--                <div class="search-data">--}}
+{{--                    <p class="search-data-title mb-0">Michal Clark</p><small class="text-muted">FontEnd--}}
+{{--                        Developer</small>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </a></li>--}}
+{{--    <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between py-50 w-100"--}}
+{{--                                   href="app-user-view-account.html">--}}
+{{--            <div class="d-flex align-items-center">--}}
+{{--                <div class="avatar me-75"><img--}}
+{{--                        src="{{asset('portals/app-assets/images/portrait/small/avatar-s-14.jpg')}}" alt="png"--}}
+{{--                        height="32"></div>--}}
+{{--                <div class="search-data">--}}
+{{--                    <p class="search-data-title mb-0">Milena Gibson</p><small class="text-muted">Digital Marketing--}}
+{{--                        Manager</small>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </a></li>--}}
+{{--    <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between py-50 w-100"--}}
+{{--                                   href="app-user-view-account.html">--}}
+{{--            <div class="d-flex align-items-center">--}}
+{{--                <div class="avatar me-75"><img--}}
+{{--                        src="{{asset('portals/app-assets/images/portrait/small/avatar-s-6.jpg')}}" alt="png"--}}
+{{--                        height="32"></div>--}}
+{{--                <div class="search-data">--}}
+{{--                    <p class="search-data-title mb-0">Anna Strong</p><small class="text-muted">Web Designer</small>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </a></li>--}}
+{{--</ul>--}}
+{{--<ul class="main-search-list-defaultlist-other-list d-none">--}}
+{{--    <li class="auto-suggestion justify-content-between"><a--}}
+{{--            class="d-flex align-items-center justify-content-between w-100 py-50">--}}
+{{--            <div class="d-flex justify-content-start"><span class="me-75" data-feather="alert-circle"></span><span>No results found.</span>--}}
+{{--            </div>--}}
+{{--        </a></li>--}}
+{{--</ul>--}}
 <!-- END: Header-->
 
 
@@ -245,9 +245,9 @@
 <!-- END: Main Menu-->
 
 <!-- BEGIN: Content-->
-<div class="app-content content " style="margin-left: auto;">
-    <div class="content-overlay"></div>
-    <div class="header-navbar-shadow"></div>
+<div class="app-content content " style="margin-left: auto; padding: 3%;">
+{{--    <div class="content-overlay"></div>--}}
+{{--    <div class="header-navbar-shadow"></div>--}}
     @yield('content')
 </div>
 <!-- END: Content-->

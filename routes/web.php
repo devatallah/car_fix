@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 //use App\Http\Controllers\Admin\Auth\LoginController;
+use App\Http\Controllers\Admin\ECURequestController;
 use App\Http\Controllers\Admin\SolutionController;
 use App\Http\Controllers\Admin\ECUController;
 use App\Http\Controllers\Admin\FixController;
@@ -25,6 +26,22 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/get_solution_brands', function (Request $request) {
+    $solution = \App\Models\Solution::query()->with('brands.ecus')->find($request->solution_uuid);
+//    dd($solution);
+    $main_list = [];
+//    foreach ($solutions as $solution){
+//        $solution_list = [];
+    foreach ($solution->brands as $brand){
+        foreach ($brand->ecus as $ecu){
+            $ecu_list = ['id' => $ecu->uuid, 'text' => $ecu->name];
+        }
+        $main_list[] = ['id' => $brand->uuid, 'text' => $brand->name, 'children' => [$ecu_list]];
+    }
+//        $main_list['children'][] = ['id' => $solution->uuid, 'text' => $solution->name, 'children' => $brnd_list];
+//
+//    }
+
+    return response()->json($main_list);
     $solution = \App\Models\Solution::query()->with('brands')->find($request->solution_uuid);
     $json = [];
     foreach ($solution->brands as $brand) {
@@ -36,6 +53,7 @@ Route::get('/get_solution_brands', function (Request $request) {
     return response()->json($json);
 });
 Route::get('/get_solution_brand_ecus', function (Request $request) {
+
     $ecus = \App\Models\ECU::query()->where(['solution_uuid' => $request->solution_uuid, 'brand_uuid' => $request->brand_uuid])->get();
     $json = [];
     foreach ($ecus as $ecu) {
@@ -115,6 +133,13 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
             Route::delete('/{category}', [FixController::class, 'destroy']);
             Route::get('/indexTable', [FixController::class, 'indexTable']);
         });
+        Route::group(['prefix' => 'ecu_requests'], function () {
+            Route::get('/', [ECURequestController::class, 'index']);
+            Route::post('/', [ECURequestController::class, 'store']);
+            Route::put('/{ecu_request}', [ECURequestController::class, 'update']);
+            Route::delete('/{ecu_request}', [ECURequestController::class, 'destroy']);
+            Route::get('/indexTable', [ECURequestController::class, 'indexTable']);
+        });
     });
 
 
@@ -133,12 +158,18 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
 
 
         Route::group(['prefix' => 'fixes'], function () {
-//        Route::group(['prefix' => 'categories', 'middleware' => ['permission:categories']], function () {
             Route::get('/', [App\Http\Controllers\User\FixController::class, 'index']);
             Route::post('/', [App\Http\Controllers\User\FixController::class, 'store']);
             Route::put('/{fix}', [App\Http\Controllers\User\FixController::class, 'update']);
             Route::delete('/{fix}', [App\Http\Controllers\User\FixController::class, 'destroy']);
             Route::get('/indexTable', [App\Http\Controllers\User\FixController::class, 'indexTable']);
+        });
+        Route::group(['prefix' => 'ecu_requests'], function () {
+            Route::get('/', [App\Http\Controllers\User\ECURequestController::class, 'index']);
+            Route::post('/', [App\Http\Controllers\User\ECURequestController::class, 'store']);
+            Route::put('/{ecu_request}', [App\Http\Controllers\User\ECURequestController::class, 'update']);
+            Route::delete('/{ecu_request}', [App\Http\Controllers\User\ECURequestController::class, 'destroy']);
+            Route::get('/indexTable', [App\Http\Controllers\User\ECURequestController::class, 'indexTable']);
         });
     });
 });
