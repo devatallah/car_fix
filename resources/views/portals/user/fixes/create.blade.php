@@ -4,6 +4,16 @@
 @endsection
 @section('styles')
     <style>
+        #myProgress {
+            width: 100%;
+            background-color: #ddd;
+        }
+
+        #myBar {
+            width: 1%;
+            height: 30px;
+            background-color: #04AA6D;
+        }
         .pac-container {
             z-index: 1051 !important;
         }
@@ -16,16 +26,7 @@
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">@lang('fixes')</h2>
-                        <div class="breadcrumb-wrapper">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{url('/user')}}">@lang('home')</a>
-                                </li>
-                                <li class="breadcrumb-item"><a
-                                        href="{{url('/user/fixes')}}">@lang('fixes')</a>
-                                </li>
-                            </ol>
-                        </div>
+                        <h2 class="content-header-title float-left mb-0">@lang('Solutions')</h2>
                     </div>
                 </div>
             </div>
@@ -38,13 +39,17 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="head-label">
-                                    <h4 class="card-title">@lang('fixes')</h4>
-                                </div>
-                                <div class="text-right">
                                     <div class="form-gruop">
                                         <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal"
                                                 data-bs-target="#create_modal"><span><i class="fa fa-plus"></i> @lang('Request New Solution')</span>
                                         </button>
+
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="form-gruop">
+                                        <a class="btn btn-outline-primary" href="" type="button" ><span><i class="fa fa-recycle"></i> @lang('Refresh')</span>
+                                        </a>
 
                                     </div>
                                 </div>
@@ -55,9 +60,9 @@
                                       novalidate>
                                     {{csrf_field()}}
                                     <div class="row">
-                                        <div class="me-5 col-6">
+                                        <div class="col-6">
                                             <div class="form-group mb-1">
-                                                <label for="solution_uuid">@lang('solution')</label>
+                                                <label for="solution_uuid">@lang('Solution Type')</label>
                                                 <select class="solution_uuid form-control" id="solution_uuid"
                                                         name="solution_uuid"
                                                         required>
@@ -74,43 +79,47 @@
                                                 @endif
                                                 <div class="invalid-feedback"></div>
                                             </div>
-                                            <label for="ecu_uuid">@lang('ecu')</label>
-                                            <div id="ecus" class="form-group ms-1 ps-1 pt-1 mb-1"
-                                                 style="background-color: #2B344D; height: 200px; overflow:auto;">
+                                            <div id="ecus" class="form-group ps-1 pt-1 mb-1"
+                                                 style="background-color: #2B344D; height: 500px; overflow:auto;">
                                             </div>
                                         </div>
-                                        <div class="ms-5 col-2">
-                                            <label for="file">@lang('broken_file')</label>
-                                            <div class="form-group">
-                                                <div class="fileinput fileinput-exists"
-                                                     data-provides="fileinput">
-                                                    <div class="fileinput-preview thumbnail"
-                                                         data-trigger="fileinput"
-                                                         style="width: 200px; height: 150px;border-style: solid;">
-                                                        <img id="" src="" alt=""/>
-                                                    </div>
-                                                    <div>
-                                                    <span class="btn btn-secondary btn-file">
-                                                                <span
-                                                                    class="fileinput-new"> @lang('select_file')</span>
-                                                                <span
-                                                                    class="fileinput-exists"> @lang('select_file')</span>
-                                                        <input type="file" name="broken_file"></span>
-                                                    </div>
-                                                    @if ($errors->has('broken_file'))
-                                                        <span class="help-block">
-                                        <strong>{{ $errors->first('broken_file') }}</strong>
-                                    </span>
-                                                    @endif
-                                                    <div class="invalid-feedback"></div>
+                                        <div class="col-6 mt-1">
+                                        <div class="ms-5 col-6">
+                                            <div class="d-inline-flex">
+                                            <div class="demo-vertical-spacing">
+                                                <label for="solution_uuid">@lang('Origin File')</label>
+                                                <div class="form-group">
+                                                <span class="btn btn-secondary btn-file">
+                                                            <span class="fileinput-new"> @lang('select file')</span>
+                                                            <input type="file" name="broken_file">
+                                                        </span>
+                                                @if ($errors->has('broken_file'))
+                                                    <span class="help-block">
+                                                        <strong>{{ $errors->first('broken_file') }}</strong>
+                                                    </span>
+                                                @endif
+                                                <div class="invalid-feedback"></div>
                                                 </div>
                                             </div>
+                                                <div class="demo-vertical-spacing">
+                                                    <label for="">&nbsp</label>
+                                                    <div class="form-group">
+                                                    <button type="submit" form="create_form" class="ms-1 btn btn-primary">
+                                                    @lang('solution')
+                                                </button>
+
+                                            </div>
+                                            </div>
                                         </div>
-                                        <div class="col-6">
-                                            <button type="submit" form="create_form" class="btn btn-primary">
-                                                @lang('fix')
-                                            </button>
-                                        </div>
+{{--                                            <div class=" col-12">--}}
+{{--                                            <div id="myProgress">--}}
+{{--                                                    <div id="myBar">--}}
+
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+                                            </div>
+
                                     </div>
                                 </form>
                             </div>
@@ -184,6 +193,26 @@
     <script>
 
         var url = '{{url("/user/fixes")}}/';
+        // var i = 0;
+        // function move(e) {
+        //     e.preventDefault()
+        //     console.log(444)
+        //     if (i == 0) {
+        //         i = 1;
+        //         var elem = document.getElementById("myBar");
+        //         var width = 1;
+        //         var id = setInterval(frame, 10);
+        //         function frame() {
+        //             if (width >= 100) {
+        //                 clearInterval(id);
+        //                 i = 0;
+        //             } else {
+        //                 width++;
+        //                 elem.style.width = width + "%";
+        //             }
+        //         }
+        //     }
+        // }
         $(document).ready(function () {
             $(document).on('change', '#solution_uuid', function (e) {
                 e.preventDefault();
