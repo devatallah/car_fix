@@ -70,6 +70,11 @@ class FixController extends Controller
         $data['ownerable_uuid'] = auth()->user()->uuid;
         $data['ownerable_type'] = User::class;
         Fix::query()->create($data);
+        $solution = Solution::query()->find($request->solution_uuid);
+        if (!$solution->is_free){
+            $user = User::query()->find(auth()->user()->uuid);
+            $user->update(['balance' => $user->balance - $solution->price]);
+        }
 
         if ($request->ajax()) {
             return response()->json(['status' => true]);

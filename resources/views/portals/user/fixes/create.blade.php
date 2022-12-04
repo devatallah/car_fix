@@ -32,7 +32,51 @@
             </div>
         </div>
         <div class="content-body">
+            <section class="app-user-view-account">
+                <div class="row">
+                    <!-- User Sidebar -->
+                    <div class="col-12 order-1 order-md-0">
+                        <!-- User Card -->
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-around my-2 pt-75">
+                                    <div class="d-flex align-items-start me-2">
+                                        <div class="ms-75">
+                                            <h4 class="mb-0">Name</h4>
+                                            <span>{{auth()->user()->name}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-start">
+                                        <div class="ms-75">
+                                            <h4 class="mb-0">Email</h4>
+                                            <span>{{auth()->user()->email}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-start">
+                                        <div class="ms-75">
+                                            <h4 class="mb-0">License EXP.</h4>
+                                            <span>{{auth()->user()->license_expire_date}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-start">
+                                        <div class="ms-75">
+                                            <h4 class="mb-0">Credit</h4>
+                                            <span>{{auth()->user()->balance}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /User Card -->
+                        <!-- Plan Card -->
+                        <!-- /Plan Card -->
+                    </div>
+                    <!--/ User Sidebar -->
 
+                    <!-- User Content -->
+                    <!--/ User Content -->
+                </div>
+            </section>
             <section id="">
                 <div class="row">
                     <div class="col-12">
@@ -110,6 +154,7 @@
 
                                             </div>
                                             </div>
+                                        </div>
                                         </div>
 {{--                                            <div class=" col-12">--}}
 {{--                                            <div id="myProgress">--}}
@@ -226,16 +271,18 @@
                         text = ``
                         $.each(data, function (index, value) {
                             text += `                                                <div class="mb-1">
-                                                    <b class="brand">` + value.text + `</b>
+                                                    <h5 class="brand">` + value.text + `</h5>
                                                     <div class="ms-1 demo-vertical-spacing brand_ecus" style="display: none">`
                             $.each(value.children, function (index, value) {
 
                                 text += `<div class="form-check form-check">
                                                             <input class="form-check-input" type="radio"
                                                                    name="ecu_uuid" id="` + value.id + `"
-                                                                   value="` + value.id + `">
+                                                                   value="` + value.id + `" style="width: 0.8rem;
+    height: 0.8rem;
+    margin-top: 0.45rem; margin-left: -1.15rem;">
                                                             <label class="form-check-label"
-                                                                   for="` + value.id + `">` + value.text + `</label>
+                                                                   for="` + value.id + `"><small>` + value.text + `</small></label>
                                                         </div>`
                             });
                             text += `                  </div>
