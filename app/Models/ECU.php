@@ -94,7 +94,7 @@ class ECU extends Model
         return @$this->brand->name;
     }
 
-    public function getECUAttribute($value)
+    public function getFileAttribute($value)
     {
         return !is_null($value) ? asset(Storage::url($value)) : '';
     }

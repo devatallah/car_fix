@@ -97,6 +97,7 @@ class ECUController extends Controller
                 $data_attr .= 'data-uuid="' . $ecu->uuid . '" ';
                 $data_attr .= 'data-solution_uuid="' . $ecu->solution_uuid . '" ';
                 $data_attr .= 'data-brand_uuid="' . $ecu->brand_uuid . '" ';
+                $data_attr .= 'data-file="' . $ecu->file . '" ';
                 $data_attr .= 'data-name="' . $ecu->name . '" ';
                 $string = '';
                 $string .= '<button class="edit_btn btn btn-sm btn-outline-primary" data-bs-toggle="modal"
