@@ -97,9 +97,10 @@ class Fix extends Model
     {
         return @$this->ecu->name;
     }
-    public function getFixedFileAttribute()
+    public function getFixedFileAttribute($value)
     {
-        return @$this->ecu->file;
+        $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/';
+        return !is_null($value) ? $path.$value : '';
     }
     public function getSolutionNameAttribute()
     {
@@ -111,7 +112,8 @@ class Fix extends Model
     }
     public function getBrokenFileAttribute($value)
     {
-        return !is_null($value) ? asset(Storage::url($value)) : '';
+        $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/';
+        return !is_null($value) ? $path.$value : '';
     }
 
 

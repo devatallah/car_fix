@@ -11,6 +11,7 @@ use App\Models\Fix;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class FixController extends Controller
@@ -43,7 +44,8 @@ class FixController extends Controller
         $data = $request->only(['broken_file', 'solution_uuid', 'brand_uuid', 'ecu_uuid']);
         $fixed_file = ECU::query()->find($request->ecu_uuid);
         if ($request->hasFile('broken_file')) {
-            $broken_file = $request->broken_file('broken_file')->store('public');
+            $broken_file = Storage::disk('s3')->putFile('/broken_file',$request->file('file'), 'public');
+//            $broken_file = $request->broken_file('broken_file')->store('public');
             $data['broken_file'] = $broken_file;
         }
         $data['fixed_file'] = $fixed_file->file;

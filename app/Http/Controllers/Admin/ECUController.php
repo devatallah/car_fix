@@ -8,6 +8,7 @@ use App\Models\ECU;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class ECUController extends Controller
@@ -32,8 +33,9 @@ class ECUController extends Controller
         $this->validate($request, $rules);
         $data = $request->only(['name', 'file', 'solution_uuid', 'brand_uuid']);
         if ($request->hasFile('file')) {
-            $file = $request->file('file')->store('public');
-            $data['file'] = $file;
+            $file_name = Storage::disk('s3')->putFile('/fixed',$request->file('file'), 'public');
+//            $file = $request->file('file')->store('public');
+            $data['file'] = $file_name;
         }
         ECU::query()->create($data);
 
