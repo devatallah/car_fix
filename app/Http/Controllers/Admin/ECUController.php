@@ -58,7 +58,8 @@ class ECUController extends Controller
         $this->validate($request, $rules);
         $data = $request->only(['name', 'file', 'solution_uuid', 'brand_uuid']);
         if ($request->hasFile('file')) {
-            $fixed_file = $request->file('file')->store('public');
+            $fixed_file = Storage::disk('s3')->putFile('/fixed',$request->file('file'), 'public');
+//            $fixed_file = $request->file('file')->store('public');
             $data['file'] = $fixed_file;
         }
         $ecu->update($data);
