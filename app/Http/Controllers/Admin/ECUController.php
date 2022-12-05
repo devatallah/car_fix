@@ -32,8 +32,11 @@ class ECUController extends Controller
         ];
         $this->validate($request, $rules);
         $data = $request->only(['name', 'file', 'solution_uuid', 'brand_uuid']);
+        $solution = Solution::query()->find($request->solution_uuid);
+        $brand = Brand::query()->find($request->brand_uuid);
         if ($request->hasFile('file')) {
-            $file_name = Storage::disk('s3')->putFile('/fixed',$request->file('file'), 'public');
+            $file_name = Storage::disk('s3')->putFileAs('',$request->file('file'),
+                'fixed/magicSolution ('.$brand->name.' '.$request->name.' ('.$solution->name.') (NoChk).'.$request->file('file')->extension(), ['visibility' => 'public']);
 //            $file = $request->file('file')->store('public');
             $data['file'] = $file_name;
         }
@@ -57,10 +60,13 @@ class ECUController extends Controller
         ];
         $this->validate($request, $rules);
         $data = $request->only(['name', 'file', 'solution_uuid', 'brand_uuid']);
+        $solution = Solution::query()->find($request->solution_uuid);
+        $brand = Brand::query()->find($request->brand_uuid);
         if ($request->hasFile('file')) {
-            $fixed_file = Storage::disk('s3')->putFile('/fixed',$request->file('file'), 'public');
+            $file_name = Storage::disk('s3')->putFileAs('',$request->file('file'),
+                'fixed/magicSolution ('.$brand->name.' '.$request->name.' ('.$solution->name.') (NoChk).'.$request->file('file')->extension(), ['visibility' => 'public']);
 //            $fixed_file = $request->file('file')->store('public');
-            $data['file'] = $fixed_file;
+            $data['file'] = $file_name;
         }
         $ecu->update($data);
 
