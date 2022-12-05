@@ -53,9 +53,9 @@
                                     <div class="row">
                                         <div class="col-3">
                                             <div class="form-group">
-                                                <label for="s_solution">@lang('solution')</label>
-                                                <input id="s_solution" type="text" class="search_input form-control"
-                                                       placeholder="@lang('solution')">
+                                                <label for="s_module">@lang('module')</label>
+                                                <input id="s_module" type="text" class="search_input form-control"
+                                                       placeholder="@lang('module')">
                                             </div>
                                         </div>
                                         <div class="col-3">
@@ -100,7 +100,7 @@
                                             </div>
                                         </th>
                                         <th>@lang('uuid')</th>
-                                        <th>@lang('solution')</th>
+                                        <th>@lang('module')</th>
                                         <th>@lang('brand')</th>
                                         <th>@lang('ecu')</th>
                                         <th style="width: 225px;">@lang('actions')</th>
@@ -133,10 +133,10 @@
                         <div class="row">
                                 <div class="col-12 mb-1">
                                     <div class="form-group">
-                                        <label for="solution">@lang('solution')</label>
+                                        <label for="module">@lang('module')</label>
                                         <input type="text" class="form-control"
-                                               placeholder="@lang('solution')"
-                                               name="solution" id="solution">
+                                               placeholder="@lang('module')"
+                                               name="module" id="module">
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
@@ -193,10 +193,10 @@
                         <div class="row">
                                 <div class="col-12 mb-1">
                                     <div class="form-group">
-                                        <label for="edit_solution">@lang('solution')</label>
+                                        <label for="edit_module">@lang('module')</label>
                                         <input type="text" class="form-control"
-                                               placeholder="@lang('solution')"
-                                               name="solution" id="edit_solution">
+                                               placeholder="@lang('module')"
+                                               name="module" id="edit_module">
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
@@ -285,7 +285,7 @@
             ajax: {
                 url: '{{ url('/admin/ecu_requests/indexTable')}}',
                 data: function (d) {
-                    d.solution = $('#s_solution').val();
+                    d.module = $('#s_module').val();
                     d.brand = $('#s_brand').val();
                     d.ecu = $('#s_ecu').val();
                 }
@@ -303,7 +303,7 @@
                 },
 
                 {data: 'uuid', name: 'uuid'},
-                {data: 'solution', name: 'solution'},
+                {data: 'module', name: 'module'},
                 {data: 'brand', name: 'brand'},
                 {data: 'ecu', name: 'ecu'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
@@ -317,7 +317,7 @@
                 var days = ''
                 $('#edit_form').attr('action', url + uuid)
                 // $('#edit_order').val(button.data('order')).trigger('change')
-                $('#edit_solution').val(button.data('solution'))
+                $('#edit_module').val(button.data('module'))
                 $('#edit_brand').val(button.data('brand'))
                 $('#edit_ecu').val(button.data('ecu'))
             });

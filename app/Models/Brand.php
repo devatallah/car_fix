@@ -56,9 +56,9 @@ class Brand extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function solutions()
+    public function modules()
     {
-        return $this->belongsToMany(Solution::class, 'ecus', 'brand_uuid', 'solution_uuid', 'uuid', 'uuid')->distinct();
+        return $this->belongsToMany(Module::class, 'ecus', 'brand_uuid', 'module_uuid', 'uuid', 'uuid')->distinct();
     }
     public function ecus()
     {

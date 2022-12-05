@@ -3,12 +3,13 @@
 use App\Http\Controllers\Admin\AdminController;
 //use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\ECURequestController;
-use App\Http\Controllers\Admin\SolutionController;
+use App\Http\Controllers\Admin\ModuleController;
 use App\Http\Controllers\Admin\ECUController;
 use App\Http\Controllers\Admin\FixController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CarModelController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\SolutionController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -25,26 +26,26 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/get_solution_brands', function (Request $request) {
-    $solution = \App\Models\Solution::query()->with('brands.ecus')->find($request->solution_uuid);
-//    dd($solution);
+Route::get('/get_module_brands', function (Request $request) {
+    $module = \App\Models\Module::query()->with('brands.ecus')->find($request->module_uuid);
+//    dd($module);
     $main_list = [];
-//    foreach ($solutions as $solution){
-//        $solution_list = [];
-    foreach ($solution->brands as $brand){
+//    foreach ($modules as $module){
+//        $module_list = [];
+    foreach ($module->brands as $brand){
         foreach ($brand->ecus as $ecu){
-            $ecu_list = ['id' => $ecu->uuid, 'text' => $ecu->name];
+            $ecu_list[] = ['id' => $ecu->uuid, 'text' => $ecu->name];
         }
-        $main_list[] = ['id' => $brand->uuid, 'text' => $brand->name, 'children' => [$ecu_list]];
+        $main_list[] = ['id' => $brand->uuid, 'text' => $brand->name, 'children' => $ecu_list];
     }
-//        $main_list['children'][] = ['id' => $solution->uuid, 'text' => $solution->name, 'children' => $brnd_list];
+//        $main_list['children'][] = ['id' => $module->uuid, 'text' => $module->name, 'children' => $brnd_list];
 //
 //    }
 
     return response()->json($main_list);
-    $solution = \App\Models\Solution::query()->with('brands')->find($request->solution_uuid);
+    $module = \App\Models\Module::query()->with('brands')->find($request->module_uuid);
     $json = [];
-    foreach ($solution->brands as $brand) {
+    foreach ($module->brands as $brand) {
         $json[] = [
             'id' => $brand->uuid,
             'text' => $brand->name,
@@ -52,9 +53,9 @@ Route::get('/get_solution_brands', function (Request $request) {
     }
     return response()->json($json);
 });
-Route::get('/get_solution_brand_ecus', function (Request $request) {
+Route::get('/get_module_brand_ecus', function (Request $request) {
 
-    $ecus = \App\Models\ECU::query()->where(['solution_uuid' => $request->solution_uuid, 'brand_uuid' => $request->brand_uuid])->get();
+    $ecus = \App\Models\ECU::query()->where(['module_uuid' => $request->module_uuid, 'brand_uuid' => $request->brand_uuid])->get();
     $json = [];
     foreach ($ecus as $ecu) {
         $json[] = [
@@ -90,12 +91,12 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
         Route::put('/password', [ProfileController::class, 'changePassword']);
 
 
-        Route::group(['prefix' => 'solutions'], function () {
-            Route::get('/', [SolutionController::class, 'index']);
-            Route::post('/', [SolutionController::class, 'store']);
-            Route::put('/{solution}', [SolutionController::class, 'update']);
-            Route::delete('/{solution}', [SolutionController::class, 'destroy']);
-            Route::get('/indexTable', [SolutionController::class, 'indexTable']);
+        Route::group(['prefix' => 'modules'], function () {
+            Route::get('/', [ModuleController::class, 'index']);
+            Route::post('/', [ModuleController::class, 'store']);
+            Route::put('/{module}', [ModuleController::class, 'update']);
+            Route::delete('/{module}', [ModuleController::class, 'destroy']);
+            Route::get('/indexTable', [ModuleController::class, 'indexTable']);
         });
         Route::group(['prefix' => 'brands'], function () {
             Route::get('/', [BrandController::class, 'index']);
@@ -125,13 +126,13 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
             Route::delete('/{user}', [UserController::class, 'destroy']);
             Route::get('/indexTable', [UserController::class, 'indexTable']);
         });
-        Route::group(['prefix' => 'fixes'], function () {
-            Route::get('/', [FixController::class, 'index']);
-            Route::get('/create', [FixController::class, 'create']);
-            Route::post('/', [FixController::class, 'store']);
-            Route::put('/{category}', [FixController::class, 'update']);
-            Route::delete('/{category}', [FixController::class, 'destroy']);
-            Route::get('/indexTable', [FixController::class, 'indexTable']);
+        Route::group(['prefix' => 'solutions'], function () {
+            Route::get('/', [SolutionController::class, 'index']);
+            Route::get('/create', [SolutionController::class, 'create']);
+            Route::post('/', [SolutionController::class, 'store']);
+            Route::put('/{category}', [SolutionController::class, 'update']);
+            Route::delete('/{category}', [SolutionController::class, 'destroy']);
+            Route::get('/indexTable', [SolutionController::class, 'indexTable']);
         });
         Route::group(['prefix' => 'ecu_requests'], function () {
             Route::get('/', [ECURequestController::class, 'index']);
@@ -148,7 +149,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
     Route::post('user/logout', [App\Http\Controllers\User\Auth\LoginController::class, 'logout'])->name('user_logout');
     Route::group(['namespace' => 'User', 'prefix' => 'user', 'middleware' => ['auth:web']], function () {
         Route::get('/', function () {
-            return redirect('user/fixes');
+            return redirect('user/solutions');
         });
         Route::get('/profile', function () {
             return view('portals.user.profile');
@@ -157,12 +158,12 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
         Route::put('/password', [App\Http\Controllers\User\ProfileController::class, 'changePassword']);
 
 
-        Route::group(['prefix' => 'fixes'], function () {
-            Route::get('/', [App\Http\Controllers\User\FixController::class, 'index']);
-            Route::post('/', [App\Http\Controllers\User\FixController::class, 'store']);
-            Route::put('/{fix}', [App\Http\Controllers\User\FixController::class, 'update']);
-            Route::delete('/{fix}', [App\Http\Controllers\User\FixController::class, 'destroy']);
-            Route::get('/indexTable', [App\Http\Controllers\User\FixController::class, 'indexTable']);
+        Route::group(['prefix' => 'solutions'], function () {
+            Route::get('/', [App\Http\Controllers\User\SolutionController::class, 'index']);
+            Route::post('/', [App\Http\Controllers\User\SolutionController::class, 'store']);
+            Route::put('/{solution}', [App\Http\Controllers\User\SolutionController::class, 'update']);
+            Route::delete('/{solution}', [App\Http\Controllers\User\SolutionController::class, 'destroy']);
+            Route::get('/indexTable', [App\Http\Controllers\User\SolutionController::class, 'indexTable']);
         });
         Route::group(['prefix' => 'ecu_requests'], function () {
             Route::get('/', [App\Http\Controllers\User\ECURequestController::class, 'index']);

@@ -22,8 +22,8 @@ class ECU extends Model
     public $incrementing = false;
     protected $table = 'ecus';
     protected $guarded = [];
-    protected $appends = ['solution_name', 'brand_name'];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'solution', 'brand'];
+    protected $appends = ['module_name', 'brand_name'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'module', 'brand'];
     protected $primaryKey = 'uuid';
 
 
@@ -59,8 +59,8 @@ class ECU extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function solution(){
-        return $this->belongsTo(Solution::class)->withTrashed();
+    public function module(){
+        return $this->belongsTo(Module::class)->withTrashed();
     }
     public function brand(){
         return $this->belongsTo(Brand::class)->withTrashed();
@@ -85,9 +85,9 @@ class ECU extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function getSolutionNameAttribute()
+    public function getModuleNameAttribute()
     {
-        return @$this->solution->name;
+        return @$this->module->name;
     }
     public function getBrandNameAttribute()
     {

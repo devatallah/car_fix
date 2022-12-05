@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <title>MagicSolution</title>
+    <title>MagicModule</title>
     <link rel="apple-touch-icon" href="{{asset('portals/app-assets/images/logo.svg')}}">
     <link rel="shortcut icon" type="image/x-icon" href="{{asset('portals/app-assets/images/ico/favicon.ico')}}">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600"
@@ -250,7 +250,7 @@
                                             href="{{url('admin')}}"><span
                         class="brand-logo" style="width: 36px;">
                         <img src="{{asset('portals/app-assets/images/logo.svg')}}" alt=""></span>
-                    <h2 class="brand-text">MagicSolution</h2>
+                    <h2 class="brand-text">MagicModule</h2>
                 </a></li>
             <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pe-0" data-bs-toggle="collapse"><i
                         class="d-block d-xl-none text-primary toggle-icon font-medium-4" data-feather="x"></i><i
@@ -265,9 +265,9 @@
                         data-feather="home"></i><span class="menu-title text-truncate"
                                                       data-i18n="Dashboard">Dashboard</span></a>
             </li>
-            <li class=" nav-item"><a class="d-flex align-items-center" href="{{url('admin/solutions')}}"><i
+            <li class=" nav-item"><a class="d-flex align-items-center" href="{{url('admin/modules')}}"><i
                         data-feather="grid"></i><span class="menu-title text-truncate"
-                                                      data-i18n="Solutions">@lang('solutions')</span></a>
+                                                      data-i18n="Modules">@lang('modules')</span></a>
             </li>
             <li class=" nav-item"><a class="d-flex align-items-center" href="{{url('admin/brands')}}"><i
                         data-feather="grid"></i><span class="menu-title text-truncate"
@@ -281,13 +281,13 @@
                         data-feather="grid"></i><span class="menu-title text-truncate"
                                                       data-i18n="ECURequests">@lang('ecu_requests')</span></a>
             </li>
-            <li class=" nav-item"><a class="d-flex align-items-center" href="{{url('admin/fixes/create')}}"><i
+            <li class=" nav-item"><a class="d-flex align-items-center" href="{{url('admin/solutions/create')}}"><i
                         data-feather="grid"></i><span class="menu-title text-truncate"
-                                                      data-i18n="Fixe">@lang('create_fix')</span></a>
+                                                      data-i18n="Solution">@lang('create_solution')</span></a>
             </li>
-            <li class=" nav-item"><a class="d-flex align-items-center" href="{{url('admin/fixes')}}"><i
+            <li class=" nav-item"><a class="d-flex align-items-center" href="{{url('admin/solutions')}}"><i
                         data-feather="grid"></i><span class="menu-title text-truncate"
-                                                      data-i18n="Fixe">@lang('fixes')</span></a>
+                                                      data-i18n="Solutions">@lang('solutions')</span></a>
             </li>
             <li class=" nav-item"><a class="d-flex align-items-center" href="{{url('admin/admins')}}"><i
                         data-feather="grid"></i><span class="menu-title text-truncate"

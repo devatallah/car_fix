@@ -1,14 +1,8 @@
 @extends('portals.admin.app')
 @section('title')
-    @lang('fixes')
+    @lang('modules')
 @endsection
 @section('styles')
-    <style>
-        .pac-container {
-            z-index: 1051 !important;
-        }
-
-    </style>
 @endsection
 @section('content')
 
@@ -17,13 +11,13 @@
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">@lang('fixes')</h2>
+                        <h2 class="content-header-title float-left mb-0">@lang('modules')</h2>
                         <div class="breadcrumb-wrapper">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{url('/admin')}}">@lang('home')</a>
                                 </li>
                                 <li class="breadcrumb-item"><a
-                                        href="{{url('/admin/fixes')}}">@lang('fixes')</a>
+                                        href="{{url('/admin/modules')}}">@lang('modules')</a>
                                 </li>
                             </ol>
                         </div>
@@ -39,7 +33,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="head-label">
-                                    <h4 class="card-title">@lang('fixes')</h4>
+                                    <h4 class="card-title">@lang('modules')</h4>
                                 </div>
                                 <div class="text-right">
                                     <div class="form-gruop">
@@ -62,31 +56,6 @@
                                                 <label for="s_name">@lang('name')</label>
                                                 <input id="s_name" type="text" class="search_input form-control"
                                                        placeholder="@lang('name')">
-                                            </div>
-                                        </div>
-                                        <div class="col-3">
-                                            <div class="form-group">
-                                                <label for="s_solution_uuid">@lang('solution')</label>
-                                                <select name="s_solution_uuid" id="s_solution_uuid"
-                                                        class="form-control">
-                                                    <option value="">@lang('select')</option>
-                                                    @foreach($solutions as $solution)
-                                                        <option value="{{$solution->uuid}}">{{$solution->name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-3">
-                                            <div class="form-group">
-                                                <label for="s_brand_uuid">@lang('brand')</label>
-                                                <select name="s_brand_uuid" id="s_brand_uuid"
-                                                        class="form-control">
-                                                    <option value="">@lang('select')</option>
-                                                    @foreach($brands as $brand)
-                                                        <option
-                                                            value="{{$brand->uuid}}">{{$brand->name}}</option>
-                                                    @endforeach
-                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-3" style="margin-top: 20px">
@@ -117,10 +86,9 @@
                                             </div>
                                         </th>
                                         <th>@lang('uuid')</th>
-                                        <th>@lang('broken_file')</th>
-                                        <th>@lang('fixed_file')</th>
-                                        <th>@lang('solution')</th>
-                                        <th>@lang('brand')</th>
+                                        <th>@lang('name')</th>
+                                        <th>@lang('is_free')</th>
+                                        <th>@lang('price')</th>
                                         <th style="width: 225px;">@lang('actions')</th>
                                     </tr>
                                     </thead>
@@ -135,7 +103,7 @@
     </div>
     <div class="modal fade" id="create_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">@lang('create')</h5>
@@ -149,53 +117,33 @@
                           novalidate>
                         {{csrf_field()}}
                         <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="solution_uuid">@lang('solution')</label>
-                                    <select class="solution_uuid form-control" id="solution_uuid" name="solution_uuid"
-                                            required>
-                                        <option value="">@lang('select')</option>
-                                        @foreach($solutions as $solution)
-                                            <option value="{{$solution->uuid}}">{{$solution->name}}</option>
-                                        @endforeach
-                                    </select>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="brand_uuid">@lang('brand')</label>
-                                    <select class="brand_uuid form-control" id="brand_uuid"
-                                            name="brand_uuid" required>
-                                        <option value="">@lang('select')</option>
-                                        @foreach($brands as $brand)
-                                            <option value="{{$brand->uuid}}">{{$brand->name}}</option>
-                                        @endforeach
-                                    </select>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <label for="file">@lang('broken_file')</label>
-                                <div class="form-group">
-                                    <div class="fileinput fileinput-exists"
-                                         data-provides="fileinput">
-                                        <div class="fileinput-preview thumbnail"
-                                             data-trigger="fileinput"
-                                             style="width: 200px; height: 150px;">
-                                            <img id="" src="" alt=""/>
-                                        </div>
-                                        <div>
-                                                    <span class="btn btn-secondary btn-file">
-                                                                <span
-                                                                    class="fileinput-new"> @lang('select_file')</span>
-                                                                <span
-                                                                    class="fileinput-exists"> @lang('select_file')</span>
-                                                        <input type="file" name="broken_file"></span>
-                                        </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="name">@lang('name')</label>
+                                        <input type="text" class="form-control"
+                                               placeholder="@lang('name')"
+                                               name="name" id="name">
                                         <div class="invalid-feedback"></div>
                                     </div>
+                                </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="is_free">@lang('is_free')</label>
+                                    <select name="is_free" id="is_free" class="form-control">
+                                        <option value="">@lang('select')</option>
+                                        <option value="1">@lang('yes')</option>
+                                        <option value="0">@lang('no')</option>
+                                    </select>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                                </div>
+                            <div class="col-12">
+                            <div class="form-group">
+                                    <label for="price">@lang('price')</label>
+                                    <input type="text" class="form-control"
+                                           placeholder="@lang('price')"
+                                           name="price" id="price">
+                                    <div class="invalid-feedback"></div>
                                 </div>
                             </div>
                         </div>
@@ -215,7 +163,7 @@
 
     <div class="modal fade" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">@lang('edit')</h5>
@@ -230,53 +178,31 @@
                         {{csrf_field()}}
                         {{method_field('PUT')}}
                         <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="edit_solution_uuid">@lang('solution')</label>
-                                    <select class="solution_uuid form-control" id="edit_solution_uuid"
-                                            name="solution_uuid" required>
-                                        <option value="">@lang('select')</option>
-                                        @foreach($solutions as $solution)
-                                            <option value="{{$solution->uuid}}">{{$solution->name}}</option>
-                                        @endforeach
-                                    </select>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="edit_brand_uuid">@lang('brand')</label>
-                                    <select class="brand_uuid form-control" id="edit_brand_uuid"
-                                            name="brand_uuid" required>
-                                        <option value="">@lang('select')</option>
-                                        @foreach($brands as $brand)
-                                            <option value="{{$brand->uuid}}">{{$brand->name}}</option>
-                                        @endforeach
-                                    </select>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <label for="edit_file">@lang('broken_file')</label>
-                                <div class="form-group">
-                                    <div class="fileinput fileinput-exists"
-                                         data-provides="fileinput">
-                                        <div class="fileinput-preview thumbnail"
-                                             data-trigger="fileinput"
-                                             style="width: 200px; height: 150px;">
-                                            <img id="edit_src_file" src="" alt=""/>
-                                        </div>
-                                        <div>
-                                                    <span class="btn btn-secondary btn-file">
-                                                                <span
-                                                                    class="fileinput-new"> @lang('select_file')</span>
-                                                                <span
-                                                                    class="fileinput-exists"> @lang('select_file')</span>
-                                                        <input type="file" name="broken_file"></span>
-                                        </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="edit_name">@lang('name')</label>
+                                        <input type="text" class="form-control"
+                                               placeholder="@lang('name')"
+                                               name="name" id="edit_name">
                                         <div class="invalid-feedback"></div>
                                     </div>
+                                </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="edit_is_free">@lang('is_free')</label>
+                                    <select name="is_free" id="edit_is_free" class="form-control">
+                                        <option value="">@lang('select')</option>
+                                        <option value="1">@lang('yes')</option>
+                                        <option value="0">@lang('no')</option>
+                                    </select>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit_price">@lang('price')</label>
+                                    <input type="text" class="form-control"
+                                           placeholder="@lang('price')"
+                                           name="price" id="edit_price">
+                                    <div class="invalid-feedback"></div>
                                 </div>
                             </div>
                         </div>
@@ -299,7 +225,7 @@
 @endsection
 @section('scripts')
     <script>
-        var url = '{{url("/admin/fixes")}}/';
+        var url = '{{url("/admin/modules")}}/';
 
         var oTable = $('#datatable').DataTable({
             dom: '<"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
@@ -344,11 +270,9 @@
             serverSide: true,
             searching: false,
             ajax: {
-                url: '{{ url('/admin/fixes/indexTable')}}',
+                url: '{{ url('/admin/modules/indexTable')}}',
                 data: function (d) {
                     d.name = $('#s_name').val();
-                    d.solution_uuid = $('#s_solution_uuid').val();
-                    d.brand_uuid = $('#s_brand_uuid').val();
                 }
             },
             columns: [
@@ -364,36 +288,21 @@
                 },
 
                 {data: 'uuid', name: 'uuid'},
-                {
-                    "render": function (data, type, full, meta) {
-                        return `<a href="` + full.broken_file + `" target="_blank">@lang('download_file')</a>`;
-                    }
-                },
-                {
-                    "render": function (data, type, full, meta) {
-                        return `<a href="` + full.fixed_file + `" target="_blank">@lang('download_file')</a>`;
-                    }
-                },
-                {data: 'solution_name', name: 'solution_uuid'},
-                {data: 'brand_name', name: 'brand_uuid'},
+                {data: 'name', name: 'name'},
+                {data: 'is_free', name: 'is_free'},
+                {data: 'price', name: 'price'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
 
         $(document).ready(function () {
-
-
             $(document).on('click', '.edit_btn', function (event) {
                 var button = $(this)
                 var uuid = button.data('uuid')
                 $('#edit_form').attr('action', url + uuid)
-                @foreach(locales() as $key => $value)
-                $('#edit_name_{{$key}}').val(button.data('name_{{$key}}'))
-                @endforeach
-                var user_uuid = button.data('user_uuid')
-                $('#edit_solution_uuid').val(button.data('solution_uuid')).trigger('change')
-                $('#edit_brand_uuid').val(button.data('brand_uuid')).trigger('change')
-                $('#edit_src_file').attr('src', button.data('file'))
+                $('#edit_name').val(button.data('name'))
+                $('#edit_is_free').val(button.data('is_free')).trigger('change')
+                $('#edit_price').val(button.data('price'))
             });
             $(document).on('click', '#create_btn', function (event) {
                 $('#create_form').attr('action', url);
@@ -401,4 +310,5 @@
         });
 
     </script>
+
 @endsection

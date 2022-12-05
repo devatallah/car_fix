@@ -3,6 +3,12 @@
     @lang('solutions')
 @endsection
 @section('styles')
+    <style>
+        .pac-container {
+            z-index: 1051 !important;
+        }
+
+    </style>
 @endsection
 @section('content')
 
@@ -58,6 +64,31 @@
                                                        placeholder="@lang('name')">
                                             </div>
                                         </div>
+                                        <div class="col-3">
+                                            <div class="form-group">
+                                                <label for="s_module_uuid">@lang('module')</label>
+                                                <select name="s_module_uuid" id="s_module_uuid"
+                                                        class="form-control">
+                                                    <option value="">@lang('select')</option>
+                                                    @foreach($modules as $module)
+                                                        <option value="{{$module->uuid}}">{{$module->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="form-group">
+                                                <label for="s_brand_uuid">@lang('brand')</label>
+                                                <select name="s_brand_uuid" id="s_brand_uuid"
+                                                        class="form-control">
+                                                    <option value="">@lang('select')</option>
+                                                    @foreach($brands as $brand)
+                                                        <option
+                                                            value="{{$brand->uuid}}">{{$brand->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
                                         <div class="col-3" style="margin-top: 20px">
                                             <div class="form-group">
                                                 <button id="search_btn" class="btn btn-outline-info" type="submit">
@@ -86,9 +117,12 @@
                                             </div>
                                         </th>
                                         <th>@lang('uuid')</th>
-                                        <th>@lang('name')</th>
-                                        <th>@lang('is_free')</th>
-                                        <th>@lang('price')</th>
+                                        <th>@lang('broken_file')</th>
+                                        <th>@lang('fixed_file')</th>
+                                        <th>@lang('module')</th>
+                                        <th>@lang('brand')</th>
+                                        <th>@lang('owner_name')</th>
+                                        <th>@lang('created_at')</th>
                                         <th style="width: 225px;">@lang('actions')</th>
                                     </tr>
                                     </thead>
@@ -103,7 +137,7 @@
     </div>
     <div class="modal fade" id="create_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">@lang('create')</h5>
@@ -117,33 +151,53 @@
                           novalidate>
                         {{csrf_field()}}
                         <div class="row">
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label for="name">@lang('name')</label>
-                                        <input type="text" class="form-control"
-                                               placeholder="@lang('name')"
-                                               name="name" id="name">
-                                        <div class="invalid-feedback"></div>
-                                    </div>
-                                </div>
-                            <div class="col-12">
+                            <div class="col-6">
                                 <div class="form-group">
-                                    <label for="is_free">@lang('is_free')</label>
-                                    <select name="is_free" id="is_free" class="form-control">
+                                    <label for="module_uuid">@lang('module')</label>
+                                    <select class="module_uuid form-control" id="module_uuid" name="module_uuid"
+                                            required>
                                         <option value="">@lang('select')</option>
-                                        <option value="1">@lang('yes')</option>
-                                        <option value="0">@lang('no')</option>
+                                        @foreach($modules as $module)
+                                            <option value="{{$module->uuid}}">{{$module->name}}</option>
+                                        @endforeach
                                     </select>
                                     <div class="invalid-feedback"></div>
                                 </div>
-                                </div>
-                            <div class="col-12">
-                            <div class="form-group">
-                                    <label for="price">@lang('price')</label>
-                                    <input type="text" class="form-control"
-                                           placeholder="@lang('price')"
-                                           name="price" id="price">
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="brand_uuid">@lang('brand')</label>
+                                    <select class="brand_uuid form-control" id="brand_uuid"
+                                            name="brand_uuid" required>
+                                        <option value="">@lang('select')</option>
+                                        @foreach($brands as $brand)
+                                            <option value="{{$brand->uuid}}">{{$brand->name}}</option>
+                                        @endforeach
+                                    </select>
                                     <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="file">@lang('broken_file')</label>
+                                <div class="form-group">
+                                    <div class="fileinput fileinput-exists"
+                                         data-provides="fileinput">
+                                        <div class="fileinput-preview thumbnail"
+                                             data-trigger="fileinput"
+                                             style="width: 200px; height: 150px;">
+                                            <img id="" src="" alt=""/>
+                                        </div>
+                                        <div>
+                                                    <span class="btn btn-secondary btn-file">
+                                                                <span
+                                                                    class="fileinput-new"> @lang('select_file')</span>
+                                                                <span
+                                                                    class="fileinput-exists"> @lang('select_file')</span>
+                                                        <input type="file" name="broken_file"></span>
+                                        </div>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -163,7 +217,7 @@
 
     <div class="modal fade" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">@lang('edit')</h5>
@@ -178,31 +232,53 @@
                         {{csrf_field()}}
                         {{method_field('PUT')}}
                         <div class="row">
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label for="edit_name">@lang('name')</label>
-                                        <input type="text" class="form-control"
-                                               placeholder="@lang('name')"
-                                               name="name" id="edit_name">
-                                        <div class="invalid-feedback"></div>
-                                    </div>
-                                </div>
-                            <div class="col-12">
+                            <div class="col-6">
                                 <div class="form-group">
-                                    <label for="edit_is_free">@lang('is_free')</label>
-                                    <select name="is_free" id="edit_is_free" class="form-control">
+                                    <label for="edit_module_uuid">@lang('module')</label>
+                                    <select class="module_uuid form-control" id="edit_module_uuid"
+                                            name="module_uuid" required>
                                         <option value="">@lang('select')</option>
-                                        <option value="1">@lang('yes')</option>
-                                        <option value="0">@lang('no')</option>
+                                        @foreach($modules as $module)
+                                            <option value="{{$module->uuid}}">{{$module->name}}</option>
+                                        @endforeach
                                     </select>
                                     <div class="invalid-feedback"></div>
                                 </div>
+                            </div>
+                            <div class="col-6">
                                 <div class="form-group">
-                                    <label for="edit_price">@lang('price')</label>
-                                    <input type="text" class="form-control"
-                                           placeholder="@lang('price')"
-                                           name="price" id="edit_price">
+                                    <label for="edit_brand_uuid">@lang('brand')</label>
+                                    <select class="brand_uuid form-control" id="edit_brand_uuid"
+                                            name="brand_uuid" required>
+                                        <option value="">@lang('select')</option>
+                                        @foreach($brands as $brand)
+                                            <option value="{{$brand->uuid}}">{{$brand->name}}</option>
+                                        @endforeach
+                                    </select>
                                     <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="edit_file">@lang('broken_file')</label>
+                                <div class="form-group">
+                                    <div class="fileinput fileinput-exists"
+                                         data-provides="fileinput">
+                                        <div class="fileinput-preview thumbnail"
+                                             data-trigger="fileinput"
+                                             style="width: 200px; height: 150px;">
+                                            <img id="edit_src_file" src="" alt=""/>
+                                        </div>
+                                        <div>
+                                                    <span class="btn btn-secondary btn-file">
+                                                                <span
+                                                                    class="fileinput-new"> @lang('select_file')</span>
+                                                                <span
+                                                                    class="fileinput-exists"> @lang('select_file')</span>
+                                                        <input type="file" name="broken_file"></span>
+                                        </div>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -273,6 +349,8 @@
                 url: '{{ url('/admin/solutions/indexTable')}}',
                 data: function (d) {
                     d.name = $('#s_name').val();
+                    d.module_uuid = $('#s_module_uuid').val();
+                    d.brand_uuid = $('#s_brand_uuid').val();
                 }
             },
             columns: [
@@ -288,21 +366,38 @@
                 },
 
                 {data: 'uuid', name: 'uuid'},
-                {data: 'name', name: 'name'},
-                {data: 'is_free', name: 'is_free'},
-                {data: 'price', name: 'price'},
+                {
+                    "render": function (data, type, full, meta) {
+                        return `<a href="` + full.broken_file + `" target="_blank">@lang('download_file')</a>`;
+                    }
+                },
+                {
+                    "render": function (data, type, full, meta) {
+                        return `<a href="` + full.fixed_file + `" target="_blank">@lang('download_file')</a>`;
+                    }
+                },
+                {data: 'module_name', name: 'module_uuid'},
+                {data: 'brand_name', name: 'brand_uuid'},
+                {data: 'owner_name', name: 'ownerable_uuid'},
+                {data: 'created_at', name: 'created_at'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
 
         $(document).ready(function () {
+
+
             $(document).on('click', '.edit_btn', function (event) {
                 var button = $(this)
                 var uuid = button.data('uuid')
                 $('#edit_form').attr('action', url + uuid)
-                $('#edit_name').val(button.data('name'))
-                $('#edit_is_free').val(button.data('is_free')).trigger('change')
-                $('#edit_price').val(button.data('price'))
+                @foreach(locales() as $key => $value)
+                $('#edit_name_{{$key}}').val(button.data('name_{{$key}}'))
+                @endforeach
+                var user_uuid = button.data('user_uuid')
+                $('#edit_module_uuid').val(button.data('module_uuid')).trigger('change')
+                $('#edit_brand_uuid').val(button.data('brand_uuid')).trigger('change')
+                $('#edit_src_file').attr('src', button.data('file'))
             });
             $(document).on('click', '#create_btn', function (event) {
                 $('#create_form').attr('action', url);
@@ -310,5 +405,4 @@
         });
 
     </script>
-
 @endsection

@@ -66,12 +66,12 @@
                                         </div>
                                         <div class="col-3">
                                             <div class="form-group">
-                                                <label for="s_solution_uuid">@lang('solution')</label>
-                                                <select name="s_solution_uuid" id="s_solution_uuid"
+                                                <label for="s_module_uuid">@lang('module')</label>
+                                                <select name="s_module_uuid" id="s_module_uuid"
                                                         class="form-control">
                                                     <option value="">@lang('select')</option>
-                                                    @foreach($solutions as $solution)
-                                                        <option value="{{$solution->uuid}}">{{$solution->name}}</option>
+                                                    @foreach($modules as $module)
+                                                        <option value="{{$module->uuid}}">{{$module->name}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -119,7 +119,7 @@
                                         <th>@lang('uuid')</th>
                                         <th>@lang('name')</th>
                                         <th>@lang('file')</th>
-                                        <th>@lang('solution')</th>
+                                        <th>@lang('module')</th>
                                         <th>@lang('brand')</th>
                                         <th style="width: 225px;">@lang('actions')</th>
                                     </tr>
@@ -160,12 +160,12 @@
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="solution_uuid">@lang('solution')</label>
-                                    <select class="solution_uuid form-control" id="solution_uuid" name="solution_uuid"
+                                    <label for="module_uuid">@lang('module')</label>
+                                    <select class="module_uuid form-control" id="module_uuid" name="module_uuid"
                                             required>
                                         <option value="">@lang('select')</option>
-                                        @foreach($solutions as $solution)
-                                            <option value="{{$solution->uuid}}">{{$solution->name}}</option>
+                                        @foreach($modules as $module)
+                                            <option value="{{$module->uuid}}">{{$module->name}}</option>
                                         @endforeach
                                     </select>
                                     <div class="invalid-feedback"></div>
@@ -250,12 +250,12 @@
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="edit_solution_uuid">@lang('solution')</label>
-                                    <select class="solution_uuid form-control" id="edit_solution_uuid"
-                                            name="solution_uuid" required>
+                                    <label for="edit_module_uuid">@lang('module')</label>
+                                    <select class="module_uuid form-control" id="edit_module_uuid"
+                                            name="module_uuid" required>
                                         <option value="">@lang('select')</option>
-                                        @foreach($solutions as $solution)
-                                            <option value="{{$solution->uuid}}">{{$solution->name}}</option>
+                                        @foreach($modules as $module)
+                                            <option value="{{$module->uuid}}">{{$module->name}}</option>
                                         @endforeach
                                     </select>
                                     <div class="invalid-feedback"></div>
@@ -365,7 +365,7 @@
                 data: function (d) {
                     d.name = $('#s_name').val();
                     d.file = $('#s_file').val();
-                    d.solution_uuid = $('#s_solution_uuid').val();
+                    d.module_uuid = $('#s_module_uuid').val();
                     d.brand_uuid = $('#s_brand_uuid').val();
                 }
             },
@@ -389,7 +389,7 @@
                     }
                 },
                 // {data: 'file', name: 'file'},
-                {data: 'solution_name', name: 'solution_uuid'},
+                {data: 'module_name', name: 'module_uuid'},
                 {data: 'brand_name', name: 'brand_uuid'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
@@ -404,7 +404,7 @@
                 $('#edit_form').attr('action', url + uuid)
                 $('#edit_name').val(button.data('name'))
                 var user_uuid = button.data('user_uuid')
-                $('#edit_solution_uuid').val(button.data('solution_uuid')).trigger('change')
+                $('#edit_module_uuid').val(button.data('module_uuid')).trigger('change')
                 $('#edit_brand_uuid').val(button.data('brand_uuid')).trigger('change')
                 $('#edit_src_file').attr('src', button.data('file'))
             });

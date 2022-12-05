@@ -1,32 +1,32 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\ECURequest;
+use App\Models\Module;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\Facades\DataTables;
 
-class ECURequestController extends Controller
+class ModuleController extends Controller
 {
 
     public function index(Request $request)
     {
-        return view('portals.admin.ecu_requests.index');
+        return view('portals.admin.modules.index');
 
     }
 
-    public function update(ECURequest $ecu_request, Request $request)
+    public function update(Module $module, Request $request)
     {
         $rules = [
-            'ecu' => 'required|string|max:255',
-            'module' => 'required|string|max:255',
-            'brand' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'price' => 'nullable|numeric',
+            'is_free' => 'required|boolean',
         ];
         $this->validate($request, $rules);
-        $data = $request->only('ecu', 'module', 'brand');
-        $ecu_request->update($data);
+        $data = $request->only('name', 'price', 'is_free');
+        $module->update($data);
 
         if ($request->ajax()) {
             return response()->json(['status' => true]);
@@ -39,15 +39,13 @@ class ECURequestController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'ecu' => 'required|string|max:255',
-            'module' => 'required|string|max:255',
-            'brand' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'price' => 'nullable|numeric',
+            'is_free' => 'required|boolean',
         ];
         $this->validate($request, $rules);
-        $data = $request->only('ecu', 'module', 'brand');
-
-        $data['user_uuid'] = auth()->user()->uuid;
-        ECURequest::query()->create($data);
+        $data = $request->only('name', 'price', 'is_free');
+        Module::query()->create($data);
 
 
         if ($request->ajax()) {
@@ -55,33 +53,33 @@ class ECURequestController extends Controller
         }
         Session::flash('success_message', __('item_added'));
 
-        return redirect('ecu_requests');
+        return redirect('modules');
     }
 
     public function destroy($uuid, Request $request)
     {
-        ECURequest::query()->whereIn('uuid', explode(',', $uuid))->delete();
+        Module::query()->whereIn('uuid', explode(',', $uuid))->delete();
         return response()->json(['status' => true]);
     }
 
     public function indexTable(Request $request)
     {
-        $ecu_requests = ECURequest::query()->orderByDesc('id');
-        return Datatables::of($ecu_requests)
+        $modules = Module::query()->orderByDesc('id');
+        return Datatables::of($modules)
             ->filter(function ($query) use ($request) {
                 if ($request->name) {
                     $query->where("name", 'Like', "%" . $request->name . "%");
                 }
-            })->addColumn('action', function ($ecu_request) {
+            })->addColumn('action', function ($module) {
                 $data_attr = '';
-                $data_attr .= 'data-uuid="' . $ecu_request->uuid . '" ';
-                $data_attr .= 'data-module="' . $ecu_request->module . '" ';
-                $data_attr .= 'data-brand="' . $ecu_request->brand . '" ';
-                $data_attr .= 'data-ecu="' . $ecu_request->ecu . '" ';
+                $data_attr .= 'data-uuid="' . $module->uuid . '" ';
+                $data_attr .= 'data-name="' . $module->name . '" ';
+                $data_attr .= 'data-is_free="' . $module->is_free . '" ';
+                $data_attr .= 'data-price="' . $module->price . '" ';
                 $string = '';
                 $string .= '<button class="edit_btn btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                     data-bs-target="#edit_modal" ' . $data_attr . '>' . __('edit') . '</button>';
-                $string .= ' <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="' . $ecu_request->uuid .
+                $string .= ' <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="' . $module->uuid .
                     '">' . __('delete') . '</button>';
                 return $string;
             })->make(true);

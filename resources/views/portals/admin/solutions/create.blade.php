@@ -1,6 +1,6 @@
-@extends('portals.user.app')
+@extends('portals.admin.app')
 @section('title')
-    @lang('fixes')
+    @lang('solutions')
 @endsection
 @section('styles')
     <style>
@@ -16,75 +16,35 @@
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">@lang('Solutions')</h2>
+                        <h2 class="content-header-title float-left mb-0">@lang('solutions')</h2>
+                        <div class="breadcrumb-wrapper">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{{url('/admin')}}">@lang('home')</a>
+                                </li>
+                                <li class="breadcrumb-item"><a
+                                        href="{{url('/admin/solutions')}}">@lang('solutions')</a>
+                                </li>
+                            </ol>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="content-body">
-            <section class="app-user-view-account">
-                <div class="row">
-                    <!-- User Sidebar -->
-                    <div class="col-12 order-1 order-md-0">
-                        <!-- User Card -->
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-around my-2 pt-75">
-                                    <div class="d-flex align-items-start me-2">
-                                        <div class="ms-75">
-                                            <h4 class="mb-0">Name</h4>
-                                            <span>{{auth()->user()->name}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-start">
-                                        <div class="ms-75">
-                                            <h4 class="mb-0">Email</h4>
-                                            <span>{{auth()->user()->email}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-start">
-                                        <div class="ms-75">
-                                            <h4 class="mb-0">License EXP.</h4>
-                                            <span>{{auth()->user()->license_expire_date}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-start">
-                                        <div class="ms-75">
-                                            <h4 class="mb-0">Credit</h4>
-                                            <span>{{auth()->user()->balance}}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /User Card -->
-                        <!-- Plan Card -->
-                        <!-- /Plan Card -->
-                    </div>
-                    <!--/ User Sidebar -->
 
-                    <!-- User Content -->
-                    <!--/ User Content -->
-                </div>
-            </section>
             <section id="">
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
                                 <div class="head-label">
-                                    <div class="form-gruop">
-                                        <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal"
-                                                data-bs-target="#create_modal"><span><i class="fa fa-plus"></i> @lang('Request New Solution')</span>
-                                        </button>
-
-                                    </div>
+                                    <h4 class="card-title">@lang('solutions')</h4>
                                 </div>
                                 <div class="text-right">
                                     <div class="form-gruop">
-                                        <a class="btn btn-outline-primary" href="" type="button"><span><i
-                                                    class="fa fa-recycle"></i> @lang('Refresh')</span>
-                                        </a>
+                                        <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal"
+                                                data-bs-target="#create_modal"><span><i class="fa fa-plus"></i> @lang('Request New Module')</span>
+                                        </button>
 
                                     </div>
                                 </div>
@@ -97,19 +57,19 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-group mb-1">
-                                                <label for="solution_uuid">@lang('Solution Type')</label>
-                                                <select class="solution_uuid form-control" id="solution_uuid"
-                                                        name="solution_uuid"
+                                                <label for="module_uuid">@lang('Module Type')</label>
+                                                <select class="module_uuid form-control" id="module_uuid"
+                                                        name="module_uuid"
                                                         required>
                                                     <option value="">@lang('select')</option>
-                                                    @foreach($solutions as $solution)
+                                                    @foreach($modules as $module)
                                                         <option
-                                                            value="{{$solution->uuid}}" {{ $loop->first ? 'selected' : '' }}>{{$solution->solution_name}}</option>
+                                                            value="{{$module->uuid}}" {{ $loop->first ? 'selected' : '' }}>{{$module->module_name}}</option>
                                                     @endforeach
                                                 </select>
-                                                @if ($errors->has('solution_uuid'))
+                                                @if ($errors->has('module_uuid'))
                                                     <span class="help-block">
-                                        <strong>{{ $errors->first('solution_uuid') }}</strong>
+                                        <strong>{{ $errors->first('module_uuid') }}</strong>
                                     </span>
                                                 @endif
                                                 <div class="invalid-feedback"></div>
@@ -141,7 +101,7 @@
                                             <div class="ms-4 col-6">
                                                 <div class="d-inline-flex">
                                                     <div class="demo-vertical-spacing">
-                                                        <label for="solution_uuid">@lang('Origin File')</label>
+                                                        <label for="module_uuid">@lang('Origin File')</label>
                                                         <div class="form-group">
                                                 <span class="btn btn-secondary btn-file">
                                                             <span class="fileinput-new"> @lang('select file')</span>
@@ -162,7 +122,7 @@
                                                                     class="ms-1 submit_btn btn btn-primary">
                                                                 <i class="fa fa-spinner fa-spin"
                                                                    style="display: none;"></i>
-                                                                @lang('solution')
+                                                                @lang('module')
                                                             </button>
 
                                                         </div>
@@ -171,7 +131,7 @@
                                             </div>
                                             <div id="results" class="form-group ps-1 mt-1 pt-1 mb-1"
                                                  style="background-color: #2B344D; height: 200px; overflow:auto;">
-                                                <p><b style="font-size:large;">Selected Module: </b> <span id="solution_result"></span></p>
+                                                <p><b style="font-size:large;">Selected Module: </b> <span id="module_result"></span></p>
                                                 <p><b style="font-size:large;">Selected Brand: </b> <span id="brand_result"></span></p>
                                                 <p><b style="font-size:large;">Selected ECU: </b> <span id="ecu_result"></span></p>
                                                 <p><b style="font-size:large;">Selected File: </b> <span id="file_result"></span></p>
@@ -207,15 +167,15 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{url("/user/ecu_requests")}}" id="create_request_form" method="POST"
+                        <form action="{{url("/user/ecu_request")}}" id="create_form" method="POST"
                               data-reset="true" class="ajax_form form-horizontal" enctype="multipart/form-data"
                               novalidate>
                             {{csrf_field()}}
                             <div class="row">
                                 <div class="col-12 mb-1">
                                     <div class="form-group">
-                                        <label for="solution">@lang('solution')</label>
-                                        <input type="text" class="solution form-control" id="solution" name="solution"
+                                        <label for="module_uuid">@lang('module')</label>
+                                        <input type="text" class="module form-control" id="module" name="module"
                                                required>
                                         <div class="invalid-feedback"></div>
                                     </div>
@@ -240,12 +200,12 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" form="create_request_form" class="submit_btn btn btn-primary">
+                        <button type="submit" form="create_form" class="submit_btn btn btn-primary">
                             <i class="fa fa-spinner fa-spin" style="display: none;"></i>
                             @lang('save')
                         </button>
                         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">@lang('close')
-                        </button>
+                        </button>{{--                            <button type="button" form="create_form" class="btn btn-primary">Send message</button>--}}
                     </div>
                 </div>
             </div>
@@ -259,32 +219,12 @@
 @section('scripts')
     <script>
 
-        var url = '{{url("/user/fixes")}}/';
-        // var i = 0;
-        // function move(e) {
-        //     e.preventDefault()
-        //     console.log(444)
-        //     if (i == 0) {
-        //         i = 1;
-        //         var elem = document.getElementById("myBar");
-        //         var width = 1;
-        //         var id = setInterval(frame, 10);
-        //         function frame() {
-        //             if (width >= 100) {
-        //                 clearInterval(id);
-        //                 i = 0;
-        //             } else {
-        //                 width++;
-        //                 elem.style.width = width + "%";
-        //             }
-        //         }
-        //     }
-        // }
+        var url = '{{url("/admin/solutions")}}/';
         $(document).ready(function () {
-            $(document).on('change', '#solution_uuid', function (e) {
-                e.preventDefault();
+            $(document).on('change', '#module_uuid', function (e) {
                 $('#ecus').html('')
-                var urls = '{{url("/get_solution_brands")}}' + '?solution_uuid=' + $(this).val();
+                e.preventDefault();
+                var urls = '{{url("/get_module_brands")}}' + '?module_uuid=' + $(this).val();
                 $.ajax({
                     url: urls,
                     method: 'GET',
@@ -293,18 +233,16 @@
                         text = ``
                         $.each(data, function (index, value) {
                             text += `                                                <div class="mb-1">
-                                                    <h5 class="brand">` + value.text + `</h5>
+                                                    <b class="brand">` + value.text + `</b>
                                                     <div class="ms-1 demo-vertical-spacing brand_ecus" style="display: none">`
                             $.each(value.children, function (index, value) {
 
                                 text += `<div class="form-check form-check">
                                                             <input class="form-check-input" type="radio"
-                                                                   name="ecu_uuid" id="` + value.id + `"
-                                                                   value="` + value.id + `" style="width: 0.8rem;
-    height: 0.8rem;
-    margin-top: 0.45rem; margin-left: -1.15rem;">
+                                                                   name="inlineRadioOptions" id="` + value.id + `"
+                                                                   value="` + value.id + `">
                                                             <label class="form-check-label"
-                                                                   for="` + value.id + `"><small>` + value.text + `</small></label>
+                                                                   for="` + value.id + `">` + value.text + `</label>
                                                         </div>`
                             });
                             text += `                  </div>
@@ -312,7 +250,7 @@
                         });
                         $('#ecus').append(text)
 
-                    }
+                        }
 
                 });
             });
@@ -320,6 +258,51 @@
                 console.log(333)
                 $(this).parent().find('.brand_ecus').toggle();
             });
+            {{--$(document).on('change', '#brand_uuid', function (e) {--}}
+
+                            {{--    // e.preventDefault();--}}
+                            {{--    // var module_uuid = $('#module_uuid').val();--}}
+                            {{--    --}}{{--var urls = '{{url("/get_module_brand_ecus")}}' + '?module_uuid=' + module_uuid + '&brand_uuid=' + $(this).val();--}}
+                            {{--    // $.ajax({--}}
+                            {{--    //     url: urls,--}}
+                            {{--    //     method: 'GET',--}}
+                            {{--    //     type: 'GET',--}}
+                            {{--    //     success: function (data) {--}}
+                            {{--    //         console.log(data.status)--}}
+                            {{--    //         $("#ecu_uuid").select2({--}}
+                            {{--    //             data: data,--}}
+                            {{--    //             width: 'auto'--}}
+                            {{--    //         });--}}
+                            {{--    //     }--}}
+                            {{--    // });--}}
+                            {{--});--}}
+                            // $(document).on('click', '.select2-results__group', function () {
+                            //     $(this).siblings().toggle();
+                            // });
+                            // let optgroupState = {};
+
+                            // $("body").on('click', '.select2-container--open .select2-results__group', function() {
+                            //     $(this).siblings().toggle();
+                            //     let id = $(this).closest('.select2-results__options').attr('id');
+                            //     let index = $('.select2-results__group').index(this);
+                            //     optgroupState[id][index] = !optgroupState[id][index];
+                            // })
+
+                            // $('#select-test').on('select2:open', function() {
+                            //     $('.select2-dropdown--below').css('opacity', 0);
+                            //     setTimeout(() => {
+                            //         let groups = $('.select2-container--open .select2-results__group');
+                            //         let id = $('.select2-results__options').attr('id');
+                            //         if (!optgroupState[id]) {
+                            //             optgroupState[id] = {};
+                            //         }
+                            //         $.each(groups, (index, v) => {
+                            //             optgroupState[id][index] = optgroupState[id][index] || false;
+                            //             optgroupState[id][index] ? $(v).siblings().show() : $(v).siblings().hide();
+                            //         })
+                            //         $('.select2-dropdown--below').css('opacity', 1);
+                            //     }, 0);
+                            // })
 
 
             $(document).on('submit', '#create_form', function (e) {
@@ -333,7 +316,7 @@
                 $('.submit_btn').attr('disabled', 'disabled');
                 $('.fa-spinner.fa-spin').show();
                 $.ajax({
-                    url: "{{url("/user/fixes")}}",
+                    url: "{{url("/admin/solutions")}}",
                     type: method,
                     data: Data,
                     contentType: false,
@@ -359,7 +342,7 @@
                             var url = $('#cancel_btn').attr('href');
                             window.location.replace(url);
                         }
-                        $('#solution_result').html(data.solution_name)
+                        $('#module_result').html(data.module_name)
                         $('#brand_result').html(data.brand_name)
                         $('#ecu_result').html(data.ecu_name)
                         $('#file_result').html(data.file_name)
@@ -401,5 +384,6 @@
             });
         });
 
-    </script>
+
+</script>
 @endsection

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Solution;
+use App\Models\Module;
 use App\Models\ECU;
 use App\Models\Brand;
 use Illuminate\Http\Request;
@@ -16,9 +16,9 @@ class ECUController extends Controller
 
     public function index(Request $request)
     {
-        $solutions = Solution::all();
+        $modules = Module::all();
         $brands = Brand::all();
-        return view('portals.admin.ecus.index', compact('solutions', 'brands'));
+        return view('portals.admin.ecus.index', compact('modules', 'brands'));
 
     }
 
@@ -26,17 +26,17 @@ class ECUController extends Controller
     {
         $rules = [
             'file' => 'required|file',
-            'solution_uuid' => 'required',
+            'module_uuid' => 'required',
             'brand_uuid' => 'required',
             'name' => 'required|string|max:255',
         ];
         $this->validate($request, $rules);
-        $data = $request->only(['name', 'file', 'solution_uuid', 'brand_uuid']);
-        $solution = Solution::query()->find($request->solution_uuid);
+        $data = $request->only(['name', 'file', 'module_uuid', 'brand_uuid']);
+        $module = Module::query()->find($request->module_uuid);
         $brand = Brand::query()->find($request->brand_uuid);
         if ($request->hasFile('file')) {
             $file_name = Storage::disk('s3')->putFileAs('',$request->file('file'),
-                'fixed/magicSolution ('.$brand->name.' '.$request->name.' ('.$solution->name.') (NoChk).'.$request->file('file')->extension(), ['visibility' => 'public']);
+                'fixed/magicModule ('.$brand->name.' '.$request->name.' ('.$module->name.') (NoChk).'.$request->file('file')->extension(), ['visibility' => 'public']);
 //            $file = $request->file('file')->store('public');
             $data['file'] = $file_name;
         }
@@ -54,18 +54,17 @@ class ECUController extends Controller
     {
         $rules = [
             'file' => 'nullable|file',
-            'solution_uuid' => 'required',
+            'module_uuid' => 'required',
             'brand_uuid' => 'required',
             'name' => 'required|string|max:255',
         ];
         $this->validate($request, $rules);
-        $data = $request->only(['name', 'file', 'solution_uuid', 'brand_uuid']);
-        $solution = Solution::query()->find($request->solution_uuid);
+        $data = $request->only(['name', 'file', 'module_uuid', 'brand_uuid']);
+        $module = Module::query()->find($request->module_uuid);
         $brand = Brand::query()->find($request->brand_uuid);
         if ($request->hasFile('file')) {
             $file_name = Storage::disk('s3')->putFileAs('',$request->file('file'),
-                'fixed/magicSolution ('.$brand->name.' '.$request->name.' ('.$solution->name.') (NoChk).'.$request->file('file')->extension(), ['visibility' => 'public']);
-//            $fixed_file = $request->file('file')->store('public');
+                'fixed/magicModule ('.$brand->name.' '.$request->name.' ('.$module->name.') (NoChk).'.$request->file('file')->extension(), ['visibility' => 'public']);
             $data['file'] = $file_name;
         }
         $ecu->update($data);
@@ -98,13 +97,13 @@ class ECUController extends Controller
                 if ($request->get('car_model_uuid')) {
                     $query->where('car_model_uuid', $request->car_model_uuid);
                 }
-                if ($request->get('solution_uuid')) {
-                    $query->where('solution_uuid', $request->solution_uuid);
+                if ($request->get('module_uuid')) {
+                    $query->where('module_uuid', $request->module_uuid);
                 }
             })->addColumn('action', function ($ecu) {
                 $data_attr = '';
                 $data_attr .= 'data-uuid="' . $ecu->uuid . '" ';
-                $data_attr .= 'data-solution_uuid="' . $ecu->solution_uuid . '" ';
+                $data_attr .= 'data-module_uuid="' . $ecu->module_uuid . '" ';
                 $data_attr .= 'data-brand_uuid="' . $ecu->brand_uuid . '" ';
                 $data_attr .= 'data-file="' . $ecu->file . '" ';
                 $data_attr .= 'data-name="' . $ecu->name . '" ';

@@ -21,11 +21,11 @@ class ECURequestController extends Controller
     {
         $rules = [
             'ecu' => 'required|string|max:255',
-            'solution' => 'required|string|max:255',
+            'module' => 'required|string|max:255',
             'brand' => 'required|string|max:255',
         ];
         $this->validate($request, $rules);
-        $data = $request->only('ecu', 'solution', 'brand');
+        $data = $request->only('ecu', 'module', 'brand');
         $ecu_request->update($data);
 
         if ($request->ajax()) {
@@ -40,11 +40,11 @@ class ECURequestController extends Controller
     {
         $rules = [
             'ecu' => 'required|string|max:255',
-            'solution' => 'required|string|max:255',
+            'module' => 'required|string|max:255',
             'brand' => 'required|string|max:255',
         ];
         $this->validate($request, $rules);
-        $data = $request->only('ecu', 'solution', 'brand');
+        $data = $request->only('ecu', 'module', 'brand');
         $data['user_uuid'] = auth()->user()->uuid;
         ECURequest::query()->create($data);
 
@@ -68,8 +68,8 @@ class ECURequestController extends Controller
         $ecu_requests = ECURequest::query()->orderByDesc('id');
         return Datatables::of($ecu_requests)
             ->filter(function ($query) use ($request) {
-                if ($request->solution) {
-                    $query->where("solution", 'Like', "%" . $request->solution . "%");
+                if ($request->module) {
+                    $query->where("module", 'Like', "%" . $request->module . "%");
                 }
                 if ($request->brand) {
                     $query->where("brand", 'Like', "%" . $request->brand . "%");
@@ -80,7 +80,7 @@ class ECURequestController extends Controller
             })->addColumn('action', function ($ecu_request) {
                 $data_attr = '';
                 $data_attr .= 'data-uuid="' . $ecu_request->uuid . '" ';
-                $data_attr .= 'data-solution="' . $ecu_request->solution . '" ';
+                $data_attr .= 'data-module="' . $ecu_request->module . '" ';
                 $data_attr .= 'data-brand="' . $ecu_request->brand . '" ';
                 $data_attr .= 'data-ecu="' . $ecu_request->ecu . '" ';
                 $string = '';
