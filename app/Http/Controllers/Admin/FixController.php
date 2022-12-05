@@ -9,6 +9,7 @@ use App\Models\Solution;
 use App\Models\File;
 use App\Models\Fix;
 use App\Models\Brand;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -26,9 +27,17 @@ class FixController extends Controller
     }
     public function create(Request $request)
     {
-        $solutions = Solution::all();
-        $brands = Brand::all();
+        $solutions = Solution::query()->whereHas('brands.ecus')->get();
+        $solution = \App\Models\Solution::query()->whereHas('brands.ecus')->with('brands.ecus')->first();
+        $brands = [];
+        foreach ($solution->brands as $brand){
+            foreach ($brand->ecus as $ecu){
+                $ecu_list = ['id' => $ecu->uuid, 'text' => $ecu->name];
+            }
+            $brands[] = ['id' => $brand->uuid, 'text' => $brand->name, 'children' => [$ecu_list]];
+        }
         return view('portals.admin.fixes.create', compact('solutions', 'brands'));
+//        return view('portals.user.fixes.index', compact('solutions', 'brands'));
 
     }
 
@@ -64,24 +73,31 @@ class FixController extends Controller
         $rules = [
             'broken_file' => 'required|file',
             'solution_uuid' => 'required',
-            'brand_uuid' => 'required',
             'ecu_uuid' => 'required',
         ];
         $this->validate($request, $rules);
-        $data = $request->only(['broken_file', 'solution_uuid', 'brand_uuid', 'ecu_uuid']);
-        $fixed_file = ECU::query()->find($request->ecu_uuid);
+        $data = $request->only(['broken_file', 'solution_uuid', 'ecu_uuid']);
+        $ecu = ECU::query()->find($request->ecu_uuid);
         if ($request->hasFile('broken_file')) {
             $broken_file = Storage::disk('s3')->putFile('/broken',$request->file('broken_file'), 'public');
 //            $broken_file = $request->file('broken_file')->store('public');
             $data['broken_file'] = $broken_file;
         }
-        $data['fixed_file'] = $fixed_file->file;
+        $data['brand_uuid'] = $ecu->brand_uuid;
+        $data['fixed_file'] = $ecu->file;
         $data['ownerable_uuid'] = auth()->user()->uuid;
         $data['ownerable_type'] = Admin::class;
         $fix = Fix::query()->create($data);
-
+        $solution = Solution::query()->find($request->solution_uuid);
+        $brand = Brand::query()->find($ecu->brand_uuid);
+        if (!$solution->is_free){
+            $user = User::query()->find(auth()->user()->uuid);
+            $user->update(['balance' => $user->balance - $solution->price]);
+        }
+        $file_name = $request->file('broken_file')->getClientOriginalName();
+        $file_size = round($request->file('broken_file')->getSize() /1000/1000,2);
         if ($request->ajax()) {
-            return response()->json(['status' => true, 'url' => $fix->broken_url]);
+            return response()->json(['status' => true, 'url' => $fix->broken_file, 'brand_name' => $brand->name, 'solution_name' => $solution->name, 'ecu_name' => $ecu->name, 'file_name' => $file_name, 'file_size' => $file_size]);
         }
         Session::flash('success_message', __('item_added'));
 

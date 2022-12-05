@@ -50,21 +50,21 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <form action="{{url("/admin/fixes")}}" id="create_form" method="POST"
+                                <form action="" id="create_form" method="POST"
                                       data-reset="true" class="form-horizontal" enctype="multipart/form-data"
                                       novalidate>
                                     {{csrf_field()}}
                                     <div class="row">
-                                        <div class="me-5 col-6">
+                                        <div class="col-6">
                                             <div class="form-group mb-1">
-                                                <label for="solution_uuid">@lang('solution')</label>
+                                                <label for="solution_uuid">@lang('Solution Type')</label>
                                                 <select class="solution_uuid form-control" id="solution_uuid"
                                                         name="solution_uuid"
                                                         required>
                                                     <option value="">@lang('select')</option>
                                                     @foreach($solutions as $solution)
                                                         <option
-                                                            value="{{$solution->uuid}}">{{$solution->solution_name}}</option>
+                                                            value="{{$solution->uuid}}" {{ $loop->first ? 'selected' : '' }}>{{$solution->solution_name}}</option>
                                                     @endforeach
                                                 </select>
                                                 @if ($errors->has('solution_uuid'))
@@ -74,43 +74,79 @@
                                                 @endif
                                                 <div class="invalid-feedback"></div>
                                             </div>
-                                            <label for="ecu_uuid">@lang('ecu')</label>
-                                            <div id="ecus" class="form-group ms-1 ps-1 pt-1 mb-1"
-                                                 style="background-color: #2B344D; height: 200px; overflow:auto;">
+                                            <div id="ecus" class="form-group ps-1 pt-1 mb-1"
+                                                 style="background-color: #2B344D; height: 500px; overflow:auto;">
+                                                @foreach($brands as $brand)
+                                                    <div class="mb-1">
+                                                        <h5 class="brand">{{$brand['text']}}</h5>
+                                                        <div class="ms-1 demo-vertical-spacing brand_ecus"
+                                                             style="display: none">
+                                                            @foreach($brand['children'] as $item)
+                                                                <div class="form-check form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                           name="ecu_uuid" id="{{$item['id']}}"
+                                                                           value="{{$item['id']}}" style="width: 0.8rem;
+    height: 0.8rem;
+    margin-top: 0.45rem; margin-left: -1.15rem;">
+                                                                    <label class="form-check-label"
+                                                                           for="{{$item['id']}}"><small>{{$item['text']}}</small></label>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                @endforeach
                                             </div>
                                         </div>
-                                        <div class="ms-5 col-2">
-                                            <label for="file">@lang('broken_file')</label>
-                                            <div class="form-group">
-                                                <div class="fileinput fileinput-exists"
-                                                     data-provides="fileinput">
-                                                    <div class="fileinput-preview thumbnail"
-                                                         data-trigger="fileinput"
-                                                         style="width: 200px; height: 150px;border-style: solid;">
-                                                        <img id="" src="" alt=""/>
+                                        <div class="col-6 mt-1">
+                                            <div class="ms-4 col-6">
+                                                <div class="d-inline-flex">
+                                                    <div class="demo-vertical-spacing">
+                                                        <label for="solution_uuid">@lang('Origin File')</label>
+                                                        <div class="form-group">
+                                                <span class="btn btn-secondary btn-file">
+                                                            <span class="fileinput-new"> @lang('select file')</span>
+                                                            <input type="file" name="broken_file">
+                                                        </span>
+                                                            @if ($errors->has('broken_file'))
+                                                                <span class="help-block">
+                                                        <strong>{{ $errors->first('broken_file') }}</strong>
+                                                    </span>
+                                                            @endif
+                                                            <div class="invalid-feedback"></div>
+                                                        </div>
                                                     </div>
-                                                    <div>
-                                                    <span class="btn btn-secondary btn-file">
-                                                                <span
-                                                                    class="fileinput-new"> @lang('select_file')</span>
-                                                                <span
-                                                                    class="fileinput-exists"> @lang('select_file')</span>
-                                                        <input type="file" name="broken_file"></span>
+                                                    <div class="demo-vertical-spacing">
+                                                        <label for="">&nbsp</label>
+                                                        <div class="form-group">
+                                                            <button type="submit" form="create_form"
+                                                                    class="ms-1 submit_btn btn btn-primary">
+                                                                <i class="fa fa-spinner fa-spin"
+                                                                   style="display: none;"></i>
+                                                                @lang('solution')
+                                                            </button>
+
+                                                        </div>
                                                     </div>
-                                                    @if ($errors->has('broken_file'))
-                                                        <span class="help-block">
-                                        <strong>{{ $errors->first('broken_file') }}</strong>
-                                    </span>
-                                                    @endif
-                                                    <div class="invalid-feedback"></div>
                                                 </div>
                                             </div>
+                                            <div id="results" class="form-group ps-1 mt-1 pt-1 mb-1"
+                                                 style="background-color: #2B344D; height: 200px; overflow:auto;">
+                                                <p><b style="font-size:large;">Selected Module: </b> <span id="solution_result"></span></p>
+                                                <p><b style="font-size:large;">Selected Brand: </b> <span id="brand_result"></span></p>
+                                                <p><b style="font-size:large;">Selected ECU: </b> <span id="ecu_result"></span></p>
+                                                <p><b style="font-size:large;">Selected File: </b> <span id="file_result"></span></p>
+                                                <p><b style="font-size:large;">File Size: </b> <span id="file_size_result"></span></p>
+                                            </div>
+
+                                            {{--                                            <div class=" col-12">--}}
+                                            {{--                                            <div id="myProgress">--}}
+                                            {{--                                                    <div id="myBar">--}}
+
+                                            {{--                                                    </div>--}}
+                                            {{--                                                </div>--}}
+                                            {{--                                            </div>--}}
                                         </div>
-                                        <div class="col-6">
-                                            <button type="submit" form="create_form" class="btn btn-primary">
-                                                @lang('fix')
-                                            </button>
-                                        </div>
+
                                     </div>
                                 </form>
                             </div>
@@ -306,6 +342,11 @@
                             var url = $('#cancel_btn').attr('href');
                             window.location.replace(url);
                         }
+                        $('#solution_result').html(data.solution_name)
+                        $('#brand_result').html(data.brand_name)
+                        $('#ecu_result').html(data.ecu_name)
+                        $('#file_result').html(data.file_name)
+                        $('#file_size_result').html(data.file_size)
                         window.open(data.url, '_blank');
                     } else {
                         if (data.message) {

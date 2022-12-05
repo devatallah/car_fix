@@ -4,16 +4,6 @@
 @endsection
 @section('styles')
     <style>
-        #myProgress {
-            width: 100%;
-            background-color: #ddd;
-        }
-
-        #myBar {
-            width: 1%;
-            height: 30px;
-            background-color: #04AA6D;
-        }
         .pac-container {
             z-index: 1051 !important;
         }
@@ -92,7 +82,8 @@
                                 </div>
                                 <div class="text-right">
                                     <div class="form-gruop">
-                                        <a class="btn btn-outline-primary" href="" type="button" ><span><i class="fa fa-recycle"></i> @lang('Refresh')</span>
+                                        <a class="btn btn-outline-primary" href="" type="button"><span><i
+                                                    class="fa fa-recycle"></i> @lang('Refresh')</span>
                                         </a>
 
                                     </div>
@@ -126,62 +117,75 @@
                                             <div id="ecus" class="form-group ps-1 pt-1 mb-1"
                                                  style="background-color: #2B344D; height: 500px; overflow:auto;">
                                                 @foreach($brands as $brand)
-                                                <div class="mb-1">
-                                                    <h5 class="brand">{{$brand['text']}}</h5>
-                                                    <div class="ms-1 demo-vertical-spacing brand_ecus" style="display: none">
-                                                        @foreach($brand['children'] as $item)
-                                                        <div class="form-check form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                   name="ecu_uuid" id="{{$item['id']}}"
-                                                                   value="{{$item['id']}}" style="width: 0.8rem;
+                                                    <div class="mb-1">
+                                                        <h5 class="brand">{{$brand['text']}}</h5>
+                                                        <div class="ms-1 demo-vertical-spacing brand_ecus"
+                                                             style="display: none">
+                                                            @foreach($brand['children'] as $item)
+                                                                <div class="form-check form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                           name="ecu_uuid" id="{{$item['id']}}"
+                                                                           value="{{$item['id']}}" style="width: 0.8rem;
     height: 0.8rem;
     margin-top: 0.45rem; margin-left: -1.15rem;">
-                                                            <label class="form-check-label"
-                                                                   for="{{$item['id']}}"><small>{{$item['text']}}</small></label>
+                                                                    <label class="form-check-label"
+                                                                           for="{{$item['id']}}"><small>{{$item['text']}}</small></label>
+                                                                </div>
+                                                            @endforeach
                                                         </div>
-                                                        @endforeach
                                                     </div>
-                                                </div>
                                                 @endforeach
                                             </div>
                                         </div>
                                         <div class="col-6 mt-1">
-                                        <div class="ms-5 col-6">
-                                            <div class="d-inline-flex">
-                                            <div class="demo-vertical-spacing">
-                                                <label for="solution_uuid">@lang('Origin File')</label>
-                                                <div class="form-group">
+                                            <div class="ms-4 col-6">
+                                                <div class="d-inline-flex">
+                                                    <div class="demo-vertical-spacing">
+                                                        <label for="solution_uuid">@lang('Origin File')</label>
+                                                        <div class="form-group">
                                                 <span class="btn btn-secondary btn-file">
                                                             <span class="fileinput-new"> @lang('select file')</span>
                                                             <input type="file" name="broken_file">
                                                         </span>
-                                                @if ($errors->has('broken_file'))
-                                                    <span class="help-block">
+                                                            @if ($errors->has('broken_file'))
+                                                                <span class="help-block">
                                                         <strong>{{ $errors->first('broken_file') }}</strong>
                                                     </span>
-                                                @endif
-                                                <div class="invalid-feedback"></div>
+                                                            @endif
+                                                            <div class="invalid-feedback"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="demo-vertical-spacing">
+                                                        <label for="">&nbsp</label>
+                                                        <div class="form-group">
+                                                            <button type="submit" form="create_form"
+                                                                    class="ms-1 submit_btn btn btn-primary">
+                                                                <i class="fa fa-spinner fa-spin"
+                                                                   style="display: none;"></i>
+                                                                @lang('solution')
+                                                            </button>
+
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                                <div class="demo-vertical-spacing">
-                                                    <label for="">&nbsp</label>
-                                                    <div class="form-group">
-                                                    <button type="submit" form="create_form" class="ms-1 btn btn-primary">
-                                                    @lang('solution')
-                                                </button>
+                                            <div id="results" class="form-group ps-1 mt-1 pt-1 mb-1"
+                                                 style="background-color: #2B344D; height: 200px; overflow:auto;">
+                                                <p><b style="font-size:large;">Selected Module: </b> <span id="solution_result"></span></p>
+                                                <p><b style="font-size:large;">Selected Brand: </b> <span id="brand_result"></span></p>
+                                                <p><b style="font-size:large;">Selected ECU: </b> <span id="ecu_result"></span></p>
+                                                <p><b style="font-size:large;">Selected File: </b> <span id="file_result"></span></p>
+                                                <p><b style="font-size:large;">File Size: </b> <span id="file_size_result"></span></p>
+                                            </div>
 
-                                            </div>
-                                            </div>
-                                        </div>
-                                        </div>
-{{--                                            <div class=" col-12">--}}
-{{--                                            <div id="myProgress">--}}
-{{--                                                    <div id="myBar">--}}
+                                            {{--                                            <div class=" col-12">--}}
+                                            {{--                                            <div id="myProgress">--}}
+                                            {{--                                                    <div id="myBar">--}}
 
-{{--                                                    </div>--}}
-{{--                                                </div>--}}
-{{--                                            </div>--}}
-                                            </div>
+                                            {{--                                                    </div>--}}
+                                            {{--                                                </div>--}}
+                                            {{--                                            </div>--}}
+                                        </div>
 
                                     </div>
                                 </form>
@@ -355,6 +359,11 @@
                             var url = $('#cancel_btn').attr('href');
                             window.location.replace(url);
                         }
+                        $('#solution_result').html(data.solution_name)
+                        $('#brand_result').html(data.brand_name)
+                        $('#ecu_result').html(data.ecu_name)
+                        $('#file_result').html(data.file_name)
+                        $('#file_size_result').html(data.file_size)
                         window.open(data.url, '_blank');
                     } else {
                         if (data.message) {
