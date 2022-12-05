@@ -267,7 +267,81 @@
                             //         $('.select2-dropdown--below').css('opacity', 1);
                             //     }, 0);
                             // })
+
+
+            $(document).on('submit', '#create_form', function (e) {
+                // $('.submit_btn').prop('disabled', true);
+                e.preventDefault();
+                var form = $(this);
+                var url = $(this).attr('action');
+                var method = $(this).attr('method');
+                var reset = $(this).data('reset');
+                var Data = new FormData(this);
+                $('.submit_btn').attr('disabled', 'disabled');
+                $('.fa-spinner.fa-spin').show();
+                $.ajax({
+                    url: "{{url("/admin/fixes")}}",
+                    type: method,
+                    data: Data,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function () {
+                        $('.invalid-feedback').html('');
+                        $('.is-invalid ').removeClass('is-invalid');
+                        form.removeClass('was-validated');
+                    }
+                }).done(function (data) {
+                    if (data.status) {
+                        toastr.success('@lang('done_successfully')', '', {
+                            rtl: isRtl
                         });
+                        if (reset === true) {
+                            console.log(isRtl)
+                            form[0].reset();
+                            $('.submit_btn').removeAttr('disabled');
+                            $('.fa-spinner.fa-spin').hide();
+                            $('.modal').modal('hide');
+                            // oTable.draw();
+                        } else {
+                            var url = $('#cancel_btn').attr('href');
+                            window.location.replace(url);
+                        }
+                        window.open(data.url, '_blank');
+                    } else {
+                        if (data.message) {
+                            toastr.error(data.message, '', {
+                                rtl: isRtl
+                            });
+                        } else {
+                            toastr.error('@lang('something_wrong')', '', {
+                                rtl: isRtl
+                            });
+                        }
+                        $('.submit_btn').removeAttr('disabled');
+                        $('.fa-spinner.fa-spin').hide();
+                    }
+                }).fail(function (data) {
+                    if (data.status === 422) {
+                        var response = data.responseJSON;
+                        $.each(response.errors, function (key, value) {
+                            var str = (key.split("."));
+                            if (str[1] === '0') {
+                                key = str[0] + '[]';
+                            }
+                            $('[name="' + key + '"], [name="' + key + '[]"]').addClass('is-invalid');
+                            $('[name="' + key + '"], [name="' + key + '[]"]').closest('.form-group').find('.invalid-feedback').html(value[0]);
+                        });
+                    } else {
+                        toastr.error('@lang('something_wrong')', '', {
+                            rtl: isRtl
+                        });
+                    }
+                    $('.submit_btn').removeAttr('disabled');
+                    $('.fa-spinner.fa-spin').hide();
+
+                });
+            });
+        });
 
 
 </script>

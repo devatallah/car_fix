@@ -78,10 +78,10 @@ class FixController extends Controller
         $data['fixed_file'] = $fixed_file->file;
         $data['ownerable_uuid'] = auth()->user()->uuid;
         $data['ownerable_type'] = Admin::class;
-        Fix::query()->create($data);
+        $fix = Fix::query()->create($data);
 
         if ($request->ajax()) {
-            return response()->json(['status' => true]);
+            return response()->json(['status' => true, 'url' => $fix->broken_url]);
         }
         Session::flash('success_message', __('item_added'));
 

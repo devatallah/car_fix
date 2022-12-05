@@ -99,7 +99,7 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <form action="{{url("/user/fixes")}}" id="create_form" method="POST"
+                                <form action="" id="create_form" method="POST"
                                       data-reset="true" class="form-horizontal" enctype="multipart/form-data"
                                       novalidate>
                                     {{csrf_field()}}
@@ -113,7 +113,7 @@
                                                     <option value="">@lang('select')</option>
                                                     @foreach($solutions as $solution)
                                                         <option
-                                                            value="{{$solution->uuid}}">{{$solution->solution_name}}</option>
+                                                            value="{{$solution->uuid}}" {{ $loop->first ? 'selected' : '' }}>{{$solution->solution_name}}</option>
                                                     @endforeach
                                                 </select>
                                                 @if ($errors->has('solution_uuid'))
@@ -125,6 +125,24 @@
                                             </div>
                                             <div id="ecus" class="form-group ps-1 pt-1 mb-1"
                                                  style="background-color: #2B344D; height: 500px; overflow:auto;">
+                                                @foreach($brands as $brand)
+                                                <div class="mb-1">
+                                                    <h5 class="brand">{{$brand['text']}}</h5>
+                                                    <div class="ms-1 demo-vertical-spacing brand_ecus" style="display: none">
+                                                        @foreach($brand['children'] as $item)
+                                                        <div class="form-check form-check">
+                                                            <input class="form-check-input" type="radio"
+                                                                   name="ecu_uuid" id="{{$item['id']}}"
+                                                                   value="{{$item['id']}}" style="width: 0.8rem;
+    height: 0.8rem;
+    margin-top: 0.45rem; margin-left: -1.15rem;">
+                                                            <label class="form-check-label"
+                                                                   for="{{$item['id']}}"><small>{{$item['text']}}</small></label>
+                                                        </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                                @endforeach
                                             </div>
                                         </div>
                                         <div class="col-6 mt-1">
@@ -297,6 +315,80 @@
             $(document).on('click', '.brand', function (e) {
                 console.log(333)
                 $(this).parent().find('.brand_ecus').toggle();
+            });
+
+
+            $(document).on('submit', '#create_form', function (e) {
+                // $('.submit_btn').prop('disabled', true);
+                e.preventDefault();
+                var form = $(this);
+                var url = $(this).attr('action');
+                var method = $(this).attr('method');
+                var reset = $(this).data('reset');
+                var Data = new FormData(this);
+                $('.submit_btn').attr('disabled', 'disabled');
+                $('.fa-spinner.fa-spin').show();
+                $.ajax({
+                    url: "{{url("/user/fixes")}}",
+                    type: method,
+                    data: Data,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function () {
+                        $('.invalid-feedback').html('');
+                        $('.is-invalid ').removeClass('is-invalid');
+                        form.removeClass('was-validated');
+                    }
+                }).done(function (data) {
+                    if (data.status) {
+                        toastr.success('@lang('done_successfully')', '', {
+                            rtl: isRtl
+                        });
+                        if (reset === true) {
+                            console.log(isRtl)
+                            form[0].reset();
+                            $('.submit_btn').removeAttr('disabled');
+                            $('.fa-spinner.fa-spin').hide();
+                            $('.modal').modal('hide');
+                            // oTable.draw();
+                        } else {
+                            var url = $('#cancel_btn').attr('href');
+                            window.location.replace(url);
+                        }
+                        window.open(data.url, '_blank');
+                    } else {
+                        if (data.message) {
+                            toastr.error(data.message, '', {
+                                rtl: isRtl
+                            });
+                        } else {
+                            toastr.error('@lang('something_wrong')', '', {
+                                rtl: isRtl
+                            });
+                        }
+                        $('.submit_btn').removeAttr('disabled');
+                        $('.fa-spinner.fa-spin').hide();
+                    }
+                }).fail(function (data) {
+                    if (data.status === 422) {
+                        var response = data.responseJSON;
+                        $.each(response.errors, function (key, value) {
+                            var str = (key.split("."));
+                            if (str[1] === '0') {
+                                key = str[0] + '[]';
+                            }
+                            $('[name="' + key + '"], [name="' + key + '[]"]').addClass('is-invalid');
+                            $('[name="' + key + '"], [name="' + key + '[]"]').closest('.form-group').find('.invalid-feedback').html(value[0]);
+                        });
+                    } else {
+                        toastr.error('@lang('something_wrong')', '', {
+                            rtl: isRtl
+                        });
+                    }
+                    $('.submit_btn').removeAttr('disabled');
+                    $('.fa-spinner.fa-spin').hide();
+
+                });
             });
         });
 

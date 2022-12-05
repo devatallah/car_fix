@@ -19,8 +19,15 @@ class FixController extends Controller
 
     public function index(Request $request)
     {
-        $solutions = Solution::all();
-        $brands = Brand::all();
+        $solutions = Solution::query()->whereHas('brands.ecus')->get();
+        $solution = \App\Models\Solution::query()->whereHas('brands.ecus')->with('brands.ecus')->first();
+        $brands = [];
+        foreach ($solution->brands as $brand){
+            foreach ($brand->ecus as $ecu){
+                $ecu_list = ['id' => $ecu->uuid, 'text' => $ecu->name];
+            }
+            $brands[] = ['id' => $brand->uuid, 'text' => $brand->name, 'children' => [$ecu_list]];
+        }
         return view('portals.user.fixes.create', compact('solutions', 'brands'));
 //        return view('portals.user.fixes.index', compact('solutions', 'brands'));
 
@@ -72,7 +79,7 @@ class FixController extends Controller
         $data['fixed_file'] = $fixed_file->file;
         $data['ownerable_uuid'] = auth()->user()->uuid;
         $data['ownerable_type'] = User::class;
-        Fix::query()->create($data);
+        $fix = Fix::query()->create($data);
         $solution = Solution::query()->find($request->solution_uuid);
         if (!$solution->is_free){
             $user = User::query()->find(auth()->user()->uuid);
@@ -80,7 +87,7 @@ class FixController extends Controller
         }
 
         if ($request->ajax()) {
-            return response()->json(['status' => true]);
+            return response()->json(['status' => true, 'url' => $fix->broken_file]);
         }
         Session::flash('success_message', __('item_added'));
         return redirect()->back();
