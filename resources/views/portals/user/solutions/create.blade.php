@@ -15,9 +15,11 @@
         <div class="content-header row">
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
-                    <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">@lang('Solutions')</h2>
-                    </div>
+                    <div class="col-12 d-inline-flex">
+                        <img style="width: 100px" src="{{asset('portals/app-assets/images/logo.svg')}}" alt="">
+                        <div style="padding-top: 20px;padding-left: 20px">
+                        <h2 class="content-header-title float-left mb-0">@lang('MAGICSOLUTION')</h2>
+                        </div></div>
                 </div>
             </div>
         </div>
@@ -50,7 +52,7 @@
                                     </div>
                                     <div class="d-flex align-items-start">
                                         <div class="ms-75">
-                                            <h4 class="mb-0">Credit</h4>
+                                            <h4 class="mb-0">Balance</h4>
                                             <span>{{auth()->user()->balance}}</span>
                                         </div>
                                     </div>
@@ -97,7 +99,7 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-group mb-1">
-                                                <label for="module_uuid">@lang('Module Type')</label>
+                                                <label for="module_uuid">@lang('Solution Type')</label>
                                                 <select class="module_uuid form-control" id="module_uuid"
                                                         name="module_uuid"
                                                         required>
@@ -141,7 +143,7 @@
                                             <div class="ms-4 col-6">
                                                 <div class="d-inline-flex">
                                                     <div class="demo-vertical-spacing">
-                                                        <label for="module_uuid">@lang('Origin File')</label>
+                                                        <label for="module_uuid">@lang('Original File')</label>
                                                         <div class="form-group">
                                                 <span class="btn btn-secondary btn-file">
                                                             <span class="fileinput-new"> @lang('select file')</span>
@@ -169,13 +171,15 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="ms-4 col-4">
                                             <div id="results" class="form-group ps-1 mt-1 pt-1 mb-1"
                                                  style="background-color: #2B344D; height: 200px; overflow:auto;">
-                                                <p><b style="font-size:large;">Selected Module: </b> <span id="module_result"></span></p>
-                                                <p><b style="font-size:large;">Selected Brand: </b> <span id="brand_result"></span></p>
-                                                <p><b style="font-size:large;">Selected ECU: </b> <span id="ecu_result"></span></p>
-                                                <p><b style="font-size:large;">Selected File: </b> <span id="file_result"></span></p>
-                                                <p><b style="font-size:large;">File Size: </b> <span id="file_size_result"></span></p>
+                                                <p><b style="font-size:small;">Selected Module: </b> <span id="module_result"></span></p>
+                                                <p><b style="font-size:small;">Selected Brand: </b> <span id="brand_result"></span></p>
+                                                <p><b style="font-size:small;">Selected ECU: </b> <span id="ecu_result"></span></p>
+                                                <p><b style="font-size:small;">Selected File: </b> <span id="file_result"></span></p>
+                                                <p><b style="font-size:small;">File Size: </b> <span id="file_size_result"></span></p>
+                                            </div>
                                             </div>
 
                                             {{--                                            <div class=" col-12">--}}
