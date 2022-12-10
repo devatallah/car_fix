@@ -19,7 +19,7 @@ class SolutionController extends Controller
 
     public function index(Request $request)
     {
-        $modules = Module::query()->whereHas('brands.ecus')->get();
+        $modules = Module::query()->whereHas('brands.ecus')->first();
         $module = \App\Models\Module::query()->whereHas('brands.ecus')->with('brands.ecus')->first();
         $brands = [];
         foreach ($module->brands as $brand){
