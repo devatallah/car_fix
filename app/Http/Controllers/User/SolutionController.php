@@ -21,6 +21,7 @@ class SolutionController extends Controller
         $modules = Module::query()->whereHas('brands.ecus')->get();
         $module = \App\Models\Module::query()->whereHas('brands.ecus')->with('brands.ecus')->first();
         $brands = [];
+        $ecu_list = [];
         if ($module) {
             foreach ($module->brands as $brand) {
                 foreach ($brand->ecus as $ecu) {
