@@ -36,7 +36,7 @@ class ECUController extends Controller
         $brand = Brand::query()->find($request->brand_uuid);
         if ($request->hasFile('file')) {
             $file_name = Storage::disk('s3')->putFileAs('',$request->file('file'),
-                'fixed/magicModule ('.$brand->name.' '.$request->name.' ('.$module->name.') (NoChk).'.$request->file('file')->extension(), ['visibility' => 'public']);
+                'fixed/magicSolution ('.$brand->name.' '.$request->name.' ('.$module->name.') (NoChk).'.$request->file('file')->extension(), ['visibility' => 'public']);
 //            $file = $request->file('file')->store('public');
             $data['file'] = $file_name;
         }
@@ -64,7 +64,7 @@ class ECUController extends Controller
         $brand = Brand::query()->find($request->brand_uuid);
         if ($request->hasFile('file')) {
             $file_name = Storage::disk('s3')->putFileAs('',$request->file('file'),
-                'fixed/magicModule ('.$brand->name.' '.$request->name.' ('.$module->name.') (NoChk).'.$request->file('file')->extension(), ['visibility' => 'public']);
+                'fixed/magicSolution ('.$brand->name.' '.$request->name.' ('.$module->name.') (NoChk).'.$request->file('file')->extension(), ['visibility' => 'public']);
             $data['file'] = $file_name;
         }
         $ecu->update($data);

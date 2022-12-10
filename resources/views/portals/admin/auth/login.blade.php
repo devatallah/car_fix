@@ -58,7 +58,7 @@
                         <div class="card-body">
                             <a href="index.html" class="brand-logo">
                                 <img src="{{asset('portals/app-assets/images/logo.svg')}}" style="width: 120px" alt="">
-{{--                                <h2 class="brand-text text-primary ms-1">MagicModule</h2>--}}
+{{--                                <h2 class="brand-text text-primary ms-1">magicSolution</h2>--}}
                             </a>
 
 

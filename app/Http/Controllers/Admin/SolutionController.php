@@ -84,7 +84,7 @@ class SolutionController extends Controller
             $data['broken_file'] = $broken_file;
         }
         $data['brand_uuid'] = $ecu->brand_uuid;
-        $data['fixed_file'] = $ecu->file;
+        $data['fixed_file'] = $ecu->getRawOriginal()['file'];
         $data['ownerable_uuid'] = auth()->user()->uuid;
         $data['ownerable_type'] = Admin::class;
         $solution = Solution::query()->create($data);
@@ -97,7 +97,7 @@ class SolutionController extends Controller
         $file_name = $request->file('broken_file')->getClientOriginalName();
         $file_size = round($request->file('broken_file')->getSize() /1000/1000,2);
         if ($request->ajax()) {
-            return response()->json(['status' => true, 'url' => $solution->broken_file, 'brand_name' => $brand->name, 'module_name' => $module->name, 'ecu_name' => $ecu->name, 'file_name' => $file_name, 'file_size' => $file_size]);
+            return response()->json(['status' => true, 'url' => $solution->fixed_file, 'brand_name' => $brand->name, 'module_name' => $module->name, 'ecu_name' => $ecu->name, 'file_name' => $file_name, 'file_size' => $file_size]);
         }
         Session::flash('success_message', __('item_added'));
 

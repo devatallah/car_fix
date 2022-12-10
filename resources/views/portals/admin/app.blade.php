@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <title>MagicModule</title>
+    <title>magicSolution</title>
     <link rel="apple-touch-icon" href="{{asset('portals/app-assets/images/logo.svg')}}">
     <link rel="shortcut icon" type="image/x-icon" href="{{asset('portals/app-assets/images/ico/favicon.ico')}}">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600"
@@ -250,7 +250,7 @@
                                             href="{{url('admin')}}"><span
                         class="brand-logo" style="width: 36px;">
                         <img src="{{asset('portals/app-assets/images/logo.svg')}}" alt=""></span>
-                    <h2 class="brand-text">MagicModule</h2>
+                    <h2 class="brand-text">magicSolution</h2>
                 </a></li>
             <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pe-0" data-bs-toggle="collapse"><i
                         class="d-block d-xl-none text-primary toggle-icon font-medium-4" data-feather="x"></i><i
