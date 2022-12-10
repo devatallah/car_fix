@@ -32,23 +32,13 @@ class Handler extends ExceptionHandler
     /**
      * Register the exception handling callbacks for the application.
      *
-     * @return void
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         $guard = Arr::get($exception->guards(), 0);
-        switch ($guard) {
-            case 'admin':
-                $login = '/admin/login';
-//                return $request->wantsJson()
-//                    ? mainResponse(false, __('api.unauthenticated'), [], [], 401) :
-                redirect(url(locale() . $login));
-            default:
-                $login = '/login';
-                break;
-        }
-//        return $request->wantsJson()
-//            ? mainResponse(false, __('api.unauthenticated'), [], [], 401) :
-        redirect()->guest(url(locale() . $login));
+        return $this->shouldReturnJson($request, $exception)
+            ? response()->json(['message' => $exception->getMessage()], 401)
+            : redirect()->guest($exception->redirectTo() ?? ($guard == 'admin' ? route('/admin/login') : route('user/login')));
     }
 }
