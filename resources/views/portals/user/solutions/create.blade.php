@@ -11,7 +11,7 @@
     </style>
 @endsection
 @section('content')
-    <div class="content-wrapper">
+    <div class="content-wrapper" style="height: 200px; width: 700px;margin-left:1px">
         <div class="content-header row">
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
@@ -30,7 +30,7 @@
                     <div class="col-12 order-1 order-md-0">
                         <!-- User Card -->
                         <div class="card">
-                            <div class="card-body">
+                            <div class="card-body" style="padding:0px">
                                 <div class="d-flex justify-content-around my-2 pt-75">
                                     <div class="d-flex align-items-start me-2">
                                         <div class="ms-75">
@@ -146,8 +146,8 @@
                                                         <label for="module_uuid">@lang('Original File')</label>
                                                         <div class="form-group">
                                                 <span class="btn btn-secondary btn-file">
-                                                            <span class="fileinput-new"> @lang('select file')</span>
-                                                            <input type="file" name="broken_file">
+                                                            <span style="width:50px;" class="fileinput-new">@lang('Upload File')</span>
+                                                            <input type="file" name="Original File">
                                                         </span>
                                                             @if ($errors->has('broken_file'))
                                                                 <span class="help-block">
@@ -164,21 +164,21 @@
                                                                     class="ms-1 submit_btn btn btn-primary">
                                                                 <i class="fa fa-spinner fa-spin"
                                                                    style="display: none;"></i>
-                                                                @lang('solve')
+                                                                @lang('Solution')
                                                             </button>
 
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="ms-4 col-4">
-                                            <div id="results" class="form-group ps-1 mt-1 pt-1 mb-1"
-                                                 style="background-color: #2B344D; height: 200px; overflow:auto;">
-                                                <p><b style="font-size:small;">Selected Module: </b> <span id="module_result"></span></p>
-                                                <p><b style="font-size:small;">Selected Brand: </b> <span id="brand_result"></span></p>
-                                                <p><b style="font-size:small;">Selected ECU: </b> <span id="ecu_result"></span></p>
-                                                <p><b style="font-size:small;">Selected File: </b> <span id="file_result"></span></p>
-                                                <p><b style="font-size:small;">File Size: </b> <span id="file_size_result"></span></p>
+                                            <div style=" height: 200px; weight:200px; margin-left:45px; margin-top:16px;">
+                                            <div id="results"
+                                                 style="background-color: #2B344D;">
+                                                <p><b style="font-size:small; padding:8px;">Selected Module: </b> <span id="module_result"></span></p>
+                                                <p><b style="font-size:small;padding:8px;">Selected Brand: </b> <span id="brand_result"></span></p>
+                                                <p><b style="font-size:small;padding:8px;">Selected ECU: </b> <span id="ecu_result"></span></p>
+                                                <p><b style="font-size:small;padding:8px;">Selected File: </b> <span id="file_result"></span></p>
+                                                <p><b style="font-size:small;padding:8px;">File Size: </b> <span id="file_size_result"></span></p>
                                             </div>
                                             </div>
 
