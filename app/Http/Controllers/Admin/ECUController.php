@@ -53,7 +53,7 @@ class ECUController extends Controller
     public function update(ECU $ecu, Request $request)
     {
         $rules = [
-            'file' => 'nullable|file',
+            'file' => 'nullable',
             'module_uuid' => 'required',
             'brand_uuid' => 'required',
             'name' => 'required|string|max:255',

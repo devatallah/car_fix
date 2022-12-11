@@ -44,7 +44,7 @@ class SolutionController extends Controller
     public function update(Solution $solution, Request $request)
     {
         $rules = [
-            'broken_file' => 'nullable|file',
+            'broken_file' => 'nullable',
             'module_uuid' => 'required',
             'brand_uuid' => 'required',
             'ecu_uuid' => 'required',
