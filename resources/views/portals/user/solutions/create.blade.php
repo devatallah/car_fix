@@ -11,7 +11,7 @@
     </style>
 @endsection
 @section('content')
-    <div class="content-wrapper" style="height: 200px; width: 700px;margin-left: 260px">
+    <div class="content-wrapper" style="height: 100%; width: 100%;">
         <div class="content-header row">
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
@@ -120,7 +120,7 @@
                                                  style="background-color: #2B344D; height: 500px; overflow:auto;">
                                                 @foreach($brands as $brand)
                                                     <div class="mb-1">
-                                                        <h5 class="brand">{{$brand['text']}}</h5>
+                                                        <h5 class="brand">+ {{$brand['text']}}</h5>
                                                         <div class="ms-1 demo-vertical-spacing brand_ecus"
                                                              style="display: none">
                                                             @foreach($brand['children'] as $item)
@@ -170,10 +170,16 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                
                                             </div>
+                                            <div  class="progress" style="margin-left:50px;margin-top:8px">
+                                            
+  <div class="progress-bar" role="progressbar" style="width: 40%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+</div>                                          
+                                            
                                             <div style=" height: 200px; weight:200px; margin-left:45px; margin-top:16px;">
                                             <div id="results"
-                                                 style="background-color: #2B344D;">
+                                                 style="background-color: #2B344D; ">
                                                 <p><b style="font-size:small; padding:8px;">Selected Module: </b> <span id="module_result"></span></p>
                                                 <p><b style="font-size:small;padding:8px;">Selected Brand: </b> <span id="brand_result"></span></p>
                                                 <p><b style="font-size:small;padding:8px;">Selected ECU: </b> <span id="ecu_result"></span></p>
