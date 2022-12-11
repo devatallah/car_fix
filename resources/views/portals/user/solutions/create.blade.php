@@ -146,7 +146,7 @@
                                                         <label for="module_uuid">@lang('Original File')</label>
                                                         <div class="form-group">
                                                 <span class="btn btn-secondary btn-file">
-                                                            <span style="width:50px;" class="fileinput-new">@lang('Upload File')</span>
+                                                            <span style="width:50px;" class="fileinput-new">@lang('Upload')</span>
                                                             <input type="file" name="Original File">
                                                         </span>
                                                             @if ($errors->has('broken_file'))
