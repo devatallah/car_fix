@@ -25,7 +25,7 @@ class ECUController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'file' => 'required|file',
+            'file' => 'required',
             'module_uuid' => 'required',
             'brand_uuid' => 'required',
             'name' => 'required|string|max:255',

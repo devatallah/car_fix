@@ -38,7 +38,7 @@ class SolutionController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'broken_file' => 'required|file',
+            'broken_file' => 'required',
             'module_uuid' => 'required',
             'ecu_uuid' => 'required',
         ];
