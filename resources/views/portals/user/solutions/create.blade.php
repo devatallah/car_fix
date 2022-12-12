@@ -12,6 +12,7 @@
 @endsection
 @section('content')
     <div class="content-wrapper" style="height: 100%; width: 100%;">
+    
         <div class="content-header row">
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
@@ -19,56 +20,42 @@
                         <img style="width: 100px" src="{{asset('portals/app-assets/images/logo.svg')}}" alt="">
                         <div style="padding-top: 20px;padding-left: 20px">
                         <h2 class="content-header-title float-left mb-0">@lang('MAGICSOLUTION')</h2>
-                        </div></div>
-                </div>
-            </div>
-        </div>
-        <div class="content-body">
-            <section class="app-user-view-account">
-                <div class="row">
-                    <!-- User Sidebar -->
-                    <div class="col-12 order-1 order-md-0">
-                        <!-- User Card -->
-                        <div class="card">
-                            <div class="card-body" style="padding:0px">
-                                <div class="d-flex justify-content-around my-2 pt-75">
-                                    <div class="d-flex align-items-start me-2">
-                                        <div class="ms-75">
+                        </div>
+                        <div class="d-flex align-items-start me-2" style="position: absolute;right: 550px;">
+                                        <div class="ms-75" >
                                             <h4 class="mb-0">Name</h4>
                                             <span>{{auth()->user()->name}}</span>
                                         </div>
                                     </div>
-                                    <div class="d-flex align-items-start">
-                                        <div class="ms-75">
+                                    <div class="d-flex align-items-start" style=" position: absolute;
+  right: 420px;">
+                                        <div class="ms-75" >
                                             <h4 class="mb-0">Email</h4>
                                             <span>{{auth()->user()->email}}</span>
                                         </div>
                                     </div>
-                                    <div class="d-flex align-items-start">
-                                        <div class="ms-75">
+                                    <div class="d-flex align-items-start" style="position: absolute;
+  right: 290px;">
+                                        <div class="ms-75" >
                                             <h4 class="mb-0">License EXP.</h4>
                                             <span>{{auth()->user()->license_expire_date}}</span>
                                         </div>
                                     </div>
-                                    <div class="d-flex align-items-start">
-                                        <div class="ms-75">
+                                    <div class="d-flex align-items-start" style=" position: absolute;
+  right: 160px;">
+                                        <div class="ms-75" >
                                             <h4 class="mb-0">Balance</h4>
                                             <span>{{auth()->user()->balance}}</span>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
                         </div>
-                        <!-- /User Card -->
-                        <!-- Plan Card -->
-                        <!-- /Plan Card -->
-                    </div>
-                    <!--/ User Sidebar -->
-
-                    <!-- User Content -->
-                    <!--/ User Content -->
                 </div>
-            </section>
+                
+            </div>
+            
+        </div>
+        <div class="content-body">
+            
             <section id="">
                 <div class="row">
                     <div class="col-12">
@@ -145,8 +132,8 @@
                                                     <div class="demo-vertical-spacing">
                                                         <label for="module_uuid">@lang('Original File')</label>
                                                         <div class="form-group">
-                                                <span class="btn btn-secondary btn-file">
-                                                            <span style="width:50px;" class="fileinput-new">@lang('Upload')</span>
+                                                <span class="btn btn-secondary btn-file" style="width:200px">
+                                                            <span style="width:100px;" class="fileinput-new">@lang('Open')</span>
                                                             <input type="file" name="Original File">
                                                         </span>
                                                             @if ($errors->has('broken_file'))
@@ -160,7 +147,7 @@
                                                     <div class="demo-vertical-spacing">
                                                         <label for="">&nbsp</label>
                                                         <div class="form-group">
-                                                            <button type="submit" form="create_form"
+                                                            <button type="submit" form="create_form" style="width:200px"
                                                                     class="ms-1 submit_btn btn btn-primary">
                                                                 <i class="fa fa-spinner fa-spin"
                                                                    style="display: none;"></i>
@@ -172,12 +159,12 @@
                                                 </div>
                                                 
                                             </div>
-                                            <div  class="progress" style="margin-left:50px;margin-top:8px">
-                                            
-  <div class="progress-bar" role="progressbar" style="width: 40%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-</div>                                          
-                                            
-                                            <div style=" height: 200px; weight:200px; margin-left:45px; margin-top:16px;">
+                                            <div  class="progress" style="margin-left:50px;margin-top:30px;height:20px">         
+                                            <div class="progress-bar" role="progressbar" style="width: 40%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                                            </div>      
+                                                   
+                
+                                            <div style=" height: 200px; weight:200px; margin-left:45px; margin-top:45px;">
                                             <div id="results"
                                                  style="background-color: #2B344D; ">
                                                 <p><b style="font-size:small; padding:8px;">Selected Module: </b> <span id="module_result"></span></p>
