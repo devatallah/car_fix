@@ -37,14 +37,38 @@ class SolutionController extends Controller
 
     public function store(Request $request)
     {
+
         $rules = [
             'broken_file' => 'required',
             'module_uuid' => 'required',
             'ecu_uuid' => 'required',
         ];
         $this->validate($request, $rules);
-        $data = $request->only(['broken_file', 'module_uuid', 'ecu_uuid']);
+        $file_name = strtolower($request->file('broken_file')->getClientOriginalName());
+
+        $brands_list = Brand::query()->get()->pluck('name')->toArray();
+        $brands_list = array_map('strtolower', $brands_list);
+        $brand_name = '';
+        foreach($brands_list as $brand) {
+            if (stripos($file_name,$brand) !== false){
+                $brand_name = $brand;
+            }
+        }
+
+        $ecus_list = Brand::query()->get()->pluck('name')->toArray();
+        $ecus_list = array_map('strtolower', $ecus_list);
+        $ecu_name = '';
+        foreach($ecus_list as $ecu) {
+            if (stripos($file_name,$ecu) !== false){
+                $ecu_name = $ecu;
+            }
+        }
         $ecu = ECU::query()->find($request->ecu_uuid);
+        $brand = Brand::query()->find($ecu->brand_uuid);
+        if ($brand_name != strtolower($brand->name) or $ecu_name != strtolower($ecu->name)){
+            return response()->json(['message' => "The given data was invalid.", 'errors' => ['broken_file'=> ['The provided file is invalid.']]], 422);
+        }
+        $data = $request->only(['broken_file', 'module_uuid', 'ecu_uuid']);
         if ($request->hasFile('broken_file')) {
             $broken_file = Storage::disk('s3')->putFile('/broken', $request->file('broken_file'), 'public');
 //            $broken_file = $request->file('broken_file')->store('public');
@@ -56,7 +80,6 @@ class SolutionController extends Controller
         $data['ownerable_type'] = User::class;
         $solution = Solution::query()->create($data);
         $module = Module::query()->find($request->module_uuid);
-        $brand = Brand::query()->find($ecu->brand_uuid);
         if (!$module->is_free) {
             $user = User::query()->find(auth()->user()->uuid);
             $user->update(['balance' => $user->balance - $module->price]);

@@ -12,7 +12,7 @@
 @endsection
 @section('content')
     <div class="content-wrapper" style="height: 100%; width: 100%;">
-    
+
         <div class="content-header row">
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
@@ -50,12 +50,12 @@
                                     </div>
                         </div>
                 </div>
-                
+
             </div>
-            
+
         </div>
         <div class="content-body">
-            
+
             <section id="">
                 <div class="row">
                     <div class="col-12">
@@ -96,11 +96,6 @@
                                                             value="{{$module->uuid}}" {{ $loop->first ? 'selected' : '' }}>{{$module->module_name}}</option>
                                                     @endforeach
                                                 </select>
-                                                @if ($errors->has('module_uuid'))
-                                                    <span class="help-block">
-                                        <strong>{{ $errors->first('module_uuid') }}</strong>
-                                    </span>
-                                                @endif
                                                 <div class="invalid-feedback"></div>
                                             </div>
                                             <div id="ecus" class="form-group ps-1 pt-1 mb-1"
@@ -125,6 +120,7 @@
                                                     </div>
                                                 @endforeach
                                             </div>
+                                            <div class="invalid-feedback"></div>
                                         </div>
                                         <div class="col-6 mt-1">
                                             <div class="ms-4 col-6">
@@ -134,13 +130,8 @@
                                                         <div class="form-group">
                                                 <span class="btn btn-secondary btn-file" style="width:200px">
                                                             <span style="width:100px;" class="fileinput-new">@lang('Open')</span>
-                                                            <input type="file" name="Original File">
+                                                            <input type="file" name="broken_file">
                                                         </span>
-                                                            @if ($errors->has('broken_file'))
-                                                                <span class="help-block">
-                                                        <strong>{{ $errors->first('broken_file') }}</strong>
-                                                    </span>
-                                                            @endif
                                                             <div class="invalid-feedback"></div>
                                                         </div>
                                                     </div>
@@ -157,13 +148,13 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                
+
                                             </div>
-                                            <div  class="progress" style="margin-left:50px;margin-top:30px;height:20px">         
+                                            <div  class="progress" style="margin-left:50px;margin-top:30px;height:20px">
                                             <div class="progress-bar" role="progressbar" style="width: 40%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-                                            </div>      
-                                                   
-                
+                                            </div>
+
+
                                             <div style=" height: 200px; weight:200px; margin-left:45px; margin-top:45px;">
                                             <div id="results"
                                                  style="background-color: #2B344D; ">
@@ -383,8 +374,11 @@
                             if (str[1] === '0') {
                                 key = str[0] + '[]';
                             }
-                            $('[name="' + key + '"], [name="' + key + '[]"]').addClass('is-invalid');
-                            $('[name="' + key + '"], [name="' + key + '[]"]').closest('.form-group').find('.invalid-feedback').html(value[0]);
+                            toastr.error(value[0], '', {
+                                rtl: isRtl
+                            });
+                            // $('[name="' + key + '"], [name="' + key + '[]"]').addClass('is-invalid');
+                            // $('[name="' + key + '"], [name="' + key + '[]"]').closest('.form-group').find('.invalid-feedback').html(value[0]);
                         });
                     } else {
                         toastr.error('@lang('something_wrong')', '', {
