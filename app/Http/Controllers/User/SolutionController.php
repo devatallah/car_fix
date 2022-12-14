@@ -61,7 +61,7 @@ class SolutionController extends Controller
             }
         }
 
-        $ecus_list = Brand::query()->get()->pluck('name')->toArray();
+        $ecus_list = ECU::query()->get()->pluck('name')->toArray();
         $ecus_list = array_map('strtolower', $ecus_list);
         $ecu_name = '';
         foreach($ecus_list as $ecu) {
