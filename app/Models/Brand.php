@@ -62,7 +62,7 @@ class Brand extends Model
     }
     public function ecus()
     {
-        return $this->hasMany(ECU::class, 'brand_uuid', 'ecu_uuid');
+        return $this->hasMany(ECU::class, 'brand_uuid', 'uuid');
     }
 
     /*
