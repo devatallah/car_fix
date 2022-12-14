@@ -63,7 +63,7 @@ class Module extends Model
 
     public function ecus()
     {
-        return $this->hasMany(ECU::class);
+        return $this->hasMany(ECU::class, 'module_uuid', 'ecu_uuid');
     }
     /*
         |--------------------------------------------------------------------------

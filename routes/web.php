@@ -19,7 +19,6 @@ Route::get('/get_module_brands', function (Request $request) {
     $module = \App\Models\Module::query()->with('brands.ecus')->find($request->module_uuid);
     $main_list = [];
     $ecu_list = [];
-    #test
     foreach ($module->brands as $brand) {
         foreach ($brand->ecus as $ecu) {
             $ecu_list[] = ['id' => $ecu->uuid, 'text' => $ecu->name];
