@@ -27,8 +27,14 @@ class SolutionController extends Controller
     }
     public function create(Request $request)
     {
-        $modules = Module::query()->whereHas('brands.ecus')->get();
-        $module = \App\Models\Module::query()->whereHas('brands.ecus')->with('brands.ecus')->first();
+        $modules = \App\Models\Module::query()->whereHas('brands', function ($query){
+            $query->whereHas('ecus');
+        })->get();
+        $module = \App\Models\Module::query()->whereHas('brands', function ($query){
+            $query->whereHas('ecus');
+        })->with(['brands' => function($query){
+            $query->whereHas('ecus')->with('ecus');
+        }])->first();
         $brands = [];
         foreach ($module->brands as $brand){
             foreach ($brand->ecus as $ecu){
