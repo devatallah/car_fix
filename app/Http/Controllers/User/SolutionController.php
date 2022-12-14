@@ -18,8 +18,14 @@ class SolutionController extends Controller
 
     public function index(Request $request)
     {
-        $modules = Module::query()->whereHas('brands.ecus')->get();
-        $module = \App\Models\Module::query()->whereHas('brands.ecus')->with('brands.ecus')->first();
+        $modules = \App\Models\Module::query()->whereHas('brands', function ($query){
+            $query->whereHas('ecus');
+        })->get();
+        $module = \App\Models\Module::query()->whereHas('brands', function ($query){
+            $query->whereHas('ecus');
+        })->with(['brands' => function($query){
+            $query->whereHas('ecus')->with('ecus');
+        }])->first();
         $brands = [];
         $ecu_list = [];
         if ($module) {

@@ -16,8 +16,12 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/get_module_brands', function (Request $request) {
-    dd($request->module_uuid);
-    $module = \App\Models\Module::query()->with('brands.ecus')->find($request->module_uuid);
+    $module = \App\Models\Module::query()->whereHas('brands', function ($query){
+        $query->whereHas('ecus');
+    })->with(['brands' => function($query){
+        $query->whereHas('ecus')->with('ecus');
+    }])->where('uuid', $request->module_uuid)->first();
+
     $main_list = [];
     $ecu_list = [];
     foreach ($module->brands as $brand) {
