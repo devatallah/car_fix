@@ -13,21 +13,13 @@ use Illuminate\Support\Facades\Route;
 
 //use App\Http\Controllers\Admin\Auth\LoginController;
 
-/*
-|--------------------------------------------------------------------------
-| web routes
-|--------------------------------------------------------------------------
-|
-| here is where you can register web routes for your application. these
-| routes are loaded by the routeserviceprovider within a group which
-| contains the "web" middleware group. now create something great!
-|
-*/
+
 
 Route::get('/get_module_brands', function (Request $request) {
     $module = \App\Models\Module::query()->with('brands.ecus')->find($request->module_uuid);
     $main_list = [];
     $ecu_list = [];
+    #test
     foreach ($module->brands as $brand) {
         foreach ($brand->ecus as $ecu) {
             $ecu_list[] = ['id' => $ecu->uuid, 'text' => $ecu->name];
