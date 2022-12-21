@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ECUController;
+use App\Http\Controllers\Admin\ECUFileController;
 use App\Http\Controllers\Admin\ECURequestController;
 use App\Http\Controllers\Admin\ModuleController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -14,11 +15,21 @@ use Illuminate\Support\Facades\Route;
 //use App\Http\Controllers\Admin\Auth\LoginController;
 
 
+Route::get('/diff', function (Request $request) {
+    dd(urlencode('https://carfix22.s3-eu-west-1.amazonaws.com/origin/magicSolution (FORD  (TVA) (NoChk) 1671625481.jpg'));
+    $file = file_get_contents(
+        str_replace(' ', '%20', "https://carfix22.s3-eu-west-1.amazonaws.com/origin/magicSolution (FORD  (TVA) (NoChk) 1671625481.jpg"));
+    dd(md5($file));
+//    dd(file_get_contents(''.$origin_file));
+    $md5image1 = md5(file_get_contents('https://carfix22.s3-eu-west-1.amazonaws.com/origin/magicSolution%20(brand%201%20%20solution%202)%20(NoChk)%201671622543.jpg'));
+    $md5image2 = md5(file_get_contents('https://carfix22.s3-eu-west-1.amazonaws.com/fixed/magicSolution%20(brand%201%20%20solution%202)%20(NoChk)%201671622574.jpg'));
+    dd($md5image1 == $md5image2);
 
+});
 Route::get('/get_module_brands', function (Request $request) {
-    $module = \App\Models\Module::query()->whereHas('brands', function ($query){
+    $module = \App\Models\Module::query()->whereHas('brands', function ($query) {
         $query->whereHas('ecus');
-    })->with(['brands' => function($query){
+    })->with(['brands' => function ($query) {
         $query->whereHas('ecus')->with('ecus');
     }])->where('uuid', $request->module_uuid)->first();
 
@@ -90,6 +101,13 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::put('/{ecu}', [ECUController::class, 'update']);
         Route::delete('/{ecu}', [ECUController::class, 'destroy']);
         Route::get('/indexTable', [ECUController::class, 'indexTable']);
+    });
+    Route::group(['prefix' => 'ecu_files'], function () {
+        Route::get('/', [ECUFileController::class, 'index']);
+        Route::post('/', [ECUFileController::class, 'store']);
+        Route::put('/{ecu_file}', [ECUFileController::class, 'update']);
+        Route::delete('/{ecu_file}', [ECUFileController::class, 'destroy']);
+        Route::get('/indexTable', [ECUFileController::class, 'indexTable']);
     });
     Route::group(['prefix' => 'admins'], function () {
         Route::get('/', [AdminController::class, 'index']);

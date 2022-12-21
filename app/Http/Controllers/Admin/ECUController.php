@@ -25,21 +25,14 @@ class ECUController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'file' => 'required',
             'module_uuid' => 'required',
             'brand_uuid' => 'required',
             'name' => 'required|string|max:255',
         ];
         $this->validate($request, $rules);
-        $data = $request->only(['name', 'file', 'module_uuid', 'brand_uuid']);
+        $data = $request->only(['name', 'module_uuid', 'brand_uuid']);
         $module = Module::query()->find($request->module_uuid);
         $brand = Brand::query()->find($request->brand_uuid);
-        if ($request->hasFile('file')) {
-            $file_name = Storage::disk('s3')->putFileAs('',$request->file('file'),
-                'fixed/magicSolution ('.$brand->name.' '.$request->name.' ('.$module->name.') (NoChk).'.$request->file('file')->extension(), ['visibility' => 'public']);
-//            $file = $request->file('file')->store('public');
-            $data['file'] = $file_name;
-        }
         ECU::query()->create($data);
 
         if ($request->ajax()) {
@@ -53,20 +46,14 @@ class ECUController extends Controller
     public function update(ECU $ecu, Request $request)
     {
         $rules = [
-            'file' => 'nullable',
             'module_uuid' => 'required',
             'brand_uuid' => 'required',
             'name' => 'required|string|max:255',
         ];
         $this->validate($request, $rules);
-        $data = $request->only(['name', 'file', 'module_uuid', 'brand_uuid']);
+        $data = $request->only(['name', 'module_uuid', 'brand_uuid']);
         $module = Module::query()->find($request->module_uuid);
         $brand = Brand::query()->find($request->brand_uuid);
-        if ($request->hasFile('file')) {
-            $file_name = Storage::disk('s3')->putFileAs('',$request->file('file'),
-                'fixed/magicSolution ('.$brand->name.' '.$request->name.' ('.$module->name.') (NoChk).'.$request->file('file')->extension(), ['visibility' => 'public']);
-            $data['file'] = $file_name;
-        }
         $ecu->update($data);
 
         if ($request->ajax()) {
@@ -105,11 +92,11 @@ class ECUController extends Controller
                 $data_attr .= 'data-uuid="' . $ecu->uuid . '" ';
                 $data_attr .= 'data-module_uuid="' . $ecu->module_uuid . '" ';
                 $data_attr .= 'data-brand_uuid="' . $ecu->brand_uuid . '" ';
-                $data_attr .= 'data-file="' . $ecu->file . '" ';
                 $data_attr .= 'data-name="' . $ecu->name . '" ';
                 $string = '';
                 $string .= '<button class="edit_btn btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                     data-bs-target="#edit_modal" ' . $data_attr . '>' . __('edit') . '</button>';
+                $string .= ' <a href="'.url("admin/ecu_files?ecu_uuid=$ecu->uuid").'" class="btn btn-sm btn-outline-primary">' . __('images') . '</a>';
                 $string .= ' <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="' . $ecu->uuid .
                     '">' . __('delete') . '</button>';
                 return $string;

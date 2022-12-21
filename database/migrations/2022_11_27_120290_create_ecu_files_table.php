@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSolutionsTable extends Migration
+class CreateEcuFilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,12 @@ class CreateSolutionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('solutions', function (Blueprint $table) {
+        Schema::create('ecu_files', function (Blueprint $table) {
             $table->id();
             $table->string('uuid')->unique();
-            $table->text('broken_file')->nullable();
             $table->text('fixed_file')->nullable();
-            $table->string('module_uuid')->nullable();
-            $table->string('brand_uuid')->nullable();
+            $table->text('origin_file')->nullable();
             $table->string('ecu_uuid')->nullable();
-            $table->string('ecu_file_uuid')->nullable();
-            $table->string('ownerable_uuid')->nullable();
-            $table->string('ownerable_type')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -36,6 +31,6 @@ class CreateSolutionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('solutions');
+            Schema::dropIfExists('ecu_files');
     }
 }

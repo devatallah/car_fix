@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\ECU;
+use App\Models\ECUFile;
 use App\Models\Module;
 use App\Models\Solution;
 use App\Models\User;
@@ -18,12 +19,12 @@ class SolutionController extends Controller
 
     public function index(Request $request)
     {
-        $modules = \App\Models\Module::query()->whereHas('brands', function ($query){
+        $modules = \App\Models\Module::query()->whereHas('brands', function ($query) {
             $query->whereHas('ecus');
         })->get();
-        $module = \App\Models\Module::query()->whereHas('brands', function ($query){
+        $module = \App\Models\Module::query()->whereHas('brands', function ($query) {
             $query->whereHas('ecus');
-        })->with(['brands' => function($query){
+        })->with(['brands' => function ($query) {
             $query->whereHas('ecus')->with('ecus');
         }])->first();
         $brands = [];
@@ -43,45 +44,40 @@ class SolutionController extends Controller
 
     public function store(Request $request)
     {
-
         $rules = [
             'broken_file' => 'required',
             'module_uuid' => 'required',
             'ecu_uuid' => 'required',
         ];
         $this->validate($request, $rules);
-        $file_name = strtolower($request->file('broken_file')->getClientOriginalName());
 
-        $brands_list = Brand::query()->get()->pluck('name')->toArray();
-        $brands_list = array_map('strtolower', $brands_list);
-        $brand_name = '';
-        foreach($brands_list as $brand) {
-            if (stripos($file_name,$brand) !== false){
-                $brand_name = $brand;
-            }
-        }
+        $ecu_files = ECUFile::query()->where('ecu_uuid', $request->ecu_uuid)->get();
 
-        $ecus_list = ECU::query()->get()->pluck('name')->toArray();
-        $ecus_list = array_map('strtolower', $ecus_list);
-        $ecu_name = '';
-        foreach($ecus_list as $ecu) {
-            if (stripos($file_name,$ecu) !== false){
-                $ecu_name = $ecu;
-            }
-        }
-        $ecu = ECU::query()->find($request->ecu_uuid);
-        $brand = Brand::query()->find($ecu->brand_uuid);
-        if ($brand_name != strtolower($brand->name) or $ecu_name != strtolower($ecu->name)){
-            return response()->json(['message' => "The given data was invalid.", 'errors' => ['broken_file'=> ['The provided file is invalid.']]], 422);
-        }
-        $data = $request->only(['broken_file', 'module_uuid', 'ecu_uuid']);
         if ($request->hasFile('broken_file')) {
             $broken_file = Storage::disk('s3')->putFile('/broken', $request->file('broken_file'), 'public');
-//            $broken_file = $request->file('broken_file')->store('public');
-            $data['broken_file'] = $broken_file;
         }
+        $broken_file_md5 = md5(file_get_contents('https://carfix22.s3-eu-west-1.amazonaws.com/' . $broken_file));
+        $ecu_file_uuid = null;
+        foreach ($ecu_files as $ecu_file) {
+            $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/';
+            $origin_file_md5 = md5(file_get_contents($path.urlencode($ecu_file->getRawOriginal()['origin_file'])));
+            if ($broken_file_md5 == $origin_file_md5) {
+                $ecu_file_uuid = $ecu_file->uuid;
+                break;
+            }
+        }
+        if (is_null($ecu_file_uuid)) {
+            return response()->json(['message' => "The given data was invalid.", 'errors' => ['broken_files' => ['The provided file is invalid.']]], 422);
+        }
+
+        $ecu = ECU::query()->find($request->ecu_uuid);
+        $ecu_file = ECUFile::query()->find($ecu_file_uuid);
+        $brand = Brand::query()->find($ecu->brand_uuid);
+        $data = $request->only(['broken_file', 'module_uuid', 'ecu_uuid']);
+        $data['ecu_file_uuid'] = $ecu_file_uuid;
+        $data['broken_file'] = $broken_file;
         $data['brand_uuid'] = $ecu->brand_uuid;
-        $data['fixed_file'] = $ecu->getRawOriginal()['file'];
+        $data['fixed_file'] = $ecu_file->getRawOriginal()['fixed_file'];
         $data['ownerable_uuid'] = auth()->user()->uuid;
         $data['ownerable_type'] = User::class;
         $solution = Solution::query()->create($data);
