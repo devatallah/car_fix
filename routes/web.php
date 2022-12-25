@@ -13,6 +13,146 @@ use Illuminate\Support\Facades\Route;
 
 //use App\Http\Controllers\Admin\Auth\LoginController;
 
+Route::get('/test_psa', function (Request $request) {
+    $file1 = file_get_contents('origin_PSA.bin');
+    $file2 = file_get_contents('dpf_PSA.bin');
+    $file3 = file_get_contents('egr_PSA.bin');
+    $file4 = file_get_contents('SCR_PSA.bin');
+    $result = '';
+    
+    for ($i = 0; $i < strlen($file1); $i++) {
+        if ($file1[$i] === $file2[$i] && $file2[$i] === $file3[$i] && $file3[$i] === $file4[$i]) {
+            $result .= $file1[$i];
+        } elseif ($file2[$i] != $file1[$i] ) {
+            $result .= $file2[$i];
+            // Handle differences between the files
+        } elseif ($file3[$i] != $file1[$i] ) {
+            $result .= $file3[$i];
+            // Handle differences between the files
+        } elseif ($file4[$i] != $file1[$i] ) {
+            $result .= $file4[$i];
+            // Handle differences between the files
+        }
+    }
+
+    file_put_contents('result_PSA.bin', $result);
+    
+});
+
+Route::get('/test1', function (Request $request) {
+    $file1 = file_get_contents('origin.bin');
+    $file2 = file_get_contents('dpf.bin');
+    $file3 = file_get_contents('egr.bin');
+    
+    $result = '';
+    
+    for ($i = 0; $i < strlen($file1); $i++) {
+        if ($file1[$i] === $file2[$i] && $file2[$i] === $file3[$i]) {
+            $result .= $file1[$i];
+        } elseif ($file2[$i] != $file1[$i] ) {
+            $result .= $file2[$i];
+            // Handle differences between the files
+        } elseif ($file3[$i] != $file1[$i] ) {
+            $result .= $file3[$i];
+            // Handle differences between the files
+        }
+    }
+
+    file_put_contents('result1.bin', $result);
+    
+});
+
+
+Route::get('/test2', function (Request $request) {
+    $file1 = file_get_contents('origin.bin');
+    $file2 = file_get_contents('dpf.bin');
+    $file3 = file_get_contents('egr.bin');
+    
+    $result = $file1 . $file2 . $file3;
+    
+    file_put_contents('result2.bin', $result);
+    
+});
+
+
+Route::get('/test3', function (Request $request) {
+    $file1 = fopen('origin.bin', 'rb');
+    $file2 = fopen('dpf.bin', 'rb');
+    $file3 = fopen('egr.bin', 'rb');
+    $result = fopen('result3.bin', 'wb');
+    
+    while (($data = fread($file1, 8192)) !== false) {
+        fwrite($result, $data);
+    }
+    
+    while (($data = fread($file2, 8192)) !== false) {
+        fwrite($result, $data);
+    }
+    
+    while (($data = fread($file3, 8192)) !== false) {
+        fwrite($result, $data);
+    }
+    
+    fclose($file1);
+    fclose($file2);
+    fclose($file3);
+    fclose($result);
+    
+    
+});
+
+
+Route::get('/test4', function (Request $request) {
+
+// Open the three files in binary mode
+$f1 = fopen("origin.bin", "rb");
+$f2 = fopen("dpf.bin", "rb");
+$f3 = fopen("egr.bin", "rb");
+
+// Open the result file in binary mode
+$result = fopen("result4.bin", "wb");
+
+// Read the first line from each file
+$line1 = fgets($f1);
+$line2 = fgets($f2);
+$line3 = fgets($f3);
+
+// Initialize a counter for the line number
+$line_number = 1;
+
+// Loop until all lines have been read
+while ($line1 !== false || $line2 !== false || $line3 !== false) {
+  // Compare the lines and print a message if they are different
+  if ($line1 != $line2) {
+    echo "Line $line_number: Files 1 and 2 are different\n";
+  }
+  if ($line1 != $line3) {
+    echo "Line $line_number: Files 1 and 3 are different\n";
+  }
+  if ($line2 != $line3) {
+    echo "Line $line_number: Files 2 and 3 are different\n";
+  }
+
+  // Write the lines to the result file
+  fwrite($result, $line1);
+  fwrite($result, $line2);
+  fwrite($result, $line3);
+
+  // Read the next line from each file
+  $line1 = fgets($f1);
+  $line2 = fgets($f2);
+  $line3 = fgets($f3);
+
+  // Increment the line number
+  $line_number++;
+}
+
+// Close the files
+fclose($f1);
+fclose($f2);
+fclose($f3);
+fclose($result);
+});
 
 
 Route::get('/get_module_brands', function (Request $request) {
