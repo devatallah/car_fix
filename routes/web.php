@@ -15,12 +15,15 @@ use Illuminate\Support\Facades\Route;
 //use App\Http\Controllers\Admin\Auth\LoginController;
 
 Route::get('/test_psa', function (Request $request) {
+    $user_file=file_get_contents('testa.bin');
     $file1 = file_get_contents('origin_PSA.bin');
     $file2 = file_get_contents('dpf_PSA.bin');
     $file3 = file_get_contents('egr_PSA.bin');
     $file4 = file_get_contents('SCR_PSA.bin');
     $result = '';
-    
+    //file size must equl in all files 
+    if($user_file ===$file1 or $user_file===$file2 or $user_file===$file3 or $user_file===$file4 ){ 
+    if(filesize("testa.bin") === filesize("origin_PSA.bin")){
     for ($i = 0; $i < strlen($file1); $i++) {
         if ($file1[$i] === $file2[$i] && $file2[$i] === $file3[$i] && $file3[$i] === $file4[$i]) {
             $result .= $file1[$i];
@@ -35,10 +38,11 @@ Route::get('/test_psa', function (Request $request) {
             // Handle differences between the files
         }
     }
-
-    file_put_contents('result_PSA.bin', $result);
-    
-});
+    file_put_contents('dd.bin', $result); 
+}
+}
+}
+);
 
 Route::get('/test1', function (Request $request) {
     $file1 = file_get_contents('origin.bin');
