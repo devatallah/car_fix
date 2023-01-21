@@ -62,7 +62,6 @@
     "faq": "FAQ",
     "frequently_ask_question": "Frequently Ask Question",
     "contact_us": "Contact Us",
-    "location": "موقع العمل",
     "location": "Location",
     "message": "Message",
     "start_now": "Start Now",
@@ -308,6 +307,11 @@
     "download_file": "Download File",
     "broken_file": "Broken File",
     "fixed_file": "Fixed File",
+
+    "modules": "Fix Type",
+    "brands" : "Brands",
+    "ecus"  : "ECUS",
+    "ecu_files" : "ECUS Files",
 
     "": ""
 }

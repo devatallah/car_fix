@@ -1,0 +1,26 @@
+<svg id="Group_7162" data-name="Group 7162" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="7.984" height="14.364" viewBox="0 0 7.984 14.364">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="Mask" d="M7.813.971,4.391,4.4a.551.551,0,0,1-.8,0L.171.971a.553.553,0,0,1,0-.8.551.551,0,0,1,.8,0L3.992,3.2,7.015.171a.551.551,0,0,1,.8,0A.553.553,0,0,1,7.813.971Z" fill="#cdcdcd"/>
+    </clipPath>
+    <clipPath id="clip-path-2">
+      <path id="Mask-2" data-name="Mask" d="M7.813,4.4a.551.551,0,0,1-.8,0L3.992,1.371.969,4.4a.551.551,0,0,1-.8,0,.553.553,0,0,1,0-.8L3.593.171a.551.551,0,0,1,.8,0L7.813,3.6A.553.553,0,0,1,7.813,4.4Z" fill="#cdcdcd"/>
+    </clipPath>
+  </defs>
+  <g id="chevron-down" transform="translate(0 9.794)">
+    <path id="Mask-3" data-name="Mask" d="M7.813.971,4.391,4.4a.551.551,0,0,1-.8,0L.171.971a.553.553,0,0,1,0-.8.551.551,0,0,1,.8,0L3.992,3.2,7.015.171a.551.551,0,0,1,.8,0A.553.553,0,0,1,7.813.971Z" fill="#cdcdcd"/>
+    <g id="Mask_Group_222" data-name="Mask Group 222" clip-path="url(#clip-path)">
+      <g id="Icon_Color" data-name="Icon Color" transform="translate(-2.851 -4.57)">
+        <rect id="_Icon_Color" data-name="🎨 Icon Color" width="13.687" height="13.711" fill="#cdcdcd"/>
+      </g>
+    </g>
+  </g>
+  <g id="chevron-up">
+    <path id="Mask-4" data-name="Mask" d="M7.813,4.4a.551.551,0,0,1-.8,0L3.992,1.371.969,4.4a.551.551,0,0,1-.8,0,.553.553,0,0,1,0-.8L3.593.171a.551.551,0,0,1,.8,0L7.813,3.6A.553.553,0,0,1,7.813,4.4Z" fill="#cdcdcd"/>
+    <g id="Mask_Group_219" data-name="Mask Group 219" clip-path="url(#clip-path-2)">
+      <g id="Icon_Color-2" data-name="Icon Color" transform="translate(-2.851 -4.57)">
+        <rect id="_Icon_Color-2" data-name="🎨 Icon Color" width="13.687" height="13.711" fill="#cdcdcd"/>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Group_7429" data-name="Group 7429" transform="translate(18976 -6258)">
+    <path id="Path_13096" data-name="Path 13096" d="M12,0A12,12,0,1,1,0,12,12,12,0,0,1,12,0Z" transform="translate(-18976 6258)" fill="#fcfcfc"/>
+    <path id="play" d="M9,8.321a.862.862,0,0,1,.1-.4A.745.745,0,0,1,10.143,7.6l9.263,5.48a.791.791,0,0,1,.3.319.85.85,0,0,1-.3,1.116L10.143,20a.733.733,0,0,1-.373.1A.8.8,0,0,1,9,19.283Z" transform="translate(-18977.5 6256.198)" fill="#247310"/>
+  </g>
+</svg>

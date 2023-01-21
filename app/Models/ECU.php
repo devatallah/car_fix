@@ -2,11 +2,9 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Storage;
 use Webpatser\Uuid\Uuid;
 
 class ECU extends Model
@@ -22,8 +20,8 @@ class ECU extends Model
     public $incrementing = false;
     protected $table = 'ecus';
     protected $guarded = [];
-    protected $appends = ['module_name', 'brand_name'];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'module', 'brand'];
+    protected $appends = ['brand_name'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'brand'];
     protected $primaryKey = 'uuid';
 
 
@@ -39,7 +37,6 @@ class ECU extends Model
         self::creating(function ($model) {
             $model->uuid = (string)Uuid::generate(4);
         });
-
     }
 
     /*
@@ -59,11 +56,14 @@ class ECU extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function module(){
-        return $this->belongsTo(Module::class)->withTrashed();
-    }
-    public function brand(){
+    public function brand()
+    {
         return $this->belongsTo(Brand::class)->withTrashed();
+    }
+
+    public function files()
+    {
+        return $this->hasMany(ECUFile::class);
     }
 
     /*
@@ -85,20 +85,8 @@ class ECU extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function getModuleNameAttribute()
-    {
-        return @$this->module->name;
-    }
     public function getBrandNameAttribute()
     {
         return @$this->brand->name;
     }
-
-    public function getFileAttribute($value)
-    {
-        $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/';
-        return !is_null($value) ? $path.$value : '';
-    }
-
-
 }

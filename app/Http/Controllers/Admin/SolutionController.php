@@ -23,27 +23,25 @@ class SolutionController extends Controller
         $modules = Module::all();
         $brands = Brand::all();
         return view('portals.admin.solutions.index', compact('modules', 'brands'));
-
     }
     public function create(Request $request)
     {
-        $modules = \App\Models\Module::query()->whereHas('brands', function ($query){
-            $query->whereHas('ecus');
-        })->get();
-        $module = \App\Models\Module::query()->whereHas('brands', function ($query){
-            $query->whereHas('ecus');
-        })->with(['brands' => function($query){
-            $query->whereHas('ecus')->with('ecus');
-        }])->first();
-        $brands = [];
-        foreach ($module->brands as $brand){
-            foreach ($brand->ecus as $ecu){
-                $ecu_list[] = ['id' => $ecu->uuid, 'text' => $ecu->name];
-            }
-            $brands[] = ['id' => $brand->uuid, 'text' => $brand->name, 'children' => $ecu_list];
-        }
-        return view('portals.admin.solutions.create', compact('modules', 'brands'));
-//        return view('portals.user.solutions.index', compact('modules', 'brands'));
+        // $modules = \App\Models\Module::query()->whereHas('brands', function ($query){
+        //     $query->whereHas('ecus');
+        // })->get();
+        // $module = \App\Models\Module::query()->whereHas('brands', function ($query){
+        //     $query->whereHas('ecus');
+        // })->with(['brands' => function($query){
+        //     $query->whereHas('ecus')->with('ecus');
+        // }])->first();
+        // $brands = [];
+        // foreach ($module->brands as $brand){
+        //     foreach ($brand->ecus as $ecu){
+        //         $ecu_list[] = ['id' => $ecu->uuid, 'text' => $ecu->name];
+        //     }
+        //     $brands[] = ['id' => $brand->uuid, 'text' => $brand->name, 'children' => $ecu_list];
+        // }
+        return view('portals.admin.solutions.create'); // , compact('modules', 'brands')
 
     }
 
@@ -59,8 +57,8 @@ class SolutionController extends Controller
         $data = $request->only(['broken_file', 'module_uuid', 'brand_uuid', 'ecu_uuid']);
         $ecu = ECU::query()->find($request->ecu_uuid);
         if ($request->hasFile('broken_file')) {
-            $broken_file = Storage::disk('s3')->putFile('/broken',$request->file('broken_file'), 'public');
-//            $broken_file = $request->broken_file('broken_file')->store('public');
+            $broken_file = Storage::disk('s3')->putFile('/broken', $request->file('broken_file'), 'public');
+            //            $broken_file = $request->broken_file('broken_file')->store('public');
             $data['broken_file'] = $broken_file;
         }
         $data['fixed_file'] = $ecu->file;
@@ -85,8 +83,8 @@ class SolutionController extends Controller
         $data = $request->only(['broken_file', 'module_uuid', 'ecu_uuid']);
         $ecu = ECU::query()->find($request->ecu_uuid);
         if ($request->hasFile('broken_file')) {
-            $broken_file = Storage::disk('s3')->putFile('/broken',$request->file('broken_file'), 'public');
-//            $broken_file = $request->file('broken_file')->store('public');
+            $broken_file = Storage::disk('s3')->putFile('/broken', $request->file('broken_file'), 'public');
+            //            $broken_file = $request->file('broken_file')->store('public');
             $data['broken_file'] = $broken_file;
         }
         $data['brand_uuid'] = $ecu->brand_uuid;
@@ -96,12 +94,12 @@ class SolutionController extends Controller
         $solution = Solution::query()->create($data);
         $module = Module::query()->find($request->module_uuid);
         $brand = Brand::query()->find($ecu->brand_uuid);
-        if (!$module->is_free){
+        if (!$module->is_free) {
             $user = User::query()->find(auth()->user()->uuid);
             $user->update(['balance' => $user->balance - $module->price]);
         }
         $file_name = $request->file('broken_file')->getClientOriginalName();
-        $file_size = round($request->file('broken_file')->getSize() /1000/1000,2);
+        $file_size = round($request->file('broken_file')->getSize() / 1000 / 1000, 2);
         if ($request->ajax()) {
             return response()->json(['status' => true, 'url' => $solution->fixed_file, 'brand_name' => $brand->name, 'module_name' => $module->name, 'ecu_name' => $ecu->name, 'file_name' => $file_name, 'file_size' => $file_size]);
         }
@@ -141,5 +139,4 @@ class SolutionController extends Controller
                 return $string;
             })->make(true);
     }
-
 }

@@ -1,0 +1,30 @@
+<svg id="Payment_Methods" data-name="Payment Methods" xmlns="http://www.w3.org/2000/svg" width="36" height="24" viewBox="0 0 36 24">
+  <path id="Path_13075" data-name="Path 13075" d="M4,0H32a4,4,0,0,1,4,4V20a4,4,0,0,1-4,4H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0Z" fill="#e2e6ea"/>
+  <g id="symbols" transform="translate(4 -8.554)">
+    <g id="Group_447" data-name="Group 447" transform="translate(9.404 16.692)">
+      <g id="Group_446" data-name="Group 446" transform="translate(0 0)">
+        <path id="Path_815" data-name="Path 815" d="M18.089,16.8l-1.367,8.023h2.186L20.277,16.8Z" transform="translate(-16.722 -16.799)" fill="#1a1f71"/>
+      </g>
+    </g>
+    <g id="Group_449" data-name="Group 449" transform="translate(2.172 16.699)">
+      <g id="Group_448" data-name="Group 448">
+        <path id="Path_816" data-name="Path 816" d="M9.261,16.814,7.119,22.285l-.228-.826a8.584,8.584,0,0,0-3.029-3.326l1.958,6.69,2.314,0,3.443-8.007Z" transform="translate(-3.862 -16.812)" fill="#1a1f71"/>
+      </g>
+    </g>
+    <g id="Group_451" data-name="Group 451" transform="translate(0 16.623)">
+      <g id="Group_450" data-name="Group 450">
+        <path id="Path_817" data-name="Path 817" d="M4.371,17.329a.88.88,0,0,0-.953-.652H.028L0,16.837a6.962,6.962,0,0,1,5.108,4.036Z" transform="translate(0 -16.677)" fill="#1a1f71"/>
+      </g>
+    </g>
+    <g id="Group_453" data-name="Group 453" transform="translate(12.958 16.554)">
+      <g id="Group_452" data-name="Group 452">
+        <path id="Path_818" data-name="Path 818" d="M27.474,18.23a4.037,4.037,0,0,1,1.636.307l.2.093.3-1.739a5.644,5.644,0,0,0-1.959-.337c-2.161,0-3.683,1.088-3.7,2.648-.014,1.152,1.085,1.8,1.915,2.18.852.394,1.138.644,1.134,1-.007.537-.679.783-1.307.783a4.59,4.59,0,0,1-2.059-.42l-.282-.128-.308,1.8a6.925,6.925,0,0,0,2.436.427c2.3,0,3.792-1.075,3.808-2.741.01-.912-.574-1.607-1.837-2.178-.765-.372-1.233-.62-1.228-1C26.221,18.586,26.618,18.23,27.474,18.23Z" transform="translate(-23.043 -16.554)" fill="#1a1f71"/>
+      </g>
+    </g>
+    <g id="Group_455" data-name="Group 455" transform="translate(19.049 16.701)">
+      <g id="Group_454" data-name="Group 454" transform="translate(0 0)">
+        <path id="Path_819" data-name="Path 819" d="M39.955,16.815H38.266a1.088,1.088,0,0,0-1.146.666l-3.246,7.352h2.3s.375-.989.459-1.205l2.8,0c.065.28.267,1.2.267,1.2h2.028Zm-2.7,5.171c.18-.461.871-2.242.871-2.242-.012.022.178-.464.291-.766l.147.692.507,2.316Z" transform="translate(-33.874 -16.815)" fill="#1a1f71"/>
+      </g>
+    </g>
+  </g>
+</svg>

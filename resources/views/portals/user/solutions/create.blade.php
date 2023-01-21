@@ -1,191 +1,95 @@
 @extends('portals.user.app')
+
 @section('title')
     @lang('Solutions')
 @endsection
-@section('styles')
-    <style>
-        .pac-container {
-            z-index: 1051 !important;
-        }
 
+@section('my_style')
+    <link rel="stylesheet" href="{{ asset('portals/assets/css/user-solutions.css') }}">
+    <style>
+        html .content.app-content {
+            padding: 0;
+        }
     </style>
 @endsection
+
 @section('content')
-    <div class="content-wrapper" style="height: 100%; width: 100%;">
+    <div class="main-container" style="height: 100%; width: 100%;">
 
-        <div class="content-header row">
-            <div class="content-header-left col-md-9 col-12 mb-2">
-                <div class="row breadcrumbs-top">
-                    <div class="col-12 d-inline-flex">
-                        <img style="width: 100px" src="{{asset('portals/app-assets/images/logo.svg')}}" alt="">
-                        <div style="padding-top: 20px;padding-left: 20px">
-                        <h2 class="content-header-title float-left mb-0">@lang('MAGICSOLUTION')</h2>
-                        </div>
-                        <div class="d-flex align-items-start me-2" style="position: absolute;right: 550px;">
-                                        <div class="ms-75" >
-                                            <h4 class="mb-0">Name</h4>
-                                            <span>{{auth()->user()->name}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-start" style=" position: absolute;
-  right: 420px;">
-                                        <div class="ms-75" >
-                                            <h4 class="mb-0">Email</h4>
-                                            <span>{{auth()->user()->email}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-start" style="position: absolute;
-  right: 290px;">
-                                        <div class="ms-75" >
-                                            <h4 class="mb-0">License EXP.</h4>
-                                            <span>{{auth()->user()->license_expire_date}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-start" style=" position: absolute;
-  right: 160px;">
-                                        <div class="ms-75" >
-                                            <h4 class="mb-0">Balance</h4>
-                                            <span>{{auth()->user()->balance}}</span>
-                                        </div>
-                                    </div>
-                        </div>
-                </div>
-
-            </div>
-
-        </div>
-        <div class="content-body">
-
-            <section id="">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="head-label">
-                                    <div class="form-gruop">
-                                        <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal"
-                                                data-bs-target="#create_modal"><span><i class="fa fa-plus"></i> @lang('Request New Solutions')</span>
-                                        </button>
-
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="form-gruop">
-                                        <a class="btn btn-outline-primary" href="" type="button"><span><i
-                                                    class="fa fa-recycle"></i> @lang('Refresh')</span>
-                                        </a>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <form action="" id="create_form" method="POST"
-                                      data-reset="true" class="form-horizontal" enctype="multipart/form-data"
-                                      novalidate>
-                                    {{csrf_field()}}
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-group mb-1">
-                                                <label for="module_uuid">@lang('Solution Type')</label>
-                                                <select class="module_uuid form-control" id="module_uuid"
-                                                        name="module_uuid"
-                                                        required>
-                                                    <option value="">@lang('select')</option>
-                                                    @foreach($modules as $module)
-                                                        <option
-                                                            value="{{$module->uuid}}" {{ $loop->first ? 'selected' : '' }}>{{$module->module_name}}</option>
-                                                    @endforeach
-                                                </select>
-                                                <div class="invalid-feedback"></div>
-                                            </div>
-                                            <div id="ecus" class="form-group ps-1 pt-1 mb-1"
-                                                 style="background-color: #2B344D; height: 500px; overflow:auto;">
-                                                @foreach($brands as $brand)
-                                                    <div class="mb-1">
-                                                        <h5 class="brand">+ {{$brand['text']}}</h5>
-                                                        <div class="ms-1 demo-vertical-spacing brand_ecus"
-                                                             style="display: none">
-                                                            @foreach($brand['children'] as $item)
-                                                                <div class="form-check form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                           name="ecu_uuid" id="{{$item['id']}}"
-                                                                           value="{{$item['id']}}" style="width: 0.8rem;
-    height: 0.8rem;
-    margin-top: 0.45rem; margin-left: -1.15rem;">
-                                                                    <label class="form-check-label"
-                                                                           for="{{$item['id']}}"><small>{{$item['text']}}</small></label>
-                                                                </div>
-                                                            @endforeach
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                            <div class="invalid-feedback"></div>
-                                        </div>
-                                        <div class="col-6 mt-1">
-                                            <div class="ms-4 col-6">
-                                                <div class="d-inline-flex">
-                                                    <div class="demo-vertical-spacing">
-                                                        <label for="module_uuid">@lang('Original File')</label>
-                                                        <div class="form-group">
-                                                <span class="btn btn-secondary btn-file" style="width:200px">
-                                                            <span style="width:100px;" class="fileinput-new">@lang('Open')</span>
-                                                            <input type="file" name="broken_file">
-                                                        </span>
-                                                            <div class="invalid-feedback"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="demo-vertical-spacing">
-                                                        <label for="">&nbsp</label>
-                                                        <div class="form-group">
-                                                            <button type="submit" form="create_form" style="width:200px"
-                                                                    class="ms-1 submit_btn btn btn-primary">
-                                                                <i class="fa fa-spinner fa-spin"
-                                                                   style="display: none;"></i>
-                                                                @lang('Solution')
-                                                            </button>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div  class="progress" style="margin-left:50px;margin-top:30px;height:20px">
-                                            <div class="progress-bar" role="progressbar" style="width: 40%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-                                            </div>
-
-
-                                            <div style=" height: 200px; weight:200px; margin-left:45px; margin-top:45px;">
-                                            <div id="results"
-                                                 style="background-color: #2B344D; ">
-                                                <p><b style="font-size:small; padding:8px;">Selected Module: </b> <span id="module_result"></span></p>
-                                                <p><b style="font-size:small;padding:8px;">Selected Brand: </b> <span id="brand_result"></span></p>
-                                                <p><b style="font-size:small;padding:8px;">Selected ECU: </b> <span id="ecu_result"></span></p>
-                                                <p><b style="font-size:small;padding:8px;">Selected File: </b> <span id="file_result"></span></p>
-                                                <p><b style="font-size:small;padding:8px;">File Size: </b> <span id="file_size_result"></span></p>
-                                            </div>
-                                            </div>
-
-                                            {{--                                            <div class=" col-12">--}}
-                                            {{--                                            <div id="myProgress">--}}
-                                            {{--                                                    <div id="myBar">--}}
-
-                                            {{--                                                    </div>--}}
-                                            {{--                                                </div>--}}
-                                            {{--                                            </div>--}}
-                                        </div>
-
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+        <div class="card">
+            <form id="logoutForm" action="{{ route('user_logout') }}" method="POST" style="display: none">
+                {{ csrf_field() }}
+            </form>
+            <form onsubmit="event.preventDefault(); findSolution(this)">
+                <section>
+                    <h3 class="group-title">Solution Type</h3>
+                    <br>
+                    <div class="solutions-radio-group">
+                        @foreach ($modules as $module)
+                            <label class="label-container text-gray">{{ $module->name }}
+                                <input type="radio" name="solution" value="{{ $module->uuid }}"
+                                    data-module-name="{{ $module->name }}" onchange="getBrands(this)">
+                                <span class="checkmark"></span>
+                            </label>
+                        @endforeach
                     </div>
-                </div>
-            </section>
-
+                    <div class="lists-group"></div>
+                </section>
+                <section>
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-12 mb-2 d-flex justify-content-end align-items-center">
+                                <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#create_modal"><span><i class="fa fa-plus"></i> @lang('Request New Solutions')</span>
+                                </button>
+                                <a class="btn btn-outline-primary mx-3" href="" type="button">
+                                    <span><i class="fa fa-recycle"></i> @lang('Refresh')</span>
+                                </a>
+                                <button class="btn btn-primary" type="button"
+                                    onclick="document.querySelector('form#logoutForm').submit();">
+                                    <i class="mr-50" data-feather="power"></i>@lang('logout')
+                                </button>
+                            </div>
+                            <div class="col-12 d-flex justify-content-between align-items-center">
+                                <img class="logo" src="{{ asset('portals/app-assets/images/logo.svg') }}" alt="logo">
+                                <div class="user">
+                                    <h3 class="text-gray">User:</h3>
+                                    <p class="text-gray">{{ auth()->user()->name }}</p>
+                                </div>
+                                <div class="linces">
+                                    <h3 class="text-gray">License EXP.</h3>
+                                    <p class="text-gray">{{ auth()->user()->license_expire_date }}</p>
+                                </div>
+                                <div class="user">
+                                    <h3 class="text-gray">Balance:</h3>
+                                    <p class="text-gray">{{ auth()->user()->balance }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="group-title btn btn-secondary" href="">DTC</a>
+                        <br>
+                        <div class="btn-groups d-flex">
+                            <input type="file" id="originalFile" accept=".bin" onchange="uploadFile(this)" hidden>
+                            <button type="button" onclick="fileExplorer()">Open</button>
+                            <button type="submit">Solution</button>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-container">
+                                <div class="progress-bg">45%</div>
+                            </div>
+                        </div>
+                        <div class="file-details">
+                            <p><b>Selected Module:</b> <span id="selectedModule"></span></p>
+                            <p><b>Selected Brand:</b> <span id="selectedBrand"></span></p>
+                            <p><b>Selected ECU:</b> <span id="selectedECU"></span></p>
+                            <p><b>Selected File:</b> <span id="selectedFile"></span></p>
+                            <p><b>File Size:</b> <span id="selectedSize"></span></p>
+                        </div>
+                </section>
+            </form>
         </div>
         <div class="modal fade" id="create_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
+            aria-hidden="true">
             <div class="modal-dialog modal modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -195,16 +99,15 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{url("/user/ecu_requests")}}" id="create_request_form" method="POST"
-                              data-reset="true" class="ajax_form form-horizontal" enctype="multipart/form-data"
-                              novalidate>
-                            {{csrf_field()}}
+                        <form action="{{ url('/user/ecu_requests') }}" id="create_request_form" method="POST"
+                            data-reset="true" class="ajax_form form-horizontal" enctype="multipart/form-data" novalidate>
+                            {{ csrf_field() }}
                             <div class="row">
                                 <div class="col-12 mb-1">
                                     <div class="form-group">
-                                        <label for="module">@lang('module')</label>
+                                        <label for="module">fix type</label>
                                         <input type="text" class="module form-control" id="module" name="module"
-                                               required>
+                                            required>
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
@@ -212,7 +115,7 @@
                                     <div class="form-group">
                                         <label for="brand">@lang('brand')</label>
                                         <input type="text" class="brand form-control" id="brand" name="brand"
-                                               required>
+                                            required>
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
@@ -220,7 +123,7 @@
                                     <div class="form-group">
                                         <label for="ecu">@lang('ecu')</label>
                                         <input type="text" class="ecu form-control" id="ecu" name="ecu"
-                                               required>
+                                            required>
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
@@ -238,159 +141,190 @@
                 </div>
             </div>
         </div>
+        {{-- <div class="modal fade" id="requestSolution" tabindex="-1" role="dialog"
+            aria-labelledby="requestSolutionModal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Whould you want to request a new solution?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>We can't find a solution for your file.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">Request</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
     </div>
-
 @endsection
 @section('js')
-
 @endsection
 @section('scripts')
     <script>
+        $('#requestSolution').modal('show')
+        var fix_type_uuid, brand_uuid, ecu_uuid = "";
 
-        var url = '{{url("/user/solutions")}}/';
-        // var i = 0;
-        // function move(e) {
-        //     e.preventDefault()
-        //     console.log(444)
-        //     if (i == 0) {
-        //         i = 1;
-        //         var elem = document.getElementById("myBar");
-        //         var width = 1;
-        //         var id = setInterval(frame, 10);
-        //         function frame() {
-        //             if (width >= 100) {
-        //                 clearInterval(id);
-        //                 i = 0;
-        //             } else {
-        //                 width++;
-        //                 elem.style.width = width + "%";
-        //             }
-        //         }
-        //     }
-        // }
-        $(document).ready(function () {
-            $(document).on('change', '#module_uuid', function (e) {
-                e.preventDefault();
-                $('#ecus').html('')
-                var urls = '{{url("/get_module_brands")}}' + '?module_uuid=' + $(this).val();
-                $.ajax({
-                    url: urls,
-                    method: 'GET',
-                    type: 'GET',
-                    success: function (data) {
-                        text = ``
-                        $.each(data, function (index, value) {
-                            text += `                                                <div class="mb-1">
-                                                    <h5 class="brand">` + value.text + `</h5>
-                                                    <div class="ms-1 demo-vertical-spacing brand_ecus" style="display: none">`
-                            $.each(value.children, function (index, value) {
+        function showCategories(parentItem, ev) {
+            brand_uuid = $(ev).attr('data-brand-id');
+            document.getElementById("selectedECU").innerText = '';
+            document.getElementById("selectedBrand").innerText = $(ev).attr('data-brand-name');
+            parentItem.classList.toggle("show");
+        }
 
-                                text += `<div class="form-check form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                   name="ecu_uuid" id="` + value.id + `"
-                                                                   value="` + value.id + `" style="width: 0.8rem;
-    height: 0.8rem;
-    margin-top: 0.45rem; margin-left: -1.15rem;">
-                                                            <label class="form-check-label"
-                                                                   for="` + value.id + `"><small>` + value.text + `</small></label>
-                                                        </div>`
-                            });
-                            text += `                  </div>
-                                                </div>`
-                        });
-                        $('#ecus').append(text)
+        function getECU(ev) {
+            ecu_uuid = ev.value;
+            document.getElementById("selectedECU").innerText = $(ev).attr('data-ecu-name');
+        }
 
+        function getBrands(ev) {
+            $('.lists-group').empty();
+            let url = "/user/solutions/brands/list";
+            let id = ev.value;
+            fix_type_uuid = id;
+            document.getElementById("selectedBrand").innerText = '';
+            document.getElementById("selectedECU").innerText = '';
+            document.getElementById("selectedModule").innerText = $(ev).attr('data-module-name');
+            const data = {
+                'module_uuid': id
+            };
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: data,
+                dataType: 'json',
+            }).done(function(data) {
+                if (data.status) {
+                    toastr.success(data.message, '');
+                    let text = '';
+                    let brand = data.data;
+                    brand.forEach((element) => {
+                        text += `<div class="dropdown-container">
+                            <h3 class="tilte" onclick="showCategories(this.parentNode, this)" data-brand-id="${element['uuid']}" data-brand-name="${element['name']}">+${element['name']}</h3>
+                            <ul>`;
+                        let brandChidlren = element['ecus'];
+                        for (let index = 0; index < brandChidlren.length; index++) {
+                            const ecu = brandChidlren[index];
+                            text += `<li class="menu-item">
+                                    <label class="label-container sm-label text-gray">${ecu['name']}
+                                        <input type="radio" name="category" data-ecu-name="${ecu['name']}" value="${ecu['uuid']}" onchange="getECU(this)">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </li>`
+                        }
+                        text += `</ul>
+                        </div>`
+                    });
+                    $('.lists-group').append(text);
+                } else {
+                    if (data.message) {
+                        toastr.error(data.message, '');
+                    } else {
+                        toastr.error('@lang('something_wrong')', '');
                     }
+                }
+            }).fail(function(data) {
+                toastr.error(data.responseJSON.message, '');
+            });
+        }
 
+        function fileExplorer() {
+            $('#originalFile').click();
+        }
+
+        function uploadFile(ev) {
+            const file = event.target.files[0];
+            document.getElementById("selectedFile").innerText = file.name;
+            document.getElementById("selectedSize").innerText = formatBytes(file.size);
+        }
+
+        function formatBytes(bytes, decimals = 2) {
+            if (!+bytes) return '0 Bytes'
+
+            const k = 1024
+            const dm = decimals < 0 ? 0 : decimals
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+
+            const i = Math.floor(Math.log(bytes) / Math.log(k))
+
+            return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
+        }
+
+        function findSolution(ev) {
+
+            let url = "/user/solutions/find/solution";
+            var progress = $(".progress-bg");
+
+            if (fix_type_uuid == "" || brand_uuid == "" || ecu_uuid == "") {
+                toastr.error('Fix Type, Brand, ECU data should not be empty');
+            } else if (document.getElementById("originalFile").files.length == 0) {
+                toastr.error('No original file selected');
+            } else {
+                $.ajaxSetup({
+                    url: url,
+                    global: false,
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    }
                 });
-            });
-            $(document).on('click', '.brand', function (e) {
-                console.log(333)
-                $(this).parent().find('.brand_ecus').toggle();
-            });
-
-
-            $(document).on('submit', '#create_form', function (e) {
-                // $('.submit_btn').prop('disabled', true);
-                e.preventDefault();
-                var form = $(this);
-                var url = $(this).attr('action');
-                var method = $(this).attr('method');
-                var reset = $(this).data('reset');
-                var Data = new FormData(this);
-                $('.submit_btn').attr('disabled', 'disabled');
-                $('.fa-spinner.fa-spin').show();
+                var formData = new FormData()
+                formData.append('module_uuid', fix_type_uuid)
+                formData.append('brand_uuid', brand_uuid)
+                formData.append('ecu_uuid', ecu_uuid)
+                formData.append('file', document.getElementById("originalFile").files[0])
                 $.ajax({
-                    url: "{{url("/user/solutions")}}",
-                    type: method,
-                    data: Data,
-                    contentType: false,
+                    data: formData,
                     processData: false,
-                    beforeSend: function () {
-                        $('.invalid-feedback').html('');
-                        $('.is-invalid ').removeClass('is-invalid');
-                        form.removeClass('was-validated');
-                    }
-                }).done(function (data) {
-                    if (data.status) {
-                        toastr.success('@lang('done_successfully')', '', {
-                            rtl: isRtl
-                        });
-                        if (reset === true) {
-                            console.log(isRtl)
-                            form[0].reset();
-                            $('.submit_btn').removeAttr('disabled');
-                            $('.fa-spinner.fa-spin').hide();
-                            $('.modal').modal('hide');
-                            // oTable.draw();
-                        } else {
-                            var url = $('#cancel_btn').attr('href');
-                            window.location.replace(url);
-                        }
-                        $('#module_result').html(data.module_name)
-                        $('#brand_result').html(data.brand_name)
-                        $('#ecu_result').html(data.ecu_name)
-                        $('#file_result').html(data.file_name)
-                        $('#file_size_result').html(data.file_size)
-                        window.open(data.url, '_blank');
-                    } else {
-                        if (data.message) {
-                            toastr.error(data.message, '', {
-                                rtl: isRtl
-                            });
-                        } else {
-                            toastr.error('@lang('something_wrong')', '', {
-                                rtl: isRtl
-                            });
-                        }
-                        $('.submit_btn').removeAttr('disabled');
-                        $('.fa-spinner.fa-spin').hide();
-                    }
-                }).fail(function (data) {
-                    if (data.status === 422) {
-                        var response = data.responseJSON;
-                        $.each(response.errors, function (key, value) {
-                            var str = (key.split("."));
-                            if (str[1] === '0') {
-                                key = str[0] + '[]';
+                    contentType: false,
+                    beforeSend: function() {
+                        var percentVal = '0%';
+                        progress.width(percentVal)
+                        progress.html(percentVal);
+                    },
+                    xhr: function() {
+                        var xhr = new window.XMLHttpRequest();
+                        xhr.upload.addEventListener("progress", function(event) {
+                            if (event.lengthComputable) {
+                                var percentComplete = Math.round((event.loaded * 100) / event.total);
+                                var percentVal = percentComplete + '%';
+                                progress.width(percentVal);
+                                progress.html(percentVal);
                             }
-                            toastr.error(value[0], '', {
-                                rtl: isRtl
-                            });
-                            // $('[name="' + key + '"], [name="' + key + '[]"]').addClass('is-invalid');
-                            // $('[name="' + key + '"], [name="' + key + '[]"]').closest('.form-group').find('.invalid-feedback').html(value[0]);
-                        });
-                    } else {
-                        toastr.error('@lang('something_wrong')', '', {
-                            rtl: isRtl
-                        });
+                        }, false);
+                        return xhr;
+                    },
+                    complete: function(xhr) {
+                        toastr.success('Request Done!');
                     }
-                    $('.submit_btn').removeAttr('disabled');
-                    $('.fa-spinner.fa-spin').hide();
+                }).done(function(response) {
+                    if (response.status) {
+                        toastr.success(response.message, '');
+                        const link = document.createElement('a');
+                        link.setAttribute('href', response.data.url);
+                        link.setAttribute('target', '_blank');
+                        link.click();
+                    } else {
+                        if (response.message) {
+                            toastr.error(response.message, '');
+                        } else {
+                            toastr.error('@lang('something_wrong')', '');
+                        }
 
+                        // $('#myModal').modal('show')
+                    }
+                    var percentVal = '100%';
+                    progress.width(percentVal)
+                    progress.html(percentVal);
+                }).fail(function(data) {
+                    toastr.error(data.responseJSON.message, '');
                 });
-            });
-        });
-
+            }
+        }
     </script>
 @endsection
