@@ -1,0 +1,506 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@100;300;400;700;900&display=swap');
+
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #CDCDCD;
+    border-radius: 50px;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    -ms-border-radius: 50px;
+    -o-border-radius: 50px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Lato', sans-serif;
+}
+
+body {
+    background-color: #1D1D1D;
+}
+
+header {
+    width: 100%;
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #262626;
+    padding: 0 60px;
+}
+
+header .left-navbar {
+    /* margin-left: 60px; */
+    display: flex;
+}
+
+header .left-navbar .logo {
+    margin-right: 60px;
+}
+
+header .left-navbar .nav-links {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+}
+
+header .left-navbar .nav-links .nav-item {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+header .left-navbar .nav-links .nav-item a {
+    font-size: 14px;
+    font-weight: 400;
+    color: #CDCDCD;
+    text-decoration: none;
+}
+
+header .left-navbar .nav-links .nav-item.active a {
+    color: #45E01F;
+}
+
+header .right-navbar {
+    display: flex;
+    align-items: center;
+    /* margin-right: 60px; */
+}
+
+header .right-navbar .auth-user {
+    display: flex;
+    align-items: center;
+    margin-right: 32px;
+}
+
+header .right-navbar .auth-user .notification-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 32px;
+    background-color: #303030;
+    cursor: pointer;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+
+header .right-navbar .auth-user .notification-icon img {
+    width: 18px;
+    height: 20px;
+}
+
+header .right-navbar .auth-user h4 {
+    font-size: 14px;
+    font-weight: 400;
+    color: #FCFCFC;
+    margin-right: 16px;
+}
+
+header .right-navbar .auth-user .user-image {
+    width: 40px;
+    height: 40px;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+
+header .right-navbar .auth-user .user-image img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+
+header .right-navbar .login-link {
+    width: 82px;
+    height: 41px;
+    margin-right: 16px;
+    background-color: transparent;
+    border: 1px solid #FCFCFC;
+    border-radius: 4px;
+}
+
+header .right-navbar .get-started-link {
+    width: 120px;
+    height: 41px;
+    margin-right: 16px;
+    background-color: #247310;
+    border: none;
+    outline: none;
+}
+
+header .right-navbar .choose-localization {
+    border: none;
+    background-color: transparent;
+    outline: none;
+}
+
+header .right-navbar .choose-localization img {
+    width: 36px;
+    height: 24px;
+}
+
+header .right-navbar button {
+    cursor: pointer;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+}
+
+header .right-navbar a {
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.mobile-menu {
+    width: 100%;
+    display: none;
+}
+
+.mobile-menu .head {
+    width: 100%;
+    height: 70px;
+    background-color: #262626;
+    margin-bottom: 2px;
+}
+
+.mobile-menu .head .content {
+    width: 100%;
+    height: 100%;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mobile-menu .head .logo {
+    width: 64px;
+    height: 36px;
+}
+
+.mobile-menu .head .menu-toggle-btn {
+    width: 21px;
+    height: 14px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+.mobile-menu .head .menu-toggle-btn#close-menu-btn {
+    display: none;
+}
+
+.mobile-menu .menu {
+    width: 100%;
+    background-color: #262626;
+    position: relative;
+    z-index: 888;
+    display: none;
+}
+
+.mobile-menu .menu .content {
+    width: 100%;
+    padding: 24px;
+}
+
+.mobile-menu .menu .nav-links {
+    list-style-type: none;
+    margin-bottom: 40px;
+}
+
+.mobile-menu .menu .nav-links .nav-item {
+    margin-bottom: 24px;
+}
+
+.mobile-menu .menu .nav-links .nav-item a {
+    font-size: 14px;
+    font-weight: 400;
+    color: #CDCDCD;
+    text-decoration: none;
+}
+
+.mobile-menu .menu .nav-links .nav-item.active a {
+    color: #45E01F;
+}
+
+.mobile-menu .menu .login-link,
+.mobile-menu .menu .get-started-link {
+    width: 100%;
+    height: 41px;
+    margin-bottom: 16px;
+}
+
+.mobile-menu .menu .login-link {
+    background-color: transparent;
+    border: 1px solid #FCFCFC;
+}
+
+.mobile-menu .menu .get-started-link {
+    background-color: #247310;
+    border: none;
+    outline: none;
+}
+
+.mobile-menu .menu .choose-localization {
+    display: block;
+    margin-top: 56px;
+    border: none;
+    background-color: transparent;
+    outline: none;
+}
+
+.mobile-menu .menu .choose-localization img {
+    width: 36px;
+    height: 24px;
+}
+
+.mobile-menu .menu button {
+    cursor: pointer;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+}
+
+.mobile-menu .menu button a {
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.mobile-menu .menu .content .auth-user {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 0;
+}
+
+.mobile-menu .menu .content .auth-user .user-info {
+    display: flex;
+    align-items: center;
+}
+
+.mobile-menu .menu .content .auth-user .user-info h4 {
+    font-size: 14px;
+    font-weight: 400;
+    color: #FCFCFC;
+    margin-right: 16px;
+}
+
+.mobile-menu .menu .content .auth-user .user-info .user-image {
+    width: 40px;
+    height: 40px;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+
+.mobile-menu .menu .content .auth-user .user-info .user-image img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+
+.mobile-menu .menu .content .auth-user .notification-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 32px;
+    background-color: #303030;
+    cursor: pointer;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+
+.mobile-menu .menu .content .auth-user .notification-icon img {
+    width: 18px;
+    height: 20px;
+}
+
+.mobile-menu .menu .content .auth-user .user-image {
+    width: 40px;
+    height: 40px;
+    float: right;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+
+.mobile-menu .menu .content .auth-user .user-image img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+
+.mobile-menu .menu .content .auth-user .choose-localization {
+    border: none;
+    background-color: transparent;
+    outline: none;
+    margin-left: 32px;
+    margin-top: 0;
+}
+
+.mobile-menu .menu .content .auth-user .choose-localization img {
+    width: 36px;
+    height: 24px;
+}
+
+input {
+    outline: none;
+}
+
+.notification-container {
+    width: 100%;
+    height: 100vh;
+    /* background-color: rgba(48, 48, 48, 0.88); */
+    backdrop-filter: blur(8px);
+    position: fixed;
+    top: 0;
+    /* right: 0; */
+    left: 100vw;
+    z-index: 999;
+    display: none;
+}
+
+.notifications {
+    width: 372px;
+    height: 100%;
+    background-color: #303030;
+    padding: 37px 16px;
+    float: right;
+    overflow-y: auto;
+}
+
+.notifications::-webkit-scrollbar {
+    width: 0;
+    border: 0;
+    display: none;
+}
+
+.notifications .header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 51px;
+}
+
+.notifications .header h2 {
+    font-size: 30px;
+    font-weight: bold;
+    font-family: 'Bebas Neue', cursive;
+    color: #FCFCFC;
+    text-transform: uppercase;
+}
+
+.notifications .header button {
+    width: 40px;
+    height: 40px;
+    background: #262626;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+
+.notifications .list {
+    width: 100%;
+}
+
+.notifications .list .notify {
+    width: 100%;
+    height: 86px;
+    padding: 16px;
+    margin-bottom: 10px;
+    background-color: #3B3B3B;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+
+.notifications .list .notify .date {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.notifications .list .notify .date span {
+    font-size: 12px;
+    font-weight: 400;
+    color: #CDCDCD;
+}
+
+.notifications .list .notify p {
+    font-size: 14px;
+    font-weight: bold;
+    color: #FCFCFC;
+}
+
+@media screen and (max-width: 991px) {
+    header {
+        display: none;
+    }
+
+    .mobile-menu {
+        display: block;
+    }
+
+    .notifications {
+        width: 90%;
+    }
+
+    .notifications .header h2 {
+        font-size: 25px;
+        font-weight: 500;
+    }
+}

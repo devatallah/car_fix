@@ -14,14 +14,13 @@ class ModuleController extends Controller
     public function index(Request $request)
     {
         return view('portals.admin.modules.index');
-
     }
 
     public function update(Module $module, Request $request)
     {
         $rules = [
             'name' => 'required|string|max:255',
-            'price' => 'nullable|numeric',
+            'price' => 'required_if:is_free,0',
             'is_free' => 'required|boolean',
         ];
         $this->validate($request, $rules);
@@ -40,7 +39,7 @@ class ModuleController extends Controller
     {
         $rules = [
             'name' => 'required|string|max:255',
-            'price' => 'nullable|numeric',
+            'price' => 'required_if:is_free,0',
             'is_free' => 'required|boolean',
         ];
         $this->validate($request, $rules);
@@ -84,5 +83,4 @@ class ModuleController extends Controller
                 return $string;
             })->make(true);
     }
-
 }

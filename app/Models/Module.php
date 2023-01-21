@@ -56,14 +56,14 @@ class Module extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function brands()
-    {
-        return $this->belongsToMany(Brand::class, 'ecus', 'module_uuid', 'brand_uuid', 'uuid', 'uuid')->distinct();
-    }
+    // public function brands()
+    // {
+    //     return $this->belongsToMany(Brand::class, 'ecus', 'module_uuid', 'brand_uuid', 'uuid', 'uuid')->distinct();
+    // }
 
     public function ecus()
     {
-        return $this->hasMany(ECU::class, 'module_uuid', 'uuid');
+        return $this->hasMany(ECUFile::class, 'module_uuid', 'uuid');
     }
     /*
         |--------------------------------------------------------------------------

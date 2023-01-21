@@ -14,24 +14,6 @@ class BrandController extends Controller
     public function index(Request $request)
     {
         return view('portals.admin.brands.index');
-
-    }
-
-    public function update(Brand $brand, Request $request)
-    {
-        $rules = [
-            'name' => 'required|string|max:255',
-        ];
-        $this->validate($request, $rules);
-        $data = $request->only('name');
-        $brand->update($data);
-
-        if ($request->ajax()) {
-            return response()->json(['status' => true]);
-        }
-        Session::flash('success_message', __('item_edited'));
-
-        return redirect()->back();
     }
 
     public function store(Request $request)
@@ -51,6 +33,23 @@ class BrandController extends Controller
         Session::flash('success_message', __('item_added'));
 
         return redirect('brands');
+    }
+
+    public function update(Brand $brand, Request $request)
+    {
+        $rules = [
+            'name' => 'required|string|max:255',
+        ];
+        $this->validate($request, $rules);
+        $data = $request->only('name');
+        $brand->update($data);
+
+        if ($request->ajax()) {
+            return response()->json(['status' => true]);
+        }
+        Session::flash('success_message', __('item_edited'));
+
+        return redirect()->back();
     }
 
     public function destroy($uuid, Request $request)
@@ -79,5 +78,4 @@ class BrandController extends Controller
                 return $string;
             })->make(true);
     }
-
 }

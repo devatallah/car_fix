@@ -16,8 +16,6 @@ class CreateEcuFilesTable extends Migration
         Schema::create('ecu_files', function (Blueprint $table) {
             $table->id();
             $table->string('uuid')->unique();
-            $table->text('fixed_file')->nullable();
-            $table->text('origin_file')->nullable();
             $table->string('ecu_uuid')->nullable();
             $table->timestamps();
             $table->softDeletes();
@@ -31,6 +29,6 @@ class CreateEcuFilesTable extends Migration
      */
     public function down()
     {
-            Schema::dropIfExists('ecu_files');
+        Schema::dropIfExists('ecu_files');
     }
 }

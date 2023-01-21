@@ -1,0 +1,1003 @@
+.preview-slide {
+    width: 100%;
+    height: 511px;
+    position: relative;
+    margin-top: 40px;
+    margin-bottom: 82px;
+}
+
+.preview-slide .slide-images {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.preview-slide .slide-images img {
+    width: 424px;
+    height: 100%;
+    margin-right: 24px;
+    opacity: 0.8;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+}
+
+.preview-slide .slide-images img:last-child {
+    margin-right: 0;
+}
+
+.preview-slide .preview-welcome {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.preview-slide .preview-welcome h1 {
+    font-size: 75px;
+    font-weight: 400;
+    font-family: 'Bebas Neue', cursive;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 3px;
+    line-height: 105px;
+    color: #FFFFFF;
+    position: absolute;
+    top: 144px;
+}
+
+.preview-slide .preview-welcome h1 span {
+    font-family: 'Bebas Neue', cursive;
+    color: #45E01F;
+}
+
+.how-it-works {
+    width: 100%;
+}
+
+.how-it-works .tutorial {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 96px;
+}
+
+.how-it-works .tutorial .steps {
+    width: 528px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin-left: 60px;
+    position: relative;
+    top: 21.5px;
+    background-image: url('../images/landpage/tutorial.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position-y: 47.5px;
+}
+
+.how-it-works .tutorial .steps>div {
+    width: 424px;
+    min-height: 95px;
+    padding: 16px;
+    margin-bottom: 56px;
+    background-color: #303030;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+}
+
+.how-it-works .tutorial .steps div:last-of-type {
+    margin-bottom: 64px;
+}
+
+.how-it-works .tutorial .steps>div h4 {
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #DAF9D2;
+    margin-bottom: 10px;
+}
+
+.how-it-works .tutorial .steps>div p {
+    font-size: 14px;
+    font-weight: 400;
+    color: #CDCDCD;
+}
+
+.how-it-works .tutorial .steps button {
+    width: 182px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #247310;
+    font-size: 14px;
+    font-weight: bold;
+    color: #FFFFFF;
+    position: absolute;
+    left: 52px;
+    bottom: 56px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+}
+
+.how-it-works .tutorial .steps button img {
+    margin-left: 8px;
+}
+
+.how-it-works .tutorial .video {
+    width: 708px;
+    height: 552px;
+    background-color: #303030;
+}
+
+.our-services {
+    width: 100%;
+    margin-bottom: 96px;
+}
+
+.our-services .services {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.our-services .services>div {
+    width: 50%;
+    height: 350px;
+    display: flex;
+}
+
+.our-services .services>div .washing-service {
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.our-services .services>div .washing-service img {
+    width: 100%;
+    height: 100%;
+    opacity: 0.6;
+}
+
+.our-services .services .properties {
+    width: 50%;
+    padding-top: 30px;
+    padding-left: 48px;
+    background-color: #303030;
+}
+
+.our-services .services .properties h3 {
+    font-size: 25px;
+    font-weight: bold;
+    color: #FCFCFC;
+    margin-bottom: 32px;
+}
+
+.our-services .services .interior-car-wash .properties h4 {
+    font-size: 30px;
+    font-weight: 500;
+    font-family: 'Bebas Neue', cursive;
+    color: #45E01F;
+    margin-top: 24px;
+    text-transform: uppercase;
+}
+
+.our-services .services .properties ul {
+    margin-bottom: 40px;
+    list-style-position: inside;
+}
+
+.our-services .services .properties ul li {
+    font-size: 14px;
+    font-weight: 400;
+    color: #CDCDCD;
+    margin-bottom: 24px;
+}
+
+.our-services .services .properties ul li span {
+    position: relative;
+    right: 9px;
+}
+
+.our-services .services .properties ul li:last-of-type {
+    margin-bottom: 0;
+}
+
+.our-services .services .properties button {
+    width: 120px;
+    height: 41px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #FFFFFF;
+    background-color: #247310;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+}
+
+.frequently-questions {
+    width: 100%;
+    margin-bottom: 96px;
+}
+
+.frequently-questions .questions {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.frequently-questions .questions .items {
+    display: grid;
+    grid-template-rows: repeat(auto auto);
+    grid-template-columns: auto auto;
+    row-gap: 24px;
+    column-gap: 24px;
+}
+
+.frequently-questions .questions .items>div {
+    width: 536px;
+    height: 110px;
+    padding-top: 32px;
+    padding-left: 40px;
+    background-color: #303030;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+}
+
+.frequently-questions .questions .items>div h3 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #FCFCFC;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.frequently-questions .questions .items>div p {
+    font-size: 14px;
+    font-weight: 400;
+    color: #CDCDCD;
+}
+
+.customers-testimonial {
+    width: 100%;
+    margin-bottom: 96px;
+}
+
+.customers-testimonial .testimonials {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-x: auto;
+}
+
+.customers-testimonial .testimonials::-webkit-scrollbar {
+    width: 0;
+    outline: none;
+    display: none;
+}
+
+.customers-testimonial .testimonials .customer {
+    width: 648px;
+    height: 219px;
+    background-color: #303030;
+    margin-right: 24px;
+    padding: 30px 30px 20px 30px;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+}
+
+.customers-testimonial .testimonials .customer:last-of-type {
+    margin-right: 0;
+}
+
+.customers-testimonial .testimonials .customer .quote {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.customers-testimonial .testimonials .customer .quote img {
+    width: 29.48px;
+    height: 22px;
+}
+
+.customers-testimonial .testimonials .customer p.comment {
+    width: 445px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 22.4px;
+    color: #CDCDCD;
+    margin-bottom: 30px;
+}
+
+.customers-testimonial .testimonials .customer .testimonial-information {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.customers-testimonial .testimonials .customer .testimonial-information .customers-information {
+    display: flex;
+    align-items: center;
+}
+
+.customers-testimonial .testimonials .customer .testimonial-information .customers-information img {
+    width: 43px;
+    height: 43px;
+    margin-right: 16px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+
+.customers-testimonial .testimonials .customer .testimonial-information .customers-information h4 {
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: capitalize;
+    color: #FCFCFC;
+}
+
+.customers-testimonial .testimonials .customer .testimonial-information .customers-ratting {
+    display: flex;
+    align-items: center;
+}
+
+.customers-testimonial .testimonials .customer .testimonial-information .customers-ratting img {
+    width: 21px;
+    height: 20px;
+    margin-right: 4px;
+}
+
+.customers-testimonial .testimonials .customer .testimonial-information .customers-ratting img:last-child {
+    margin-right: 0;
+}
+
+.wash-packages {
+    margin-bottom: 104px;
+}
+
+.wash-packages .package-types {
+    width: 100%;
+    margin-bottom: 43px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #4A4A4A;
+}
+
+.wash-packages .package-types span {
+    display: block;
+    width: 162px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #FCFCFC;
+    text-align: center;
+    text-transform: uppercase;
+    padding-bottom: 8px;
+    cursor: pointer;
+}
+
+.wash-packages .package-types span.active {
+    color: #45E01F;
+    border-bottom: 1px solid #45E01F;
+}
+
+.wash-packages .sedan-plans {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wash-packages .sedan-plans .item {
+    width: 200px;
+    height: 310px;
+    text-align: center;
+    margin-right: 24px;
+    padding-top: 32px;
+    position: relative;
+    background-color: #303030;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+}
+
+.wash-packages .sedan-plans .item:last-of-type {
+    margin-right: 0;
+}
+
+.wash-packages .sedan-plans .item .discount {
+    display: block;
+    position: absolute;
+    top: -11px;
+    left: 62px;
+    z-index: 99;
+    padding: 3px 10px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #040404;
+    background-color: #DAF9D2;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    -ms-border-radius: 2px;
+    -o-border-radius: 2px;
+}
+
+.wash-packages .sedan-plans .item .free-period {
+    font-size: 18px;
+    font-weight: bold;
+    color: #45E01F;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+}
+
+.wash-packages .sedan-plans .item .period {
+    font-size: 18px;
+    font-weight: bold;
+    color: #FCFCFC;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+}
+
+.wash-packages .sedan-plans .item .specifications {
+    text-align: center;
+}
+
+.wash-packages .sedan-plans .item .specifications h2 {
+    font-size: 36px;
+    font-weight: bold;
+    color: #FCFCFC;
+    margin-bottom: 8px;
+}
+
+.wash-packages .sedan-plans .item .specifications h2 sub {
+    font-size: 20px;
+    font-weight: bold;
+    color: #CDCDCD;
+    text-transform: uppercase;
+    position: relative;
+    bottom: 5px;
+    left: 3px;
+}
+
+.wash-packages .sedan-plans .item .specifications .price {
+    font-size: 14px;
+    font-weight: bold;
+    color: #FCFCFC;
+}
+
+.wash-packages .sedan-plans .item .specifications .wash-times {
+    font-size: 14px;
+    font-weight: bold;
+    color: #FCFCFC;
+    margin-top: 24px;
+    margin-bottom: 47px;
+}
+
+.wash-packages .sedan-plans .item button {
+    width: 120px;
+    height: 41px;
+    background-color: #247310;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+}
+
+.wash-packages .sedan-plans .item button a {
+    font-size: 14px;
+    font-weight: bold;
+    color: #FCFCFC;
+    text-decoration: none;
+}
+
+.landscap-title {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 30px;
+    font-weight: 400;
+    font-family: 'Bebas Neue', cursive;
+    color: #FFFFFF;
+    margin-bottom: 35px;
+}
+
+.landscap-title span {
+    font-family: 'Bebas Neue', cursive;
+    color: #45E01F;
+}
+
+.get-started {
+    width: 100%;
+    margin-bottom: 96px;
+}
+
+.get-started .free-wash {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.get-started .free-wash button {
+    width: 145px;
+    height: 41px;
+    background-color: #247310;
+    cursor: pointer;
+    margin-right: 24px;
+    border: none;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+}
+
+.get-started .free-wash button a {
+    font-size: 14px;
+    font-weight: bold;
+    color: #FCFCFC;
+    text-decoration: none;
+}
+
+.get-started .free-wash p {
+    font-size: 14px;
+    font-weight: 400;
+    color: #FCFCFC;
+}
+
+footer {
+    width: 100%;
+    height: 118px;
+    background-color: #303030;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 60px;
+}
+
+footer>div {
+    display: flex;
+    align-items: center;
+}
+
+footer .footer-description {
+    font-size: 20px;
+    font-weight: bold;
+    color: #FCFCFC;
+    margin-left: 48px;
+}
+
+footer .logo img {
+    width: 64px;
+    height: 36px;
+}
+
+footer .contact div:first-child {
+    margin-right: 35px;
+}
+
+footer .contact p {
+    font-size: 14px;
+    font-weight: 400;
+    color: #FCFCFC;
+    display: flex;
+    align-items: center;
+}
+
+footer .contact p:first-child {
+    margin-bottom: 8px;
+}
+
+footer .contact p img {
+    margin-right: 8px;
+}
+
+@media screen and (max-width: 991px) {
+    .preview-slide {
+        height: 436px;
+        position: relative;
+        margin-top: 0;
+        margin-bottom: 80px;
+    }
+
+    .preview-slide .slide-images img {
+        margin-right: 20px;
+    }
+
+    .preview-slide .preview-welcome {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .preview-slide .preview-welcome h1 {
+        font-size: 45px;
+        line-height: 63px;
+        position: absolute;
+        top: 85px;
+        padding: 47px;
+    }
+
+    .how-it-works {
+        margin-bottom: 80px;
+    }
+
+    .how-it-works .tutorial {
+        width: 100%;
+        display: block;
+        margin-bottom: 0;
+    }
+
+    .how-it-works .tutorial .steps {
+        width: 100%;
+        margin-left: 0;
+        position: relative;
+        top: 0;
+        background-image: none;
+        margin-bottom: 32px;
+        padding: 0 24px;
+    }
+
+    .how-it-works .tutorial .steps>div {
+        width: 100%;
+        min-height: 75px;
+        padding: 16px;
+        margin-bottom: 12px;
+        background-color: #303030;
+    }
+
+    .how-it-works .tutorial .steps div:last-of-type {
+        margin-bottom: 32px;
+    }
+
+    .how-it-works .tutorial .steps>div h4 {
+        font-size: 13px;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #DAF9D2;
+        margin-bottom: 10px;
+    }
+
+    .how-it-works .tutorial .steps>div p {
+        font-size: 14px;
+        font-weight: 400;
+        color: #CDCDCD;
+    }
+
+    .how-it-works .tutorial .steps button {
+        width: 100%;
+        display: block;
+        height: 48px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #247310;
+        font-size: 14px;
+        font-weight: bold;
+        color: #FFFFFF;
+        position: relative;
+        left: 0;
+        bottom: 0;
+    }
+
+    .how-it-works .tutorial .steps button img {
+        margin-left: 8px;
+    }
+
+    .how-it-works .tutorial .video {
+        width: 100%;
+        height: 249px;
+        background-color: #303030;
+    }
+
+    .our-services {
+        width: 100%;
+        margin-bottom: 80px;
+    }
+
+    .our-services .services {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    .our-services .services>div {
+        width: 100%;
+        height: fit-content;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .our-services .services>div .washing-service {
+        width: 100%;
+        height: 329px;
+        overflow: hidden;
+    }
+
+    .our-services .services>div .washing-service img {
+        width: 100%;
+        height: 100%;
+        opacity: 0.6;
+    }
+
+    .our-services .services .properties {
+        width: 100%;
+        padding: 30px 24px 40px 24px;
+        background-color: #303030;
+    }
+
+    .our-services .services .properties h3 {
+        font-size: 20px;
+        font-weight: bold;
+        color: #FCFCFC;
+        margin-bottom: 32px;
+    }
+
+    .our-services .services .interior-car-wash .properties h3 {
+        margin-bottom: 48px;
+    }
+
+    .our-services .services .properties ul {
+        margin-bottom: 32px;
+    }
+
+    .our-services .services .properties button {
+        width: 100%;
+        height: 41px;
+    }
+
+    .frequently-questions {
+        width: 100%;
+        margin-bottom: 80px;
+    }
+
+    .frequently-questions .questions {
+        width: 100%;
+        display: block;
+    }
+
+    .frequently-questions .questions .items {
+        display: block;
+        padding: 0 24px;
+    }
+
+    .frequently-questions .questions .items>div {
+        width: 100%;
+        height: auto;
+        padding: 24px;
+        margin-bottom: 10px;
+    }
+
+    .frequently-questions .questions .items>div:last-of-type {
+        margin-bottom: 0;
+    }
+
+    .customers-testimonial {
+        width: 100%;
+        margin-bottom: 80px;
+    }
+
+    .customers-testimonial .testimonials {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        overflow-x: auto;
+    }
+
+    .customers-testimonial .testimonials .customer {
+        min-width: 249px;
+        max-width: 249px;
+        height: 288px;
+        background-color: #303030;
+        margin-right: 10px;
+        padding: 16px;
+    }
+
+    .customers-testimonial .testimonials .customer:last-of-type {
+        margin-right: 0;
+    }
+
+    .customers-testimonial .testimonials .customer .quote {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .customers-testimonial .testimonials .customer .quote img {
+        width: 29.48px;
+        height: 22px;
+    }
+
+    .customers-testimonial .testimonials .customer p.comment {
+        width: 100%;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 22.4px;
+        color: #CDCDCD;
+        margin-bottom: 30px;
+    }
+
+    .customers-testimonial .testimonials .customer .testimonial-information {
+        width: 100%;
+        display: block;
+    }
+
+    .customers-testimonial .testimonials .customer .testimonial-information .customers-information {
+        display: flex;
+        align-items: center;
+    }
+
+    .customers-testimonial .testimonials .customer .testimonial-information .customers-information h4 {
+        position: relative;
+        bottom: 20px;
+    }
+
+    .customers-testimonial .testimonials .customer .testimonial-information .customers-ratting {
+        display: flex;
+        align-items: center;
+        position: relative;
+        left: 60px;
+        bottom: 20px;
+    }
+
+    .wash-packages {
+        width: 100%;
+        margin-bottom: 104px;
+    }
+
+    .wash-packages .package-types {
+        width: 100%;
+        margin-bottom: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 1px solid #4A4A4A;
+    }
+
+    .wash-packages .package-types span {
+        display: block;
+        width: 50%;
+    }
+
+    .wash-packages .sedan-plans {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .wash-packages .sedan-plans .item {
+        width: 200px;
+        height: 310px;
+        text-align: center;
+        margin-right: 0;
+        margin-bottom: 30px;
+        padding-top: 32px;
+        position: relative;
+    }
+
+    .wash-packages .sedan-plans .item:last-of-type {
+        margin-bottom: 0;
+    }
+
+    .get-started {
+        width: 100%;
+        margin-bottom: 84px;
+    }
+
+    .get-started .free-wash {
+        display: block;
+        padding: 0 24px;
+    }
+
+    .get-started .free-wash button {
+        width: 100%;
+        height: 41px;
+        background-color: #247310;
+        cursor: pointer;
+        margin-right: 0;
+        margin-bottom: 16px;
+        border: none;
+    }
+
+    .get-started .free-wash p {
+        text-align: center;
+    }
+
+    footer {
+        width: 100%;
+        height: auto;
+        background-color: #303030;
+        display: block;
+        padding: 40px 24px;
+    }
+
+    footer>div {
+        width: 100%;
+        display: block;
+    }
+
+    footer>div:first-of-type {
+        margin-bottom: 28px;
+    }
+
+    footer .footer-description {
+        display: block;
+        font-size: 20px;
+        font-weight: bold;
+        color: #FCFCFC;
+        margin-left: 0;
+    }
+
+    footer .logo {
+        display: block;
+        margin-bottom: 24px;
+    }
+
+    footer .logo img {
+        width: 64px;
+        height: 36px;
+    }
+
+    footer .contact div:first-child {
+        margin-right: 0;
+        margin-bottom: 24px;
+    }
+
+    footer .contact p {
+        font-size: 14px;
+        font-weight: 400;
+        color: #FCFCFC;
+        display: flex;
+        align-items: center;
+    }
+
+    footer .contact p:first-child {
+        margin-bottom: 8px;
+    }
+
+    footer .contact p img {
+        margin-right: 8px;
+    }
+
+}

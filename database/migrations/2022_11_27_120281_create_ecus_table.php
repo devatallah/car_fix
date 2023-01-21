@@ -17,8 +17,6 @@ class CreateEcusTable extends Migration
             $table->id();
             $table->string('uuid')->unique();
             $table->string('name')->nullable();
-            $table->text('file')->nullable();
-            $table->string('module_uuid')->nullable();
             $table->string('brand_uuid')->nullable();
             $table->timestamps();
             $table->softDeletes();
