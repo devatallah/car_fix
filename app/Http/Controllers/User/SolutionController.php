@@ -66,8 +66,8 @@ class SolutionController extends Controller
 
         $fix_type = $request->module_uuid;
         $module = Module::where('uuid', $fix_type)->first();
+    
         $user_file = $request->file;
-
         $user_file_content = file_get_contents($user_file);
 
         try {
@@ -99,17 +99,15 @@ class SolutionController extends Controller
             }
 
             $records = ECUFileRecord::where('ecu_file_uuid', $target_records)->get();
-
             // search on other records on same file
             foreach ($records as $target) {
                 $target_content = file_get_contents($target->file);
                 if ($target->module_uuid == $fix_type) {
-                    $target_file_same_fix_type_conten .= $target_content;
+                    $target_file_same_fix_type_conten = $target_content;
                 } else {
                     array_push($target_files_content, $target_content);
                 }
             }
-
             // ************ we need to fix target_files_content loop ************
             // for ($i = 0; $i < count($target_files_content); $i++) {
             for ($j = 0; $j < strlen($target_file_same_fix_type_conten); $j++) {
@@ -119,7 +117,6 @@ class SolutionController extends Controller
                     $result .= $user_file_content[$j];
                 }
             }
-
             $file_name = 'magicSolution_' . $ecu->name . '_' . $module->name . '.bin';
             Storage::disk('s3')->put('/fixed/'.$file_name, $result, 'public');
 
