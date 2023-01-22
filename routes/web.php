@@ -254,7 +254,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::post('/record', [ECUFileController::class, 'store']);
         Route::put('/{ecu_file}', [ECUFileController::class, 'update']);
         Route::delete('/{ecu_file}', [ECUFileController::class, 'destroy']);
-        Route::get('/indexTable', [ECUFileController::class, 'indexTable']);
+        Route::get('/indexTable/{ecu_uuid}', [ECUFileController::class, 'indexTable']);
     });
     Route::group(['prefix' => 'admins'], function () {
         Route::get('/', [AdminController::class, 'index']);
