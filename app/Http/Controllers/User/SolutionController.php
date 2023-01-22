@@ -117,9 +117,8 @@ class SolutionController extends Controller
                     $result .= $user_file_content[$j];
                 }
             }
-            $file_name = 'magicSolution_' . $ecu->name . '_' . $module->name . '.bin';
+            $file_name = 'magicSolution_' . $ecu->name . '_' . $module->name . '(No___CHK)'.'bin';
             Storage::disk('s3')->put('/fixed/'.$file_name, $result, 'public');
-
             $target_files_content = [];
             $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/fixed/'.$file_name;
 
