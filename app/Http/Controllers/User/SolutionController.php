@@ -100,7 +100,6 @@ class SolutionController extends Controller
 
             $records = ECUFileRecord::where('ecu_file_uuid', $target_records)->get();
             // search on other records on same file
-            dd($records);
             foreach ($records as $target) {
                 $target_content = file_get_contents($target->file);
                 if ($target->module_uuid == $fix_type) {
