@@ -297,7 +297,7 @@
             serverSide: true,
             searching: false,
             ajax: {
-                url: '{{ url('/admin/ecu_files/indexTable') }}',
+                url: '{{ url('/admin/ecu_files/indexTable/'.$ecu->uuid) }}',
                 data: function(d) {
                     // d.ecu_uuid = '{{ $ecu->uuid ?? '' }}';
                     d.module_uuid = $('#s_module_uuid').val();

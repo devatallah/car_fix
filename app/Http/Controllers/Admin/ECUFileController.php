@@ -156,9 +156,15 @@ class ECUFileController extends Controller
         return response()->json(['status' => true]);
     }
 
-    public function indexTable(Request $request)
+    public function indexTable(Request $request, $ecu_uuid)
     {
-        $ecu_files_records = ECUFileRecord::with('module')->orderByDesc('id'); //->where('ecu_uuid', $request->ecu_uuid)
+        $ecu_files = ECUFile::where('ecu_uuid', $ecu_uuid)
+            ->get(['uuid'])->pluck('uuid')->toArray();
+
+        $ecu_files_records = ECUFileRecord::with('module')->whereIn('ecu_file_uuid', $ecu_files)->orderByDesc('id');
+
+        // $ecu_files = ECUFile::with(['ecu_file_records'])->where('ecu_uuid', $request->ecu_uuid)->orderByDesc('id');
+        // $ecu_files_records = ECUFileRecord::with('module')->orderByDesc('id'); //->where('ecu_uuid', $request->ecu_uuid)
         return Datatables::of($ecu_files_records)
             ->filter(function ($query) use ($request) {
                 if ($request->get('module_uuid')) {
