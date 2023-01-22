@@ -66,8 +66,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a class="btn btn-secondary" style="background-color :red;    box-shadow: none;
-    font-weight: 500;" href="">DTC Coming Soon</a>
+                        <button class="group-title btn btn-danger" disabled>DTC Comming Soon</button>
                         <br>
                         <div class="btn-groups d-flex">
                             <input type="file" id="originalFile" accept=".bin" onchange="uploadFile(this)" hidden>
