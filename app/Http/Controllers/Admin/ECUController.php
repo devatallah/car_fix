@@ -83,7 +83,7 @@ class ECUController extends Controller
                 $string = '';
                 $string .= '<button class="edit_btn btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                     data-bs-target="#edit_modal" ' . $data_attr . '>' . __('edit') . '</button>';
-                $string .= ' <a href="' . url("admin/ecu_files?ecu_uuid=$ecu->uuid") . '" class="btn btn-sm btn-outline-primary">' . __('images') . '</a>';
+                $string .= ' <a href="' . url("admin/ecu_files?ecu_uuid=$ecu->uuid") . '" class="btn btn-sm btn-outline-primary">Files</a>';
                 $string .= ' <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="' . $ecu->uuid .
                     '">' . __('delete') . '</button>';
                 return $string;

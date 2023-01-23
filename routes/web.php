@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ECUController;
 use App\Http\Controllers\Admin\ECUFileController;
+use App\Http\Controllers\Admin\ECUFileRecordsController;
 use App\Http\Controllers\Admin\ECURequestController;
 use App\Http\Controllers\Admin\ModuleController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -251,10 +252,17 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
     });
     Route::group(['prefix' => 'ecu_files'], function () {
         Route::get('/', [ECUFileController::class, 'index']);
-        Route::post('/record', [ECUFileController::class, 'store']);
-        Route::put('/{ecu_file}', [ECUFileController::class, 'update']);
-        Route::delete('/{ecu_file}', [ECUFileController::class, 'destroy']);
+        Route::post('/file', [ECUFileController::class, 'store']);
+        Route::put('/file/{uuid}', [ECUFileController::class, 'update']);
+        Route::delete('/file/{uuid}', [ECUFileController::class, 'destroy']);
         Route::get('/indexTable/{ecu_uuid}', [ECUFileController::class, 'indexTable']);
+    });
+    Route::group(['prefix' => 'ecu_file_records'], function () {
+        Route::get('/', [ECUFileRecordsController::class, 'index']);
+        Route::post('/record', [ECUFileRecordsController::class, 'store']);
+        Route::put('/record/{uuid}', [ECUFileRecordsController::class, 'update']);
+        Route::delete('/record/{uuid}', [ECUFileRecordsController::class, 'destroy']);
+        Route::get('/indexTable/{ecu_file_uuid}', [ECUFileRecordsController::class, 'indexTable']);
     });
     Route::group(['prefix' => 'admins'], function () {
         Route::get('/', [AdminController::class, 'index']);

@@ -20,7 +20,7 @@ class ECUFileRecord extends Model
     public $incrementing = false;
     protected $table = 'ecu_file_records';
     protected $guarded = [];
-    protected $appends = ['module_name'];
+    protected $appends = ['module_name', 'ecu_file_id'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'module', 'ecu_file'];
     protected $primaryKey = 'uuid';
 
@@ -59,7 +59,7 @@ class ECUFileRecord extends Model
 
     public function ecu_file()
     {
-        return $this->belongsTo(ECUFile::class);
+        return $this->belongsTo(ECUFile::class, 'ecu_file_uuid', 'uuid');
     }
 
     public function module()
@@ -83,5 +83,9 @@ class ECUFileRecord extends Model
     public function getModuleNameAttribute()
     {
         return $this->module->name;
+    }
+    public function getEcuFileIdAttribute()
+    {
+        return $this->ecu_file->id;
     }
 }

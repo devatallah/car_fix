@@ -1,7 +1,7 @@
 @extends('portals.admin.app')
 
 @section('title')
-    @lang('ecu_files')
+    @lang('ecu_file_records')
 @endsection
 
 @section('styles')
@@ -12,12 +12,12 @@
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">@lang('ecu_files')</h2>
+                        <h2 class="content-header-title float-left mb-0">@lang('ecu_file_records')</h2>
                         <div class="breadcrumb-wrapper">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ url('/admin') }}">@lang('home')</a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="{{ url('/admin/ecus') }}">@lang('ecu_files')</a>
+                                <li class="breadcrumb-item"><a href="{{ url('/admin/ecus') }}">@lang('ecu')</a>
                                 </li>
                             </ol>
                         </div>
@@ -33,10 +33,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="head-label">
-                                    <h4 class="card-title">
-                                        ECU Name:<b>{{$ecu->name}}</b> -
-                                        ECU Files Count:<b>{{$ecu->files_count}}</b>
-                                    </h4>
+                                    <h4 class="card-title">ECU Files ID: - {{ $ecu_file->id }}</h4>
                                 </div>
                                 <div class="text-right">
                                     <div class="form-gruop">
@@ -53,6 +50,32 @@
                                 </div>
                             </div>
                             <div class="card-body">
+                                <form id="search_form">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <div class="form-group">
+                                                <label for="s_module_uuid">@lang('module')</label>
+                                                <select name="s_module_uuid" id="s_module_uuid" class="form-control">
+                                                    <option value="">@lang('select')</option>
+                                                    @foreach ($modules as $module)
+                                                        <option value="{{ $module->uuid }}">{{ $module->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-3" style="margin-top: 20px">
+                                            <div class="form-group">
+                                                <button id="search_btn" class="btn btn-outline-info" type="submit">
+                                                    <span><i class="fa fa-search"></i> @lang('search')</span>
+                                                </button>
+                                                <button id="clear_btn" class="btn btn-outline-secondary" type="submit">
+                                                    <span><i class="fa fa-undo"></i> @lang('reset')</span>
+                                                </button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                             <div class="table-responsive card-datatable">
                                 <table class="table" id="datatable">
@@ -68,6 +91,8 @@
                                                 </div>
                                             </th>
                                             <th>ID</th>
+                                            <th>@lang('file')</th>
+                                            <th>@lang('module')</th>
                                             <th style="width: 225px;">@lang('actions')</th>
                                         </tr>
                                     </thead>
@@ -94,7 +119,34 @@
                     <form action="" id="create_form" method="POST" data-reset="true" class="ajax_form form-horizontal"
                         enctype="multipart/form-data" novalidate>
                         {{ csrf_field() }}
-                        <input type="hidden" name="ecu_uuid" value="{{ $ecu->uuid }}">
+                        <input type="hidden" name="ecu_file_uuid" value="{{ $ecu_file->uuid }}">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <div class="fileinput fileinput-exists" data-provides="fileinput">
+                                        <div>
+                                            <label for="file">@lang('select_file')</label>
+                                            <input type="file" class="form-control" name="record[0][file]"
+                                                id="file" accept="text/bin">
+                                            <div class="invalid-feedback"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="module_uuid">@lang('module')</label>
+                                    <select class="module_uuid form-control" id="module_uuid"
+                                        name="record[0][module_uuid]" required>
+                                        <option value="">@lang('select')</option>
+                                        @foreach ($modules as $module)
+                                            <option value="{{ $module->uuid }}">{{ $module->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -122,18 +174,33 @@
                 </div>
                 <div class="modal-body">
                     <form action="" id="edit_form" method="POST" data-reset="true"
-                        class="form-horizontal" enctype="multipart/form-data" novalidate>
+                        class="ajax_form form-horizontal" enctype="multipart/form-data" novalidate>
                         {{ csrf_field() }}
                         {{ method_field('PUT') }}
                         <div class="row">
                             <div class="col-6">
+                                <label for="file">@lang('file')</label>
                                 <div class="form-group">
-                                    <label for="edit_ecu_uuid">@lang('module')</label>
-                                    <select class="module_uuid form-control" id="edit_ecu_uuid" name="ecu_uuid"
+                                    <div class="fileinput fileinput-exists" data-provides="fileinput">
+                                        <div>
+                                            <span class="btn btn-secondary btn-file">
+                                                <label for="file">@lang('select_file')</label>
+                                                <input type="file" class="form-control" name="file"
+                                                    id="file">
+                                            </span>
+                                        </div>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="edit_module_uuid">@lang('module')</label>
+                                    <select class="module_uuid form-control" id="edit_module_uuid" name="module_uuid"
                                         required>
                                         <option value="">@lang('select')</option>
-                                        @foreach ($ecus as $item)
-                                            <option value="{{ $item->uuid }}">{{ $item->name }}</option>
+                                        @foreach ($modules as $module)
+                                            <option value="{{ $module->uuid }}">{{ $module->name }}</option>
                                         @endforeach
                                     </select>
                                     <div class="invalid-feedback"></div>
@@ -158,7 +225,7 @@
 @endsection
 @section('scripts')
     <script>
-        var url = '{{ url('/admin/ecu_files/file') }}';
+        var url = '{{ url('/admin/ecu_file_records/record') }}/';
         var oTable = $('#datatable').DataTable({
             dom: '<"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
             "oLanguage": {
@@ -197,7 +264,10 @@
             serverSide: true,
             searching: false,
             ajax: {
-                url: '{{ url('/admin/ecu_files/indexTable/'.$ecu->uuid) }}',
+                url: '{{ url('/admin/ecu_file_records/indexTable/'.$ecu_file->uuid) }}',
+                data: function(d) {
+                    d.module_uuid = $('#s_module_uuid').val();
+                }
             },
             columns: [{
                     "render": function(data, type, full, meta) {
@@ -211,7 +281,16 @@
                 },
                 {
                     data: 'id',
-                    name: 'id',
+                    name: 'id'
+                },
+                {
+                    "render": function(data, type, full, meta) {
+                        return `<a href="` + full.file + `" target="_blank">@lang('download_file')</a>`;
+                    }
+                },
+                {
+                    data: 'module_name',
+                    name: 'module_name'
                 },
                 {
                     data: 'action',
@@ -225,13 +304,50 @@
             $(document).on('click', '.edit_btn', function(event) {
                 var button = $(this)
                 var uuid = button.data('uuid')
-                $('#edit_form').attr('action', url + '/' + uuid)
-                $('#edit_ecu_uuid').val(button.data('ecu_uuid')).trigger('change')
+                $('#edit_form').attr('action', url + uuid)
+                $('#edit_module_uuid').val(button.data('module_uuid')).trigger('change')
             });
             $(document).on('click', '#create_btn', function(event) {
                 $("#create_form .new_record").remove();
                 $('#create_form').attr('action', url);
             });
         });
+    </script>
+
+    <script>
+        var index = 0;
+        const template = function() {
+            index++;
+            return `<div class="row new_record">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <div class="fileinput fileinput-exists" data-provides="fileinput">
+                                        <div>
+                                            <label for="file">@lang('select_file')</label>
+                                            <input type="file" class="form-control" name="record[${index}][file]"
+                                                id="file">
+                                            <div class="invalid-feedback"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="module_uuid">@lang('module')</label>
+                                    <select class="module_uuid form-control" id="module_uuid"
+                                        name="record[${index}][module_uuid]" required>
+                                        <option value="">@lang('select')</option>
+                                        @foreach ($modules as $module)
+                                            <option value="{{ $module->uuid }}">{{ $module->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                        </div>`;
+        };
+        function appendRecord() {
+            $("#create_form").append(template());
+        }
     </script>
 @endsection
