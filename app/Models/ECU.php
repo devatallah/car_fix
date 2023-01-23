@@ -63,7 +63,7 @@ class ECU extends Model
 
     public function files()
     {
-        return $this->hasMany(ECUFile::class);
+        return $this->hasMany(ECUFile::class, 'ecu_uuid', 'uuid');
     }
 
     /*
