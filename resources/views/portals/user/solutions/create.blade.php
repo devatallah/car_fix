@@ -14,7 +14,7 @@
 @endsection
 
 @section('content')
-    <div class="main-container" style="height: 100%; width: 100%;">
+    <div class="main-container">
 
         <div class="card">
             <form id="logoutForm" action="{{ route('user_logout') }}" method="POST" style="display: none">
@@ -22,69 +22,82 @@
             </form>
             <form onsubmit="event.preventDefault(); findSolution(this)">
                 <section>
-                    <h3 class="group-title">Solution Type</h3>
-                    <br>
-                    <div class="solutions-radio-group">
-                        @foreach ($modules as $module)
-                            <label class="label-container text-gray">{{ $module->name }}
-                                <input type="radio" name="solution" value="{{ $module->uuid }}"
-                                    data-module-name="{{ $module->name }}" onchange="getBrands(this)">
-                                <span class="checkmark"></span>
-                            </label>
-                        @endforeach
+                    <div class="row">
+                        <div class="col-md-12 mb-2 d-flex justify-content-start align-items-center">
+                            <img class="logo" src="{{ asset('portals/app-assets/images/logo.svg') }}" alt="logo"
+                                width="100" height="100">
+                        </div>
+                        <div
+                            class="col-md-12 mb-2 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 modules-list">
+                            <select class="form-control" name="solution" id="solution" onchange="getBrands(this)">
+                                @foreach ($modules as $module)
+                                    <option value="{{ $module->uuid }}" data-module-name="{{ $module->name }}">
+                                        {{ $module->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <button class="group-title btn btn-danger" disabled>DTC Comming Soon</button>
+                        </div>
                     </div>
-                    <div class="lists-group"></div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="lists-group"></div>
+                        </div>
+                    </div>
                 </section>
                 <section>
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-12 mb-2 d-flex justify-content-end align-items-center">
-                                <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#create_modal"><span><i class="fa fa-plus"></i> @lang('Request New Solutions')</span>
-                                </button>
-                                <a class="btn btn-outline-primary mx-3" href="" type="button">
-                                    <span><i class="fa fa-recycle"></i> @lang('Refresh')</span>
-                                </a>
-                                <button class="btn btn-primary" type="button"
-                                    onclick="document.querySelector('form#logoutForm').submit();">
-                                    <i class="mr-50" data-feather="power"></i>@lang('logout')
-                                </button>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-9 d-flex flex-column align-items-center gap-1 mb-2">
+                            <div class="user d-flex flex-column flex-md-row justify-content-between align-items-center">
+                                <h3 class="text-gray">User:</h3>
+                                <p class="text-gray text-left">{{ auth()->user()->name }}</p>
                             </div>
-                            <div class="col-12 d-flex justify-content-between align-items-center">
-                                <img class="logo" src="{{ asset('portals/app-assets/images/logo.svg') }}" alt="logo">
-                                <div class="user">
-                                    <h3 class="text-gray">User:</h3>
-                                    <p class="text-gray">{{ auth()->user()->name }}</p>
-                                </div>
-                                <div class="linces">
-                                    <h3 class="text-gray">License EXP.</h3>
-                                    <p class="text-gray">{{ auth()->user()->license_expire_date }}</p>
-                                </div>
-                                <div class="user">
-                                    <h3 class="text-gray">Balance:</h3>
-                                    <p class="text-gray">{{ auth()->user()->balance }}</p>
-                                </div>
+                            <div class="linces d-flex flex-column flex-md-row justify-content-between align-items-center">
+                                <h3 class="text-gray">License EXP.</h3>
+                                <p class="text-gray text-left">{{ auth()->user()->license_expire_date }}</p>
+                            </div>
+                            <div class="email d-flex flex-column flex-md-row justify-content-between align-items-center">
+                                <h3 class="text-gray">Email:</h3>
+                                <p class="text-gray text-left">{{ auth()->user()->email }}</p>
+                            </div>
+                            <div class="balance d-flex flex-column flex-md-row justify-content-between align-items-center">
+                                <h3 class="text-gray">Balance:</h3>
+                                <p class="text-gray text-left">{{ auth()->user()->balance }}</p>
                             </div>
                         </div>
-                        <button class="group-title btn btn-danger" disabled>DTC Comming Soon</button>
-                        <br>
-                        <div class="btn-groups d-flex">
-                            <input type="file" id="originalFile" accept=".bin" onchange="uploadFile(this)" hidden>
-                            <button type="button" onclick="fileExplorer()">Open</button>
-                            <button type="submit">Solution</button>
+                        <div
+                            class="col-sm-12 col-md-3 mb-2 d-flex flex-sm-row flex-md-column justify-content-center align-items-end gap-1">
+                            <button class="btn btn-primary" type="button" title="Logout"
+                                onclick="document.querySelector('form#logoutForm').submit();">
+                                <i class="mr-50" data-feather="power"></i>
+                            </button>
+                            <button class="btn btn-outline-primary" type="button" title="Add New Request"
+                                data-bs-toggle="modal" data-bs-target="#create_modal"><span><i
+                                        class="fa fa-plus"></i></span>
+                            </button>
+                            <a class="btn btn-outline-primary" href="" title="Refresh Page">
+                                <i class="fa fa-recycle"></i>
+                            </a>
                         </div>
-                        <div class="progress-bar">
-                            <div class="progress-container">
-                                <div class="progress-bg">45%</div>
-                            </div>
+                    </div>
+                    <div class="btn-groups d-flex justify-content-between gap-3">
+                        <input type="file" id="originalFile" accept=".bin" onchange="uploadFile(this)" hidden>
+                        <button type="button" onclick="fileExplorer()">Open</button>
+                        <button type="submit">Solution</button>
+                    </div>
+                    <br>
+                    <div class="progress-bar">
+                        <div class="progress-container">
+                            <div class="progress-bg"></div>
                         </div>
-                        <div class="file-details">
-                            <p><b>Selected Module:</b> <span id="selectedModule"></span></p>
-                            <p><b>Selected Brand:</b> <span id="selectedBrand"></span></p>
-                            <p><b>Selected ECU:</b> <span id="selectedECU"></span></p>
-                            <p><b>Selected File:</b> <span id="selectedFile"></span></p>
-                            <p><b>File Size:</b> <span id="selectedSize"></span></p>
-                        </div>
+                    </div>
+                    <div class="file-details">
+                        <p><b>Selected Module:</b> <span id="selectedModule"></span></p>
+                        <p><b>Selected Brand:</b> <span id="selectedBrand"></span></p>
+                        <p><b>Selected ECU:</b> <span id="selectedECU"></span></p>
+                        <p><b>Selected File:</b> <span id="selectedFile"></span></p>
+                        <p><b>File Size:</b> <span id="selectedSize"></span></p>
+                    </div>
                 </section>
             </form>
         </div>
@@ -141,33 +154,12 @@
                 </div>
             </div>
         </div>
-        {{-- <div class="modal fade" id="requestSolution" tabindex="-1" role="dialog"
-            aria-labelledby="requestSolutionModal" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Whould you want to request a new solution?</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>We can't find a solution for your file.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Request</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
     </div>
 @endsection
 @section('js')
 @endsection
 @section('scripts')
     <script>
-        $('#requestSolution').modal('show')
         var fix_type_uuid, brand_uuid, ecu_uuid = "";
 
         function showCategories(parentItem, ev) {
@@ -189,7 +181,7 @@
             fix_type_uuid = id;
             document.getElementById("selectedBrand").innerText = '';
             document.getElementById("selectedECU").innerText = '';
-            document.getElementById("selectedModule").innerText = $(ev).attr('data-module-name');
+            document.getElementById("selectedModule").innerText = $('option:selected', ev).attr('data-module-name');
             const data = {
                 'module_uuid': id
             };
@@ -205,13 +197,15 @@
                     let brand = data.data;
                     brand.forEach((element) => {
                         text += `<div class="dropdown-container">
-                            <h3 class="tilte" onclick="showCategories(this.parentNode, this)" data-brand-id="${element['uuid']}" data-brand-name="${element['name']}">+${element['name']}</h3>
+                            <h3 class="tilte" onclick="showCategories(this.parentNode, this)" data-brand-id="${element['uuid']}" data-brand-name="${element['name']}">
+                                <i class="fa fa-angle-right"></i> ${element['name']}
+                            </h3>
                             <ul>`;
                         let brandChidlren = element['ecus'];
                         for (let index = 0; index < brandChidlren.length; index++) {
                             const ecu = brandChidlren[index];
                             text += `<li class="menu-item">
-                                    <label class="label-container sm-label text-gray">${ecu['name']}
+                                    <label class="label-container sm-label text-dark">${ecu['name']}
                                         <input type="radio" name="category" data-ecu-name="${ecu['name']}" value="${ecu['uuid']}" onchange="getECU(this)">
                                         <span class="checkmark"></span>
                                     </label>
@@ -326,5 +320,67 @@
                 });
             }
         }
+
+        $(document).ready(function() {
+            if ($('#solution option:first')) {
+                let url = "/user/solutions/brands/list";
+                let id = $("#solution").prop("selectedIndex", 0).val();
+                fix_type_uuid = id;
+                document.getElementById("selectedBrand").innerText = '';
+                document.getElementById("selectedECU").innerText = '';
+                document.getElementById("selectedModule").innerText = $("#solution option:first").attr('data-module-name');
+                const data = {
+                    'module_uuid': id
+                };
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: data,
+                    dataType: 'json',
+                }).done(function(data) {
+                    if (data.status) {
+                        toastr.success(data.message, '');
+                        let text = '';
+                        let brand = data.data;
+                        brand.forEach((element) => {
+                            text += `<div class="dropdown-container">
+                            <h3 class="tilte" onclick="showCategories(this.parentNode, this)" data-brand-id="${element['uuid']}" data-brand-name="${element['name']}">
+                                <i class="fa fa-angle-right"></i> ${element['name']}
+                            </h3>
+                            <ul>`;
+                            let brandChidlren = element['ecus'];
+                            for (let index = 0; index < brandChidlren.length; index++) {
+                                const ecu = brandChidlren[index];
+                                text += `<li class="menu-item">
+                                    <label class="label-container sm-label text-dark">${ecu['name']}
+                                        <input type="radio" name="category" data-ecu-name="${ecu['name']}" value="${ecu['uuid']}" onchange="getECU(this)">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </li>`
+                            }
+                            text += `</ul>
+                        </div>`
+                        });
+                        $('.lists-group').append(text);
+                    } else {
+                        if (data.message) {
+                            toastr.error(data.message, '');
+                        } else {
+                            toastr.error('@lang('something_wrong')', '');
+                        }
+                    }
+                }).fail(function(data) {
+                    toastr.error(data.responseJSON.message, '');
+                });
+            }
+        });
     </script>
 @endsection
+
+@push('master_script')
+    <script>
+        $('#solution').select2({
+            placeholder: "Select Solutions",
+        });
+    </script>
+@endpush

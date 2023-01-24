@@ -203,5 +203,11 @@
     "broken_file": "الملف القديم",
     "fixed_file": "الملف الجديد",
 
+    "modules": "Fix Type",
+    "module": "Fix Type",
+    "brands" : "Brands",
+    "ecus"  : "ECUS",
+    "ecu_files" : "ECUS Files",
+    "ecu_file_records" : "ECUS File Records",
     "": ""
 }
