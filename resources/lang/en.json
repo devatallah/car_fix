@@ -309,9 +309,11 @@
     "fixed_file": "Fixed File",
 
     "modules": "Fix Type",
+    "module": "Fix Type",
     "brands" : "Brands",
     "ecus"  : "ECUS",
     "ecu_files" : "ECUS Files",
     "ecu_file_records" : "ECUS File Records",
+
     "": ""
 }

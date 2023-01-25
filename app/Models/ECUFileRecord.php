@@ -84,6 +84,7 @@ class ECUFileRecord extends Model
     {
         return $this->module->name;
     }
+
     public function getEcuFileIdAttribute()
     {
         return $this->ecu_file->id;
