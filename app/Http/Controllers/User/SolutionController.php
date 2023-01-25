@@ -20,7 +20,7 @@ class SolutionController extends Controller
 
     public function index(Request $request)
     {
-        $modules = Module::get();
+        $modules = Module::where('name', '!=', 'origin')->get();
         return view('portals.user.solutions.create', compact('modules'));
     }
 
@@ -66,7 +66,7 @@ class SolutionController extends Controller
 
         $fix_type = $request->module_uuid;
         $module = Module::where('uuid', $fix_type)->first();
-    
+
         $user_file = $request->file;
         $user_file_content = file_get_contents($user_file);
 
@@ -108,15 +108,38 @@ class SolutionController extends Controller
                     array_push($target_files_content, $target_content);
                 }
             }
+            //dd(strlen($target_file_same_fix_type_conten)); // 2097152
+            //dd(strlen($target_files_content[0]));          //2097152
+            //dd(strlen($target_files_content[1]));            //2097152
+            //dd(strlen($target_files_content[2]));            //2097152
+
+            $fix=$target_file_same_fix_type_conten;
+            $file0=$target_files_content[0];
+            $file1=$target_files_content[1];
+            $file2=$target_files_content[2];
+            $file_user=$user_file_content;
+            for ($i = 0; $i < strlen($file_user); $i++) {
+                if($fix[$i]!= $file_user[$i] && $fix[$i] !=$file0[$i] && $fix[$i] !=$file1[$i] && $fix[$i] !=$file2[$i] ){
+                    $result .=$fix[$i] ;
+                }else{
+                    $result .=$file_user[$i];
+                }
+
+            }
+
+
             // ************ we need to fix target_files_content loop ************
             // for ($i = 0; $i < count($target_files_content); $i++) {
-            for ($j = 0; $j < strlen($target_file_same_fix_type_conten); $j++) {
-                if ($target_file_same_fix_type_conten[$j] != $target_files_content[0][$j] && $target_file_same_fix_type_conten[$j] != $user_file_content[$j] && $target_file_same_fix_type_conten[$j] != $target_files_content[1][$j] && $target_file_same_fix_type_conten[$j] != $target_files_content[2][$j]) {
-                    $result .= $target_file_same_fix_type_conten[$j];
-                } else {
-                    $result .= $user_file_content[$j];
-                }
-            }
+                //dd(strlen($target_file_same_fix_type_conten));
+                // for ($j = 0; $j < strlen($target_file_same_fix_type_conten); $j++) {
+
+                // if ($target_file_same_fix_type_conten[$j] != $target_files_content[0][$j] && $target_file_same_fix_type_conten[$j] != $user_file_content[$j] && $target_file_same_fix_type_conten[$j] != $target_files_content[1][$j] && $target_file_same_fix_type_conten[$j] != $target_files_content[2][$j]) {
+                //     $result .= $target_file_same_fix_type_conten[$j];
+                // } else {
+                //     $result .= $user_file_content[$j];
+                // }
+
+            //dd(strlen($result)); //2097152
             $file_name = 'magicSolution_' . $ecu->name . '_' . $module->name . '_(No___CHK)_'.'.bin';
             Storage::disk('s3')->put('/fixed/'.$file_name, $result, 'public');
             $target_files_content = [];

@@ -102,6 +102,7 @@
                                 alt="avatar" height="40" width="40"><span
                                 class="avatar-status-online"></span></span>
                     </a>
+
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user">
                         <a class="dropdown-item"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -279,6 +280,7 @@
 
     <script>
         var isRtl = '{{ LaravelLocalization::getCurrentLocaleDirection() }}' === 'rtl';
+
         var selectedIds = function() {
             return $("input[name='table_ids[]']:checked").map(function() {
                 return this.value;
@@ -293,14 +295,17 @@
                 e.preventDefault();
                 window.open(url + 'export?' + $('#search_form').serialize(), '_blank');
             });
+
             $(document).on('click', "#chart_btn", function(e) {
                 e.preventDefault();
                 window.open(url + 'chart?' + $('#search_form').serialize(), '_blank');
             });
+
             $("#advance_search_btn").click(function(e) {
                 e.preventDefault();
                 $('#advance_search_div').toggle(500);
             });
+
             $(document).on('change', "#select_all", function(e) {
                 var delete_btn = $('#delete_btn'),
                     export_btn = $('#export_btn'),
@@ -324,6 +329,7 @@
                     all_status_btn.prop('disabled', 'disabled');
                 }
             });
+
             $(document).on('change', ".table_ids", function(e) {
                 var delete_btn = $('#delete_btn'),
                     select_all = $('#select_all'),
@@ -344,15 +350,18 @@
                     all_status_btn.prop('disabled', 'disabled');
                 }
             });
+
             $('#search_btn').on('click', function(e) {
                 oTable.draw();
                 e.preventDefault();
             });
+
             $('#clear_btn').on('click', function(e) {
                 e.preventDefault();
                 $('.search_input').val("").trigger("change")
                 oTable.draw();
             });
+
             $(document).on("click", ".delete-btn", function(e) {
                 e.preventDefault();
                 var urls = url;
@@ -394,6 +403,7 @@
                                     rtl: isRtl
                                 });
                             }
+
                         }).fail(function() {
                             toastr.error('@lang('something_wrong')', '', {
                                 rtl: isRtl
@@ -450,6 +460,7 @@
                     }
                 });
             });
+
             $('#create_modal,#edit_modal').on('hide.bs.modal', function(event) {
                 var form = $(this).find('form');
                 form.find('select').val('').trigger("change")
@@ -459,6 +470,7 @@
                 $(".is-invalid").removeClass("is-invalid");
                 $(".invalid-feedback").html("");
             })
+
             $(document).on('submit', '.ajax_form', function(e) {
                 // $('.submit_btn').prop('disabled', true);
                 e.preventDefault();
@@ -529,8 +541,10 @@
                     }
                     $('.submit_btn').removeAttr('disabled');
                     $('.fa-spinner.fa-spin').hide();
+
                 });
             });
+
             // $(document).on('click', '.status_btn', function (e) { --}}
             //    e.preventDefault();
             //    var urls = url + 'update_status', status = $(this).val();
@@ -553,11 +567,13 @@
             //        }
             //    });
             // });
+
             $('#datatable').on('draw', function() {
                 $("#select_all").prop("checked", false)
                 $('#delete_btn').prop('disabled', 'disabled');
                 $('.status_btn').prop('disabled', 'disabled');
             });
+
         });
     </script>
     @yield('scripts')
