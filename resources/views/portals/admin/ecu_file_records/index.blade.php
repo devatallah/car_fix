@@ -225,7 +225,7 @@
 @endsection
 @section('scripts')
     <script>
-        var url = '{{ url('/admin/ecu_file_records/record') }}/';
+        var url = '{{ url('/admin/ecu_file_records/record') }}';
         var oTable = $('#datatable').DataTable({
             dom: '<"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
             "oLanguage": {
@@ -304,7 +304,7 @@
             $(document).on('click', '.edit_btn', function(event) {
                 var button = $(this)
                 var uuid = button.data('uuid')
-                $('#edit_form').attr('action', url + uuid)
+                $('#edit_form').attr('action', url + '/' + uuid)
                 $('#edit_module_uuid').val(button.data('module_uuid')).trigger('change')
             });
             $(document).on('click', '#create_btn', function(event) {
