@@ -83,7 +83,7 @@ ul {
 
 .main-container .card section .lists-group {
     width: 100%;
-    min-height: 500px !important;
+    min-height: 600px !important;
     margin: 10px 0;
     background-color: #fff;
     padding-top: 5px;
@@ -98,7 +98,7 @@ ul {
 
 .main-container .card section .lists-group .dropdown-container .tilte {
     color: #000 !important;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: lighter;
     line-height: 0;
     cursor: pointer;
@@ -113,7 +113,7 @@ ul {
 }
 
 .main-container .card section .lists-group .dropdown-container .tilte i {
-    font-size: 13px;
+    font-size: 14px;
 }
 
 .main-container .card section .lists-group .dropdown-container ul {
@@ -205,7 +205,7 @@ ul {
 
 .main-container .card section .file-details {
     width: 100%;
-    min-height: 430px;
+    min-height: 530px;
     padding: 15px;
     background-color: #fff;
 }
@@ -234,7 +234,7 @@ ul {
     padding-inline-start: 25px;
     color: #000;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 14px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
