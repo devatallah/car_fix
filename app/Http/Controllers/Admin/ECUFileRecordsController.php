@@ -42,7 +42,7 @@ class ECUFileRecordsController extends Controller
         $time_stamp = Carbon::now()->timestamp;
 
         DB::beginTransaction();
-        $ecu_file = ECUFile::where('uuid', $request->file_uuid)->first();
+        $ecu_file = ECUFile::where('uuid', $request->ecu_file_uuid)->first();
         if ($ecu_file) {
 
             foreach ($request->record as $key => $value) {
