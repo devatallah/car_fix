@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
@@ -20,7 +19,7 @@ class SolutionController extends Controller
 
     public function index(Request $request)
     {
-        $modules = Module::get();
+        $modules = Module::where('name', '!=', 'origin')->get();
         return view('portals.user.solutions.create', compact('modules'));
     }
 
@@ -66,8 +65,8 @@ class SolutionController extends Controller
 
         $fix_type = $request->module_uuid;
         $module = Module::where('uuid', $fix_type)->first();
-    
         $user_file = $request->file;
+
         $user_file_content = file_get_contents($user_file);
 
         try {
@@ -76,10 +75,9 @@ class SolutionController extends Controller
 
             $ecu_files = ECUFile::where('ecu_uuid', $ecu->uuid)->get();
 
-            $file_records = [];
-            $target_records = '';
-            $target_files_content = [];
-            $target_file_same_fix_type_conten = '';
+            $target_file_uuid = '';
+            $target_records_content_not_same_user_fix_type = [];
+            $target_record_content_with_same_user_fix_type = '';
             $result = '';
 
             foreach ($ecu_files as $file) {
@@ -93,34 +91,54 @@ class SolutionController extends Controller
                     // filesize($user_file) === filesize($record->file)
 
                     if ($user_file_content === $record_content) {
-                        $target_records .= $file->uuid;
+                        $target_file_uuid .= $file->uuid;
+
+                        break 2;
                     }
                 }
             }
 
-            $records = ECUFileRecord::where('ecu_file_uuid', $target_records)->get();
+            $records = ECUFileRecord::where('ecu_file_uuid', $target_file_uuid)->get();
+            dd($fix_type , $records[0]->module_uuid,count($records));
+
             // search on other records on same file
-            foreach ($records as $target) {
-                $target_content = file_get_contents($target->file);
-                if ($target->module_uuid == $fix_type) {
-                    $target_file_same_fix_type_conten = $target_content;
+            foreach ($records as $record) {
+                $record_content .= file_get_contents($record->file);
+                if ($record->module_uuid == $fix_type) {
+                    $target_record_content_with_same_user_fix_type .= $record_content;
                 } else {
-                    array_push($target_files_content, $target_content);
+                    array_push($target_records_content_not_same_user_fix_type, $record_content);
                 }
             }
-            // ************ we need to fix target_files_content loop ************
-            // for ($i = 0; $i < count($target_files_content); $i++) {
-            for ($j = 0; $j < strlen($target_file_same_fix_type_conten); $j++) {
-                if ($target_file_same_fix_type_conten[$j] != $target_files_content[0][$j] && $target_file_same_fix_type_conten[$j] != $user_file_content[$j] && $target_file_same_fix_type_conten[$j] != $target_files_content[1][$j] && $target_file_same_fix_type_conten[$j] != $target_files_content[2][$j]) {
-                    $result .= $target_file_same_fix_type_conten[$j];
+
+            // ************ we need to fix target_records_content_not_same_user_fix_type loop ************
+            // for ($i = 0; $i < count($target_records_content_not_same_user_fix_type); $i++) {
+                dd(strlen($target_record_content_with_same_user_fix_type));
+            for ($j = 0; $j < strlen($target_record_content_with_same_user_fix_type); $j++) {
+                if ($target_record_content_with_same_user_fix_type[$j] != $target_records_content_not_same_user_fix_type[0][$j] && $target_record_content_with_same_user_fix_type[$j] != $user_file_content[$j] && $target_record_content_with_same_user_fix_type[$j] != $target_records_content_not_same_user_fix_type[1][$j] && $target_record_content_with_same_user_fix_type[$j] != $target_records_content_not_same_user_fix_type[2][$j]) {
+                    $result .= $target_record_content_with_same_user_fix_type[$j];
+                    dd($result);
+
                 } else {
                     $result .= $user_file_content[$j];
+                    dd($result);
+
                 }
             }
-            $file_name = 'magicSolution_' . $ecu->name . '_' . $module->name . '_(No___CHK)_'.'.bin';
-            Storage::disk('s3')->put('/fixed/'.$file_name, $result, 'public');
-            $target_files_content = [];
-            $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/fixed/'.$file_name;
+            // }
+            $file_name = 'magicSolution_' . $ecu->name . '_' . $module->name . '.bin';
+            $file_name = str_replace(' ', '', $file_name);
+            $myfile = fopen($file_name, "w");
+            fwrite($myfile, $result);
+            fclose($myfile);
+
+            // reset target_file records
+            $target_file_uuid = '';
+            $target_records_content_not_same_user_fix_type = [];
+            $target_record_content_with_same_user_fix_type = '';
+            $result = '';
+
+            $path = asset($file_name);
 
             if ($path) {
                 return response()->json([
