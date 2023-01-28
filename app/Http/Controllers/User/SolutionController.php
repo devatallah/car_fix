@@ -77,16 +77,21 @@ class SolutionController extends Controller
         $user_file_content = file_get_contents($user_file);
 
         $user_file_name = $user_file->getClientOriginalName();
-        $u_f_n = explode('_', $user_file_name);
+        $ecu_check = '';
+        $file_check ='' ;
+        
+        if(strlen($user_file_name)> 50){
+            dd(strlen($user_file_name));
+                    $u_f_n = explode('_', $user_file_name);
         $u_f_n_1 = explode('--', $user_file_name);
         $u_f_n_ecu_name = @$u_f_n_1[1];
         $u_f_n_file_uuid = @$u_f_n[1];
         
         //dd($u_f_n_1);
-        $ecu_check = ECU::where('name', $u_f_n_ecu_name)->first();
-        $file_check = ECUFile::find($u_f_n_file_uuid);
+        $ecu_check .= ECU::where('name', $u_f_n_ecu_name)->first();
+        $file_check .= ECUFile::find($u_f_n_file_uuid);
+        }
         if ($ecu_check && $file_check) {
-
             $checked_file_records = ECUFileRecord::where('ecu_file_uuid', $file_check->uuid)->get();
             foreach ($checked_file_records as $c_f_r) {
                 $c_f_r_content = file_get_contents($c_f_r->file);
@@ -108,7 +113,7 @@ class SolutionController extends Controller
                     $result .= $file_user[$i];
                 }
             }
-            $file_name = 'magicSolution--' . $u_f_n_ecu_name . '--_' . $u_f_n_file_uuid . '_' . $module->name . '(No--CHK)' . '.bin';
+            $file_name = 'MagicSolution--' . $u_f_n_ecu_name . '--_' . $u_f_n_file_uuid . '_' . $module->name . '(No--CHK)' . '.bin';
             Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
             $target_files_content = [];
             $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/fixed/' . $file_name;
@@ -131,16 +136,14 @@ class SolutionController extends Controller
         } else {
 
             try {
-
                 $ecu = ECU::where('brand_uuid', $request->brand_uuid)->first();
-
                 $ecu_files = ECUFile::where('ecu_uuid', $ecu->uuid)->get();
                 foreach ($ecu_files as $file) {
                     $file_records = $file->ecu_file_records;
 
                     foreach ($file_records as $record) {
                         $record_content = file_get_contents($record->file);
-
+                        //To Do - we need to fix -
                         // get file size need asynch
                         // file_exists($record->file) && filesize($record->file)
                         // filesize($user_file) === filesize($record->file)
@@ -149,10 +152,15 @@ class SolutionController extends Controller
                             $target_records .= $file->uuid;
                         }
                     }
+
+                }
+                if($target_records ==null){
+                    //barnd - ecu - ecu file 1 - ecu records - UUID
+                    
+                    $target_records=$ecu_files[0] ->uuid;
                 }
 
                 $records = ECUFileRecord::where('ecu_file_uuid', $target_records)->get();
-
                 // search on other records on same file
                 foreach ($records as $target) {
                     $target_content = file_get_contents($target->file);
@@ -193,7 +201,7 @@ class SolutionController extends Controller
                 // }
 
                 //dd(strlen($result)); //2097152
-                $file_name = 'magicSolution--' . $ecu->name . '--_' . $target_records . '_' . $module->name . '(No--CHK)' . '.bin';
+                $file_name = 'MagicSolution--' . $ecu->name . '--_' . $target_records . '_' . $module->name . '(No--CHK)' . '.bin';
                 Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
                 $target_files_content = [];
                 $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/fixed/' . $file_name;
