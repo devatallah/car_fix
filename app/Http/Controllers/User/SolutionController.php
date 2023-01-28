@@ -199,7 +199,6 @@ class SolutionController extends Controller
                     //barnd - ecu - ecu file 1 - ecu records - UUID
                     $target_records=$ecu_files[0] ->uuid;
                 }
-                dd($target_records);
                 $records = ECUFileRecord::where('ecu_file_uuid', $target_records)->get();
                 // search on other records on same file
                 foreach ($records as $target) {
@@ -210,7 +209,6 @@ class SolutionController extends Controller
                         array_push($target_files_content, $target_content);
                     }
                 }
-
                 //dd(strlen($target_file_same_fix_type_conten)); // 2097152
                 //dd(strlen($target_files_content[0]));          //2097152
                 //dd(strlen($target_files_content[1]));            //2097152
@@ -252,7 +250,6 @@ class SolutionController extends Controller
                     }
                 }
             }
-
 
                 // **** we need to fix target_files_content loop ****
                 // for ($i = 0; $i < count($target_files_content); $i++) {
