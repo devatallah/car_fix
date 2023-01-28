@@ -4,8 +4,10 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\ECURequest;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class ECURequestController extends Controller
@@ -14,7 +16,6 @@ class ECURequestController extends Controller
     public function index(Request $request)
     {
         return view('portals.admin.ecu_requests.index');
-
     }
 
     public function update(ECURequest $ecu_request, Request $request)
@@ -42,11 +43,25 @@ class ECURequestController extends Controller
             'ecu' => 'required|string|max:255',
             'module' => 'required|string|max:255',
             'brand' => 'required|string|max:255',
+            'file' => [
+                'required', function ($input, $value) {
+                    return $value->getClientOriginalExtension() == 'bin';
+                },
+            ]
         ];
         $this->validate($request, $rules);
         $data = $request->only('ecu', 'module', 'brand');
 
         $data['user_uuid'] = auth()->user()->uuid;
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $name = time() . '_' . str_replace(' ', '', $file->getClientOriginalName());
+            $filePath = 'ecus/requests/' . $name;
+            Storage::disk('s3')->put($filePath, file_get_contents($file), ['visibility' => 'public']);
+            $data['file'] = $filePath;
+        }
+
         ECURequest::query()->create($data);
 
 
@@ -86,5 +101,4 @@ class ECURequestController extends Controller
                 return $string;
             })->make(true);
     }
-
 }
