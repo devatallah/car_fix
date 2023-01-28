@@ -73,7 +73,6 @@ class SolutionController extends Controller
         $brand = Brand::find($request->brand_uuid);
         $fix_type = $request->module_uuid;
         $module = Module::where('uuid', $fix_type)->first();
-
         $user_file = $request->file;
         $user_file_content = file_get_contents($user_file);
 
@@ -101,8 +100,8 @@ class SolutionController extends Controller
         //   ]
         $u_f_n_ecu_name = @$u_f_n[1];
         $u_f_n_file_uuid = @$u_f_n_1[1];
-        $ecu_check .= ECU::where('name', $u_f_n_ecu_name)->first();
-        $file_check .= ECUFile::find($u_f_n_file_uuid);
+        $ecu_check = ECU::where('name', $u_f_n_ecu_name)->first();
+        $file_check = ECUFile::find($u_f_n_file_uuid);
         }finally {
         
         }
@@ -128,7 +127,8 @@ class SolutionController extends Controller
                     $result .= $file_user[$i];
                 }
             }
-            $file_name = 'MagicSolution--' .$target_records . '--('.$brand->name . '_' .$ecu->name  . '_' . $module->name . 'No--CHK)' . '.bin';
+
+            $file_name = 'MagicSolution--' .$u_f_n_file_uuid . '--('.$brand->name . '_' .$u_f_n_ecu_name. '_' . $module->name . '(No--CHK))' . '.bin';
             Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
             $target_files_content = [];
             $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/fixed/' . $file_name;
@@ -217,7 +217,7 @@ class SolutionController extends Controller
 
                 //dd(strlen($result)); //2097152
                 
-                $file_name = 'MagicSolution--' .$target_records . '--('.$brand->name . '_' .$ecu->name  . '_' . $module->name . 'No--CHK)' . '.bin';
+                $file_name = 'MagicSolution--' .$target_records . '--('.$brand->name . '_' .$ecu->name  . '_' . $module->name . '(No--CHK))' . '.bin';
                 Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
                 $target_files_content = [];
                 $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/fixed/' . $file_name;
