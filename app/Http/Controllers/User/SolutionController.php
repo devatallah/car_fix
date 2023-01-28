@@ -115,6 +115,30 @@ class SolutionController extends Controller
                     array_push($target_files_content, $c_f_r_content);
                 }
             }
+            if(count($target_files_content)== 1){
+                $fix = $target_file_same_fix_type_conten;
+                $file0 = @$target_files_content[0];
+                $file_user = $user_file_content;
+                for ($i = 0; $i < strlen($file_user); $i++) {
+                    if ($fix[$i] != $file_user[$i] && $fix[$i] != $file0[$i] ) {
+                        $result .= $fix[$i];
+                    } else {
+                        $result .= $file_user[$i];
+                    }
+                }
+            }elseif(count($target_files_content)== 2){
+                $fix = $target_file_same_fix_type_conten;
+                $file0 = @$target_files_content[0];
+                $file1 = @$target_files_content[1];
+                $file_user = $user_file_content;
+                for ($i = 0; $i < strlen($file_user); $i++) {
+                    if ($fix[$i] != $file_user[$i] && $fix[$i] != $file0[$i] && $fix[$i] != $file1[$i]) {
+                        $result .= $fix[$i];
+                    } else {
+                        $result .= $file_user[$i];
+                    }
+                }
+            }else{
             $fix = $target_file_same_fix_type_conten;
             $file0 = @$target_files_content[0];
             $file1 = @$target_files_content[1];
@@ -127,8 +151,9 @@ class SolutionController extends Controller
                     $result .= $file_user[$i];
                 }
             }
+        }
 
-            $file_name = 'MagicSolution--' .$u_f_n_file_uuid . '--('.$brand->name . '_' .$u_f_n_ecu_name. '_' . $module->name . '(No--CHK))' . '.bin';
+            $file_name = 'MagicSolution--' .$u_f_n_file_uuid . '--('.$brand->name . '_' .$u_f_n_ecu_name. '_' . $module->name . '(No--CHK)' . '.bin';
             Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
             $target_files_content = [];
             $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/fixed/' . $file_name;
@@ -151,6 +176,7 @@ class SolutionController extends Controller
         } else {
 
             try {
+                
                 $ecu = ECU::where('brand_uuid', $request->brand_uuid)->first();
                 $ecu_files = ECUFile::where('ecu_uuid', $ecu->uuid)->get();
                 foreach ($ecu_files as $file) {
@@ -171,10 +197,9 @@ class SolutionController extends Controller
                 }
                 if($target_records ==null){
                     //barnd - ecu - ecu file 1 - ecu records - UUID
-                    
                     $target_records=$ecu_files[0] ->uuid;
                 }
-
+                dd($target_records);
                 $records = ECUFileRecord::where('ecu_file_uuid', $target_records)->get();
                 // search on other records on same file
                 foreach ($records as $target) {
@@ -185,11 +210,35 @@ class SolutionController extends Controller
                         array_push($target_files_content, $target_content);
                     }
                 }
+
                 //dd(strlen($target_file_same_fix_type_conten)); // 2097152
                 //dd(strlen($target_files_content[0]));          //2097152
                 //dd(strlen($target_files_content[1]));            //2097152
                 //dd(strlen($target_files_content[2]));            //2097152
-
+                if(count($target_files_content)== 1){
+                    $fix = $target_file_same_fix_type_conten;
+                    $file0 = @$target_files_content[0];
+                    $file_user = $user_file_content;
+                    for ($i = 0; $i < strlen($file_user); $i++) {
+                        if ($fix[$i] != $file_user[$i] && $fix[$i] != $file0[$i] ) {
+                            $result .= $fix[$i];
+                        } else {
+                            $result .= $file_user[$i];
+                        }
+                    }
+                }elseif(count($target_files_content)== 2){
+                    $fix = $target_file_same_fix_type_conten;
+                    $file0 = @$target_files_content[0];
+                    $file1 = @$target_files_content[1];
+                    $file_user = $user_file_content;
+                    for ($i = 0; $i < strlen($file_user); $i++) {
+                        if ($fix[$i] != $file_user[$i] && $fix[$i] != $file0[$i] && $fix[$i] != $file1[$i]) {
+                            $result .= $fix[$i];
+                        } else {
+                            $result .= $file_user[$i];
+                        }
+                    }
+                }else{
                 $fix = $target_file_same_fix_type_conten;
                 $file0 = @$target_files_content[0];
                 $file1 = @$target_files_content[1];
@@ -202,6 +251,7 @@ class SolutionController extends Controller
                         $result .= $file_user[$i];
                     }
                 }
+            }
 
 
                 // **** we need to fix target_files_content loop ****
@@ -217,7 +267,7 @@ class SolutionController extends Controller
 
                 //dd(strlen($result)); //2097152
                 
-                $file_name = 'MagicSolution--' .$target_records . '--('.$brand->name . '_' .$ecu->name  . '_' . $module->name . '(No--CHK))' . '.bin';
+                $file_name = 'MagicSolution--' .$target_records . '--('.$brand->name . '_' .$ecu->name  . '_' . $module->name . 'No--CHK)' . '.bin';
                 Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
                 $target_files_content = [];
                 $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/fixed/' . $file_name;
@@ -234,7 +284,7 @@ class SolutionController extends Controller
                 } else {
                     return response()->json([
                         'status' => false,
-                        'message' => 'We can not find solution for your file.',
+                        'message' => 'We can not find solution for your file , if you need it , craete a Solution request by click over + icon',
                     ]);
                 }
             } catch (\Exception $ex) {
