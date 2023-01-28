@@ -56,10 +56,10 @@
 
     <div class="preview-slide">
         <div class="slide-images">
-            <img src="{{ asset('landing/assets/images/landpage/slide-1.png') }}" alt="slide">
-            <img src="{{ asset('landing/assets/images/landpage/slide-2.png') }}" alt="slide">
-            <img src="{{ asset('landing/assets/images/landpage/slide-3.png') }}" alt="slide">
-            <img src="{{ asset('landing/assets/images/landpage/slide-4.png') }}" alt="slide">
+            <img src="{{ asset('landing/assets/images/landpage/slide-1.jpg') }}" alt="slide">
+            <img src="{{ asset('landing/assets/images/landpage/slide-2.jpg') }}" alt="slide">
+            <img src="{{ asset('landing/assets/images/landpage/slide-3.jpg') }}" alt="slide">
+            <img src="{{ asset('landing/assets/images/landpage/slide-4.jpg') }}" alt="slide">
         </div>
         <div class="preview-welcome">
             <h1>Bringing the car wash <br>to your <span>door step</span></h1>
@@ -69,23 +69,14 @@
     <div class="how-it-works">
         <h3 class="landscap-title">how it <span>works</span></h3>
         <div class="tutorial">
-            <div class="steps">
-                <div class="step1">
-                    <h4>step1</h4>
-                    <p>Get Started And Create A New Account</p>
-                </div>
-                <div class="step2">
-                    <h4>step2</h4>
-                    <p>Fill Your Car Info (Type, Model, Brand)</p>
-                </div>
-                <div class="step3">
-                    <h4>step3</h4>
-                    <p>After Completing All The Data, Wait For Our Team To Start The Car Wash</p>
-                </div>
-                <button>Watch the video <img src="{{ asset('landing/assets/images/icons/watch-video.svg') }}"
-                        alt="video-player"></button>
-            </div>
-            <div class="video"></div>
+            <p>
+                MagicSolution is a software that specializes in solving environmental systems such as (dpf , egr ,
+                adblue
+                off ) and many other solutions. The program works according to guaranteed easy and fast software
+                solutions.
+                There is full support around the clock
+                The user will get a free update over the course of the subscription.
+            </p>
         </div>
     </div>
 

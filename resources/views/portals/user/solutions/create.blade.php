@@ -140,6 +140,14 @@
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
+                                <div class="col-12 mb-1">
+                                    <div class="form-group">
+                                        <label for="file">File</label>
+                                        <input type="file" class="form-control" id="file" name="file"
+                                        accept=".bin" required>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -303,6 +311,7 @@
                         link.setAttribute('href', response.data.url);
                         link.setAttribute('target', '_blank');
                         link.click();
+                        location.reload();
                     } else {
                         if (response.message) {
                             toastr.error(response.message, '');
@@ -328,7 +337,8 @@
                 fix_type_uuid = id;
                 document.getElementById("selectedBrand").innerText = '';
                 document.getElementById("selectedECU").innerText = '';
-                document.getElementById("selectedModule").innerText = $("#solution option:first").attr('data-module-name');
+                document.getElementById("selectedModule").innerText = $("#solution option:first").attr(
+                    'data-module-name');
                 const data = {
                     'module_uuid': id
                 };
