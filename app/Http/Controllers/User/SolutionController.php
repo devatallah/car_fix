@@ -176,7 +176,6 @@ class SolutionController extends Controller
         } else {
 
             try {
-                
                 $ecu = ECU::where('brand_uuid', $request->brand_uuid)->first();
                 $ecu_files = ECUFile::where('ecu_uuid', $ecu->uuid)->get();
                 foreach ($ecu_files as $file) {
@@ -193,23 +192,39 @@ class SolutionController extends Controller
                             $target_records .= $file->uuid;
                         }
                     }
-
                 }
                 if($target_records ==null){
                     //barnd - ecu - ecu file 1 - ecu records - UUID
                     $target_records=$ecu_files[0] ->uuid;
                 }
+
+
+
                 $records = ECUFileRecord::where('ecu_file_uuid', $target_records)->get();
+                $origin_module_uuid=Module::where('name', 'Origin')->first();                
+                $origi_file_content='';
                 // search on other records on same file
                 foreach ($records as $target) {
                     $target_content = file_get_contents($target->file);
                     if ($target->module_uuid == $fix_type) {
                         $target_file_same_fix_type_conten = $target_content;
-                    } else {
+                    } elseif($target->module_uuid == $origin_module_uuid->uuid ){
+                        $origi_file_content=$target_content;
+                    }
+                    else{
                         array_push($target_files_content, $target_content);
                     }
                 }
-                //dd(strlen($target_file_same_fix_type_conten)); // 2097152
+            if($user_file_content===$origi_file_content){
+                        $result .=$target_file_same_fix_type_conten;
+            }else{
+                 //dd(strlen($target_file_same_fix_type_conten)); // 2097152
+                //dd(strlen($target_files_content[0]));          //2097152
+                //dd(strlen($target_files_content[1]));            //2097152
+                //dd(strlen($target_files_content[2]));            //2097152  //dd(strlen($target_file_same_fix_type_conten)); // 2097152
+                //dd(strlen($target_files_content[0]));          //2097152
+                //dd(strlen($target_files_content[1]));            //2097152
+                //dd(strlen($target_files_content[2]));            //2097152  //dd(strlen($target_file_same_fix_type_conten)); // 2097152
                 //dd(strlen($target_files_content[0]));          //2097152
                 //dd(strlen($target_files_content[1]));            //2097152
                 //dd(strlen($target_files_content[2]));            //2097152
@@ -249,7 +264,8 @@ class SolutionController extends Controller
                         $result .= $file_user[$i];
                     }
                 }
-            }
+                }
+                }
 
                 // **** we need to fix target_files_content loop ****
                 // for ($i = 0; $i < count($target_files_content); $i++) {
@@ -408,3 +424,4 @@ class SolutionController extends Controller
             })->make(true);
     }
 }
+
