@@ -150,30 +150,45 @@ class SolutionController extends Controller
             $file1 = @$target_files_content[1];
             $file2 = @$target_files_content[2];
             $file_user = $user_file_content;
-             for ($i = 0; $i < strlen($file_user); $i++) {
-                    // if ($fix[$i] != $file_user[$i] && $fix[$i] != $file0[$i] && $fix[$i] != $file1[$i] && $fix[$i] != $file2[$i]) {
-                    //     $result .= $fix[$i];
-                    // } else {
-                    //     $result .= $file_user[$i];
-                    // }
-                    // if($file_user[$i] == $origi_file_content[$i] && $file_user [$i]==$fix [$i]){
-                    //     $result .= $file_user[$i];
-                    // }elseif($file_user[$i] != $origi_file_content[$i] && $file_user [$i]!=$fix [$i]){
-                    //     $result .= $file_user[$i];
-                    // }elseif($file_user[$i] != $origi_file_content[$i] && $file_user [$i]==$fix [$i]){
-                       
-                    // }elseif ($file_user[$i] != $origi_file_content[$i] && $file_user [$i]!=$fix [$i] && $origi_file_content [$i]!=$fix [$i]){
-                    //     $result .= $fix[$i];
-                    //}else
-                    
-                    if($file_user [$i] != $fix[$i]){
-                            if ($file_user [$i] != $file0[$i] or $file_user [$i] != $file1[$i] or $file_user [$i] != $file2[$i]){
-                                $result .= $file_user[$i];
-                            }else{
-                                $result .= $fix[$i];
-                            }
-                    }
+
+            $map = array();
+            //dd( strlen( $file_user ));
+            for($i=0; $i < strlen( $fix ); $i++){
+            if($fix[$i]!= $origin_file[$i]){
+                $map[$i]=$fix[$i];
+            }
+            }
+            for($i=0; $i < strlen($file_user); $i++){
+                if(!empty($map[$i])){
+                    $result .=$map[$i];
+                }else{
+                    $result .= $file_user[$i];
                 }
+            }
+            //  for ($i = 0; $i < strlen($file_user); $i++) {
+            //         // if ($fix[$i] != $file_user[$i] && $fix[$i] != $file0[$i] && $fix[$i] != $file1[$i] && $fix[$i] != $file2[$i]) {
+            //         //     $result .= $fix[$i];
+            //         // } else {
+            //         //     $result .= $file_user[$i];
+            //         // }
+            //         // if($file_user[$i] == $origi_file_content[$i] && $file_user [$i]==$fix [$i]){
+            //         //     $result .= $file_user[$i];
+            //         // }elseif($file_user[$i] != $origi_file_content[$i] && $file_user [$i]!=$fix [$i]){
+            //         //     $result .= $file_user[$i];
+            //         // }elseif($file_user[$i] != $origi_file_content[$i] && $file_user [$i]==$fix [$i]){
+                       
+            //         // }elseif ($file_user[$i] != $origi_file_content[$i] && $file_user [$i]!=$fix [$i] && $origi_file_content [$i]!=$fix [$i]){
+            //         //     $result .= $fix[$i];
+            //         //}else
+                    
+            //         if($file_user [$i] != $fix[$i]){
+            //                 if ($file_user [$i] != $file0[$i] or $file_user [$i] != $file1[$i] or $file_user [$i] != $file2[$i]){
+            //                     $result .= $file_user[$i];
+            //                 }else{
+            //                     $result .= $fix[$i];
+            //                 }
+            //         }
+            //     }
         }
 
             $file_name = 'MagicSolution--' .$u_f_n_file_uuid . '--('.$brand->name . '_' .$u_f_n_ecu_name. '_' . $module->name . '(No--CHK)' . '.bin';
@@ -278,7 +293,30 @@ class SolutionController extends Controller
                 $file1 = @$target_files_content[1];
                 $file2 = @$target_files_content[2];
                 $file_user = $user_file_content;
-                for ($i = 0; $i < strlen($file_user); $i++) {
+
+                $map = array();
+                //dd( strlen( $file_user ));
+                for($i=0; $i < strlen( $fix ); $i++){
+                if($fix[$i]!= $origin_file[$i]){
+                    $map[$i]=$fix[$i];
+                }
+                }
+                for($i=0; $i < strlen($file_user); $i++){
+                    if(!empty($map[$i])){
+                        $result .=$map[$i];
+                    }else{
+                        $result .= $file_user[$i];
+                    }
+                }
+
+
+
+
+
+
+
+
+               // for ($i = 0; $i < strlen($file_user); $i++) {
                     // if ($fix[$i] != $file_user[$i] && $fix[$i] != $file0[$i] && $fix[$i] != $file1[$i] && $fix[$i] != $file2[$i]) {
                     //     $result .= $fix[$i];
                     // } else {
@@ -293,16 +331,17 @@ class SolutionController extends Controller
                     // }elseif ($file_user[$i] != $origi_file_content[$i] && $file_user [$i]!=$fix [$i] && $origi_file_content [$i]!=$fix [$i]){
                     //     $result .= $fix[$i];
                     // }
-                    if($file_user [$i] != $fix[$i]){
-                        if ($file_user [$i] != $file0[$i] or $file_user [$i] != $file1[$i] or $file_user [$i] != $file2[$i]){
-                            $result .= $file_user[$i];
-                        }else{
-                            $result .= $fix[$i];
-                        }
+                //     if($file_user [$i] != $fix[$i]){
+                //         if ($file_user [$i] != $file0[$i] or $file_user [$i] != $file1[$i] or $file_user [$i] != $file2[$i]){
+                //             $result .= $file_user[$i];
+                //         }else{
+                //             $result .= $fix[$i];
+                //         }
+                // 
+
                 }
                 }
-                }
-                }
+                
 
                 // **** we need to fix target_files_content loop ****
                 // for ($i = 0; $i < count($target_files_content); $i++) {
