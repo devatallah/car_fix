@@ -121,30 +121,6 @@ class SolutionController extends Controller
                     array_push($target_files_content, $c_f_r_content);
                 }
             }
-            if(count($target_files_content)== 1){
-                $fix = $target_file_same_fix_type_conten;
-                $file0 = @$target_files_content[0];
-                $file_user = $user_file_content;
-                for ($i = 0; $i < strlen($file_user); $i++) {
-                    if ($fix[$i] != $file_user[$i] && $fix[$i] != $file0[$i] ) {
-                        $result .= $fix[$i];
-                    } else {
-                        $result .= $file_user[$i];
-                    }
-                }
-            }elseif(count($target_files_content)== 2){
-                $fix = $target_file_same_fix_type_conten;
-                $file0 = @$target_files_content[0];
-                $file1 = @$target_files_content[1];
-                $file_user = $user_file_content;
-                for ($i = 0; $i < strlen($file_user); $i++) {
-                    if ($fix[$i] != $file_user[$i] && $fix[$i] != $file0[$i] && $fix[$i] != $file1[$i]) {
-                        $result .= $fix[$i];
-                    } else {
-                        $result .= $file_user[$i];
-                    }
-                }
-            }else{
             $fix = $target_file_same_fix_type_conten;
             $file0 = @$target_files_content[0];
             $file1 = @$target_files_content[1];
@@ -189,7 +165,7 @@ class SolutionController extends Controller
             //                 }
             //         }
             //     }
-        }
+    
 
             $file_name = 'MagicSolution--' .$u_f_n_file_uuid . '--('.$brand->name . '_' .$u_f_n_ecu_name. '_' . $module->name . '(No--CHK)' . '.bin';
             Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
@@ -211,6 +187,7 @@ class SolutionController extends Controller
                     'message' => 'We can not find solution for your file.',
                 ]);
             }
+        
         } else {
 
             try {
@@ -264,30 +241,6 @@ class SolutionController extends Controller
                 //dd(strlen($target_files_content[0]));          //2097152
                 //dd(strlen($target_files_content[1]));            //2097152
                 //dd(strlen($target_files_content[2]));            //2097152
-                if(count($target_files_content)== 1){
-                    $fix = $target_file_same_fix_type_conten;
-                    $file0 = @$target_files_content[0];
-                    $file_user = $user_file_content;
-                    for ($i = 0; $i < strlen($file_user); $i++) {
-                        if ($fix[$i] != $file_user[$i] && $fix[$i] != $file0[$i] ) {
-                            $result .= $fix[$i];
-                        } else {
-                            $result .= $file_user[$i];
-                        }
-                    }
-                }elseif(count($target_files_content)== 2){
-                    $fix = $target_file_same_fix_type_conten;
-                    $file0 = @$target_files_content[0];
-                    $file1 = @$target_files_content[1];
-                    $file_user = $user_file_content;
-                    for ($i = 0; $i < strlen($file_user); $i++) {
-                        if ($fix[$i] != $file_user[$i] && $fix[$i] != $file0[$i] && $fix[$i] != $file1[$i]) {
-                            $result .= $fix[$i];
-                        } else {
-                            $result .= $file_user[$i];
-                        }
-                    }
-                }else{
                 $fix = $target_file_same_fix_type_conten;
                 $file0 = @$target_files_content[0];
                 $file1 = @$target_files_content[1];
@@ -340,7 +293,7 @@ class SolutionController extends Controller
                 // 
 
                 }
-                }
+                
                 
 
                 // **** we need to fix target_files_content loop ****
