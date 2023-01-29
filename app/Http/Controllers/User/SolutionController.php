@@ -126,7 +126,7 @@ class SolutionController extends Controller
             $file1 = @$target_files_content[1];
             $file2 = @$target_files_content[2];
             $file_user = $user_file_content;
-
+            $origin_file=$origi_file_content;
             $map = array();
             //dd( strlen( $file_user ));
             for($i=0; $i < strlen( $fix ); $i++){
@@ -246,7 +246,7 @@ class SolutionController extends Controller
                 $file1 = @$target_files_content[1];
                 $file2 = @$target_files_content[2];
                 $file_user = $user_file_content;
-
+                $origin_file=$origi_file_content;
                 $map = array();
                 //dd( strlen( $file_user ));
                 for($i=0; $i < strlen( $fix ); $i++){
