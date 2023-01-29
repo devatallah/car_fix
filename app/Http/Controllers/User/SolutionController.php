@@ -75,6 +75,8 @@ class SolutionController extends Controller
         $module = Module::where('uuid', $fix_type)->first();
         $user_file = $request->file;
         $user_file_content = file_get_contents($user_file);
+        $origi_file_content='';
+        $origin_module_uuid=Module::where('name', 'Origin')->first();                
 
         $user_file_name = $user_file->getClientOriginalName();
         $ecu_check = '';
@@ -111,6 +113,10 @@ class SolutionController extends Controller
                 $c_f_r_content = file_get_contents($c_f_r->file);
                 if ($c_f_r->module_uuid == $fix_type) {
                     $target_file_same_fix_type_conten = $c_f_r_content;
+
+                }elseif($c_f_r->module_uuid == $origin_module_uuid->uuid ){
+                        $origi_file_content=$c_f_r_content;
+            
                 } else {
                     array_push($target_files_content, $c_f_r_content);
                 }
@@ -144,13 +150,22 @@ class SolutionController extends Controller
             $file1 = @$target_files_content[1];
             $file2 = @$target_files_content[2];
             $file_user = $user_file_content;
-            for ($i = 0; $i < strlen($file_user); $i++) {
-                if ($fix[$i] != $file_user[$i] && $fix[$i] != $file0[$i] && $fix[$i] != $file1[$i] && $fix[$i] != $file2[$i]) {
-                    $result .= $fix[$i];
-                } else {
-                    $result .= $file_user[$i];
+             for ($i = 0; $i < strlen($file_user); $i++) {
+                    // if ($fix[$i] != $file_user[$i] && $fix[$i] != $file0[$i] && $fix[$i] != $file1[$i] && $fix[$i] != $file2[$i]) {
+                    //     $result .= $fix[$i];
+                    // } else {
+                    //     $result .= $file_user[$i];
+                    // }
+                    if($file_user[$i] == $origi_file_content[$i] && $file_user [$i]!=$fix [$i]){
+                        $result .= $fix[$i];
+                    }elseif($file_user[$i] != $origi_file_content[$i] && $file_user [$i]!=$fix [$i]){
+                        $result .= $file_user[$i];
+                    }elseif($file_user[$i] == $origi_file_content[$i] && $file_user [$i]==$fix [$i]){
+                        $result .= $file_user[$i];
+                    }elseif ($file_user[$i] != $origi_file_content[$i] && $file_user [$i]!=$fix [$i] && $origi_file_content [$i]!=$fix [$i]){
+                        $result .= $fix[$i];
+                    }
                 }
-            }
         }
 
             $file_name = 'MagicSolution--' .$u_f_n_file_uuid . '--('.$brand->name . '_' .$u_f_n_ecu_name. '_' . $module->name . '(No--CHK)' . '.bin';
@@ -201,8 +216,6 @@ class SolutionController extends Controller
 
 
                 $records = ECUFileRecord::where('ecu_file_uuid', $target_records)->get();
-                $origin_module_uuid=Module::where('name', 'Origin')->first();                
-                $origi_file_content='';
                 // search on other records on same file
                 foreach ($records as $target) {
                     $target_content = file_get_contents($target->file);
@@ -258,10 +271,19 @@ class SolutionController extends Controller
                 $file2 = @$target_files_content[2];
                 $file_user = $user_file_content;
                 for ($i = 0; $i < strlen($file_user); $i++) {
-                    if ($fix[$i] != $file_user[$i] && $fix[$i] != $file0[$i] && $fix[$i] != $file1[$i] && $fix[$i] != $file2[$i]) {
+                    // if ($fix[$i] != $file_user[$i] && $fix[$i] != $file0[$i] && $fix[$i] != $file1[$i] && $fix[$i] != $file2[$i]) {
+                    //     $result .= $fix[$i];
+                    // } else {
+                    //     $result .= $file_user[$i];
+                    // }
+                    if($file_user[$i] == $origi_file_content[$i] && $file_user [$i]!=$fix [$i]){
                         $result .= $fix[$i];
-                    } else {
+                    }elseif($file_user[$i] != $origi_file_content[$i] && $file_user [$i]!=$fix [$i]){
                         $result .= $file_user[$i];
+                    }elseif($file_user[$i] == $origi_file_content[$i] && $file_user [$i]==$fix [$i]){
+                        $result .= $file_user[$i];
+                    }elseif ($file_user[$i] != $origi_file_content[$i] && $file_user [$i]!=$fix [$i] && $origi_file_content [$i]!=$fix [$i]){
+                        $result .= $fix[$i];
                     }
                 }
                 }
