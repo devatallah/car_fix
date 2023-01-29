@@ -284,15 +284,22 @@ class SolutionController extends Controller
                     // } else {
                     //     $result .= $file_user[$i];
                     // }
-                    if($file_user[$i] == $origi_file_content[$i] && $file_user [$i]!=$fix [$i]){
-                        $result .= $fix[$i];
-                    }elseif($file_user[$i] != $origi_file_content[$i] && $file_user [$i]!=$fix [$i]){
-                        $result .= $file_user[$i];
-                    }elseif($file_user[$i] == $origi_file_content[$i] && $file_user [$i]==$fix [$i]){
-                        $result .= $file_user[$i];
-                    }elseif ($file_user[$i] != $origi_file_content[$i] && $file_user [$i]!=$fix [$i] && $origi_file_content [$i]!=$fix [$i]){
-                        $result .= $fix[$i];
-                    }
+                    // if($file_user[$i] == $origi_file_content[$i] && $file_user [$i]!=$fix [$i]){
+                    //     $result .= $fix[$i];
+                    // }elseif($file_user[$i] != $origi_file_content[$i] && $file_user [$i]!=$fix [$i]){
+                    //     $result .= $file_user[$i];
+                    // }elseif($file_user[$i] == $origi_file_content[$i] && $file_user [$i]==$fix [$i]){
+                    //     $result .= $file_user[$i];
+                    // }elseif ($file_user[$i] != $origi_file_content[$i] && $file_user [$i]!=$fix [$i] && $origi_file_content [$i]!=$fix [$i]){
+                    //     $result .= $fix[$i];
+                    // }
+                    if($file_user [$i] != $fix[$i]){
+                        if ($file_user [$i] != $file0[$i] or $file_user [$i] != $file1[$i] or $file_user [$i] != $file2[$i]){
+                            $result .= $file_user[$i];
+                        }else{
+                            $result .= $fix[$i];
+                        }
+                }
                 }
                 }
                 }
