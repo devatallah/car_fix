@@ -20,7 +20,7 @@ class SolutionController extends Controller
 
     public function index(Request $request)
     {
-        $modules = Module::where('name', '!=', 'origin')->get();
+        $modules = Module::where('name', '!=', 'origin')->orderBy('name', 'ASC')->get();
         return view('portals.user.solutions.create', compact('modules'));
     }
 
@@ -38,8 +38,8 @@ class SolutionController extends Controller
                 $query->whereIn('uuid', $ecu_files);
             }])->whereHas('ecus', function ($query) use ($ecu_files) {
                 $query->whereIn('uuid', $ecu_files);
-            })->get();
-
+            })->orderBy('name', 'ASC')->get();
+            
             return response()->json([
                 'status' => true,
                 'message' => 'Brands Loaded Successfully',
