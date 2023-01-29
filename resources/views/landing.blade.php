@@ -16,15 +16,13 @@
         <div class="left-navbar">
             <img class="logo" src="{{ asset('landing/assets/images/landpage/Logo.svg') }}" alt="logo">
             <ul class="nav-links">
-                <li class="nav-item"><a href="#">How it works</a></li>
-                <li class="nav-item"><a href="#">Pricing</a></li>
+                <li class="nav-item"><a href="#howItWork">How it work</a></li>
+                <li class="nav-item"><a href="#pricing">Pricing</a></li>
             </ul>
         </div>
         <div class="right-navbar">
             <button class="login-link"><a href="#">Login</a></button>
             <button class="get-started-link"><a href="#">Get Started</a></button>
-            <button class="choose-localization"><img src="{{ asset('landing/assets/images/icons/british flag.svg') }}"
-                    alt="lang"></button>
         </div>
     </header>
 
@@ -43,13 +41,11 @@
         <div class="menu">
             <div class="content">
                 <ul class="nav-links">
-                    <li class="nav-item"><a href="#">How it works</a></li>
-                    <li class="nav-item"><a href="#">Pricing</a></li>
+                    <li class="nav-item"><a href="#howItWork">How it work</a></li>
+                    <li class="nav-item"><a href="#pricing">Pricing</a></li>
                 </ul>
                 <button class="login-link"><a href="#">Login</a></button>
                 <button class="get-started-link"><a href="#">Get Started</a></button>
-                <button class="choose-localization"><img
-                        src="{{ asset('landing/assets/images/icons/british flag.svg') }}" alt="lang"></button>
             </div>
         </div>
     </div>
@@ -62,11 +58,11 @@
             <img src="{{ asset('landing/assets/images/landpage/slide-4.jpg') }}" alt="slide">
         </div>
         <div class="preview-welcome">
-            <h1>Bringing the car wash <br>to your <span>door step</span></h1>
+            <h1>MAGICSOLUTION SECURIT <br><span>FAST AND EASY</span></h1>
         </div>
     </div>
 
-    <div class="how-it-works">
+    <div class="how-it-works" id="howItWork">
         <h3 class="landscap-title">how it <span>works</span></h3>
         <div class="tutorial">
             <p>
@@ -85,26 +81,19 @@
         <div class="services">
             <div class="exterior-car-wash">
                 <div class="washing-service">
-                    <img src="{{ asset('landing/assets/images/landpage/service-img1.png') }}" alt="wash-car">
+                    <img src="{{ asset('landing/assets/images/landpage/file-manager.jpg') }}" alt="wash-car">
                 </div>
                 <div class="properties">
-                    <h3>Exterior Car Wash</h3>
-                    <ul>
-                        <li><span>1 Wash Every 2 Days</span></li>
-                        <li><span>QR Code attached to the car for recognition</span></li>
-                        <li><span>Available 24/7</span></li>
-                        <li><span>Highly Trained Staff</span></li>
-                    </ul>
-                    <button>Get Started</button>
+                    <h3>You will not need someone to work your files for you after this program</h3>
                 </div>
             </div>
             <div class="interior-car-wash">
                 <div class="washing-service">
-                    <img src="{{ asset('landing/assets/images/landpage/service-img2.png') }}" alt="wash-car">
+                    <img src="{{ asset('landing/assets/images/landpage/payment.jpg') }}" alt="wash-car">
                 </div>
                 <div class="properties">
-                    <h3>Interior Car Wash</h3>
-                    <h4>Coming Soon</h4>
+                    <h3>Legal license</h3>
+                    <h4>Payment via PayPal or Western Union</h4>
                 </div>
             </div>
         </div>
@@ -115,20 +104,11 @@
         <div class="questions">
             <div class="items">
                 <div>
-                    <h3>When the car is washed ?</h3>
-                    <p>1 wash every 2 days from 10:00 pm to 6:00 am</p>
-                </div>
-                <div>
-                    <h3>What happened if I leave earlier than 6:00 am</h3>
-                    <p>you will have the option to enter your leaving hour in your profile</p>
-                </div>
-                <div>
-                    <h3>What are the car types supported ?</h3>
-                    <p>Sedan, Van, Minbus, SUV</p>
-                </div>
-                <div>
-                    <h3>How do you recognise cars with similar models ?</h3>
-                    <p>QR code will be generated based on your filled data in the registration</p>
+                    <h3>MagicSolution working 7/24 totally online</h3>
+                    <p>
+                        DPF, EGR,Lambda, Adblue, NOX, DTC, CAT, HotStart, Flap, O2, Speedlimit, Torqmonitoring,
+                        Start-Stop and more professional
+                    </p>
                 </div>
             </div>
         </div>
@@ -142,166 +122,99 @@
                     <img src="{{ asset('landing/assets/images/icons/bxs-quote-alt-left.svg') }}" alt="quote">
                 </div>
                 <p class="comment">
-                    it’s always awesome to wash my car here, the great staff and the service. thank you for taking of my
-                    car and making the service quick, efficient and affordable.
+                    Would highly recommend this auto shop! He was very professional, very helpful & had great prices.
+                    Will definitely come back
                 </p>
-                <div class="testimonial-information">
-                    <div class="customers-information">
-                        <img src="{{ asset('landing/assets/images/landpage/customer-2.png') }}" alt="customer">
-                        <h4>emma doe</h4>
-                    </div>
-                    <div class="customers-ratting">
-                        <img src="{{ asset('landing/assets/images/icons/dark-star.svg') }}" alt="dark-star">
-                        <img src="{{ asset('landing/assets/images/icons/dark-star.svg') }}" alt="dark-star">
-                        <img src="{{ asset('landing/assets/images/icons/dark-star.svg') }}" alt="dark-star">
-                        <img src="{{ asset('landing/assets/images/icons/dark-star.svg') }}" alt="dark-star">
-                        <img src="{{ asset('landing/assets/images/icons/light-star.svg') }}" alt="light-star">
-                    </div>
-                </div>
             </div>
             <div class="customer">
                 <div class="quote">
                     <img src="{{ asset('landing/assets/images/icons/bxs-quote-alt-left.svg') }}" alt="quote">
                 </div>
                 <p class="comment">
-                    it’s always awesome to wash my car here, the great staff and the service. thank you for taking of my
-                    car and making the service quick, efficient and affordable.
+                    Very polite, excellent service; I’m very satisfied on the work done in my car, I highly recommend to
+                    anybody. Thank you.
                 </p>
-                <div class="testimonial-information">
-                    <div class="customers-information">
-                        <img src="{{ asset('landing/assets/images/landpage/customer.png') }}" alt="customer">
-                        <h4>john doe</h4>
-                    </div>
-                    <div class="customers-ratting">
-                        <img src="{{ asset('landing/assets/images/icons/dark-star.svg') }}" alt="dark-star">
-                        <img src="{{ asset('landing/assets/images/icons/dark-star.svg') }}" alt="dark-star">
-                        <img src="{{ asset('landing/assets/images/icons/dark-star.svg') }}" alt="dark-star">
-                        <img src="{{ asset('landing/assets/images/icons/dark-star.svg') }}" alt="dark-star">
-                        <img src="{{ asset('landing/assets/images/icons/light-star.svg') }}" alt="light-star">
-                    </div>
-                </div>
             </div>
             <div class="customer">
                 <div class="quote">
                     <img src="{{ asset('landing/assets/images/icons/bxs-quote-alt-left.svg') }}" alt="quote">
                 </div>
                 <p class="comment">
-                    it’s always awesome to wash my car here, the great staff and the service. thank you for taking of my
-                    car and making the service quick, efficient and affordable.
+                    I googled an auto repair near me and chose the place for its good reviews. I am glad I chose them,
+                    quick friendly service. Upfront immediately about the price of the work done on my car and detailed
+                    why. I will recommend this shop to all my family in the area.
                 </p>
-                <div class="testimonial-information">
-                    <div class="customers-information">
-                        <img src="{{ asset('landing/assets/images/landpage/customer-2.png') }}" alt="customer">
-                        <h4>emma doe</h4>
-                    </div>
-                    <div class="customers-ratting">
-                        <img src="{{ asset('landing/assets/images/icons/dark-star.svg') }}" alt="dark-star">
-                        <img src="{{ asset('landing/assets/images/icons/dark-star.svg') }}" alt="dark-star">
-                        <img src="{{ asset('landing/assets/images/icons/dark-star.svg') }}" alt="dark-star">
-                        <img src="{{ asset('landing/assets/images/icons/dark-star.svg') }}" alt="dark-star">
-                        <img src="{{ asset('landing/assets/images/icons/light-star.svg') }}" alt="light-star">
-                    </div>
-                </div>
             </div>
             <div class="customer">
                 <div class="quote">
                     <img src="{{ asset('landing/assets/images/icons/bxs-quote-alt-left.svg') }}" alt="quote">
                 </div>
                 <p class="comment">
-                    it’s always awesome to wash my car here, the great staff and the service. thank you for taking of my
-                    car and making the service quick, efficient and affordable.
+                    Really awesome place. I had received excellent customer service upon my arrival I loved it.
                 </p>
-                <div class="testimonial-information">
-                    <div class="customers-information">
-                        <img src="{{ asset('landing/assets/images/landpage/customer.png') }}" alt="customer">
-                        <h4>john doe</h4>
-                    </div>
-                    <div class="customers-ratting">
-                        <img src="{{ asset('landing/assets/images/icons/dark-star.svg') }}" alt="dark-star">
-                        <img src="{{ asset('landing/assets/images/icons/dark-star.svg') }}" alt="dark-star">
-                        <img src="{{ asset('landing/assets/images/icons/dark-star.svg') }}" alt="dark-star">
-                        <img src="{{ asset('landing/assets/images/icons/dark-star.svg') }}" alt="dark-star">
-                        <img src="{{ asset('landing/assets/images/icons/light-star.svg') }}" alt="light-star">
-                    </div>
-                </div>
             </div>
             <div class="customer">
                 <div class="quote">
                     <img src="{{ asset('landing/assets/images/icons/bxs-quote-alt-left.svg') }}" alt="quote">
                 </div>
                 <p class="comment">
-                    it’s always awesome to wash my car here, the great staff and the service. thank you for taking of my
-                    car and making the service quick, efficient and affordable.
+                    Solid service. These guys are knowledgeable and professional.
                 </p>
-                <div class="testimonial-information">
-                    <div class="customers-information">
-                        <img src="{{ asset('landing/assets/images/landpage/customer-2.png') }}" alt="customer">
-                        <h4>emma doe</h4>
-                    </div>
-                    <div class="customers-ratting">
-                        <img src="{{ asset('landing/assets/images/icons/dark-star.svg') }}" alt="dark-star">
-                        <img src="{{ asset('landing/assets/images/icons/dark-star.svg') }}" alt="dark-star">
-                        <img src="{{ asset('landing/assets/images/icons/dark-star.svg') }}" alt="dark-star">
-                        <img src="{{ asset('landing/assets/images/icons/dark-star.svg') }}" alt="dark-star">
-                        <img src="{{ asset('landing/assets/images/icons/light-star.svg') }}" alt="light-star">
-                    </div>
+            </div>
+            <div class="customer">
+                <div class="quote">
+                    <img src="{{ asset('landing/assets/images/icons/bxs-quote-alt-left.svg') }}" alt="quote">
                 </div>
+                <p class="comment">
+                    Very professional , quick, and took care of my car needs, prices are also reasonable.
+                </p>
             </div>
         </div>
     </div>
 
-    <div class="wash-packages">
+    <div class="wash-packages" id="pricing">
         <h3 class="landscap-title">wash <span>packages</span></h3>
-        <div class="package-types">
-            <span class="active">sedan</span>
-            <span>bus/minbus/suv</span>
-        </div>
         <div class="sedan-plans">
             <div class="item">
-                <h3 class="free-period">free wash</h3>
+                <h3 class="period">One month</h3>
                 <div class="specifications">
-                    <h2>0 <sub>tl</sub></h2>
-                    <span class="price">$0</span>
-                    <p class="wash-times">1 Wash</p>
+                    <p>$95</p>
                 </div>
                 <button><a href="#">Get Started</a></button>
             </div>
             <div class="item">
-                <h3 class="period">1 month</h3>
-                <div class="specifications">
-                    <h2>750 <sub>tl</sub></h2>
-                    <span class="price">$53.6</span>
-                    <p class="wash-times">15 Wash</p>
-                </div>
-                <button><a href="#">Get Started</a></button>
-            </div>
-            <div class="item">
-                <span class="discount">Save 10%</span>
-                <h3 class="period">3 months</h3>
-                <div class="specifications">
-                    <h2>2025 <sub>tl</sub></h2>
-                    <span class="price">$144.6</span>
-                    <p class="wash-times">45 Wash</p>
-                </div>
-                <button><a href="#">Get Started</a></button>
-            </div>
-            <div class="item">
-                <span class="discount">Save 15%</span>
                 <h3 class="period">6 months</h3>
                 <div class="specifications">
-                    <h2>3825 <sub>tl</sub></h2>
-                    <span class="price">$273.2</span>
-                    <p class="wash-times">90 Wash</p>
+                    <p>$400</p>
+                    <br>
+                    <p>Renewal $100</p>
                 </div>
                 <button><a href="#">Get Started</a></button>
             </div>
             <div class="item">
-                <span class="discount">Save 20%</span>
-                <h3 class="period">1 year</h3>
+                <h3 class="period">One-year</h3>
                 <div class="specifications">
-                    <h2>7200<sub>tl</sub></h2>
-                    <span class="price">$514.3</span>
-                    <p class="wash-times">180 Wash</p>
+                    <p>$600</p>
+                    <br>
+                    <p>Renewal $150</p>
+                </div>
+                <button><a href="#">Get Started</a></button>
+            </div>
+            <div class="item">
+                <h3 class="period">Pops and Bangs</h3>
+                <div class="specifications">
+                    <p>1 CREDIT</p>
+                    <br>
+                    <p>30$ 1 CREDIT</p>
+                </div>
+                <button><a href="#">Get Started</a></button>
+            </div>
+            <div class="item">
+                <h3 class="period">STAGE</h3>
+                <div class="specifications">
+                    <p>1.5 CREDIT</p>
+                    <br>
+                    <p>30$ 1 CREDIT</p>
                 </div>
                 <button><a href="#">Get Started</a></button>
             </div>

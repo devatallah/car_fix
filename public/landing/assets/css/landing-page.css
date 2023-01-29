@@ -190,8 +190,8 @@
     width: 536px;
     height: 110px;
     padding-top: 32px;
-    padding-left: 40px;
     background-color: #303030;
+    text-align: center;
     border-radius: 4px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
@@ -352,10 +352,13 @@
 
 .wash-packages .sedan-plans .item {
     width: 200px;
-    height: 310px;
-    text-align: center;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     margin-right: 24px;
-    padding-top: 32px;
+    padding: 30px 0;
     position: relative;
     background-color: #303030;
     border-radius: 4px;
@@ -369,37 +372,10 @@
     margin-right: 0;
 }
 
-.wash-packages .sedan-plans .item .discount {
-    display: block;
-    position: absolute;
-    top: -11px;
-    left: 62px;
-    z-index: 99;
-    padding: 3px 10px;
-    font-size: 13px;
-    font-weight: bold;
-    color: #040404;
-    background-color: #DAF9D2;
-    border-radius: 2px;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    -ms-border-radius: 2px;
-    -o-border-radius: 2px;
-}
-
-.wash-packages .sedan-plans .item .free-period {
-    font-size: 18px;
-    font-weight: bold;
-    color: #45E01F;
-    margin-bottom: 40px;
-    text-transform: uppercase;
-}
-
 .wash-packages .sedan-plans .item .period {
     font-size: 18px;
     font-weight: bold;
     color: #FCFCFC;
-    margin-bottom: 40px;
     text-transform: uppercase;
 }
 
@@ -407,35 +383,10 @@
     text-align: center;
 }
 
-.wash-packages .sedan-plans .item .specifications h2 {
-    font-size: 36px;
-    font-weight: bold;
+.wash-packages .sedan-plans .item .specifications p {
+    font-size: 16px;
     color: #FCFCFC;
-    margin-bottom: 8px;
-}
-
-.wash-packages .sedan-plans .item .specifications h2 sub {
-    font-size: 20px;
-    font-weight: bold;
-    color: #CDCDCD;
-    text-transform: uppercase;
-    position: relative;
-    bottom: 5px;
-    left: 3px;
-}
-
-.wash-packages .sedan-plans .item .specifications .price {
-    font-size: 14px;
-    font-weight: bold;
-    color: #FCFCFC;
-}
-
-.wash-packages .sedan-plans .item .specifications .wash-times {
-    font-size: 14px;
-    font-weight: bold;
-    color: #FCFCFC;
-    margin-top: 24px;
-    margin-bottom: 47px;
+    text-align: center;
 }
 
 .wash-packages .sedan-plans .item button {
