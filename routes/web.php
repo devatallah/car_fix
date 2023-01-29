@@ -15,6 +15,39 @@ use Illuminate\Support\Facades\Route;
 
 //use App\Http\Controllers\Admin\Auth\LoginController;
 
+
+Route::get('/is_true', function (Request $request) {
+$file_user=file_get_contents('dpf kiaaa.bin');
+$file_fix=file_get_contents('egr kiaaa.bin');
+$origin_file = file_get_contents('Kia_Sp.bin');
+
+
+$result ='';
+$file_user_new ='';
+$file_fix_new='';
+$map = array();
+//dd( strlen( $file_user ));
+for($i=0; $i < strlen( $file_fix ); $i++){
+if($file_fix[$i]!= $origin_file[$i]){
+    $map[$i]=$file_fix[$i];
+}
+}
+
+for($i=0; $i < strlen($file_user); $i++){
+    if(!empty($map[$i])){
+        $result .=$map[$i];
+    }else{
+        $result .= $file_user[$i];
+    }
+}
+$ready_result=file_get_contents('KIA_dpf_egr_off.bin');
+   if($result == $ready_result){
+    echo 'done';
+   }else {
+    echo 'done AA';
+   }
+});
+
 Route::get(
     '/test_psa',
     function (Request $request) {
