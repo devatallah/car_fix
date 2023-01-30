@@ -114,16 +114,24 @@ class SolutionController extends Controller
             $file_user = $user_file_content;
             $origin_file = $origi_file_content;
             $map = array();
+            $map1 = array();
             for ($i = 0; $i < strlen($fix); $i++) {
                 if ($fix[$i] != $origin_file[$i]) {
                     $map[$i] = $fix[$i];
+                } elseif ($file_user[$i] != $origin_file[$i]) {
+                    $map1[$i] = $file_user[$i];
+
                 }
             }
             for ($i = 0; $i < strlen($file_user); $i++) {
-                if (!empty($map[$i])) {
+                if (!empty($map[$i]) && empty($map1[$i])) {
                     $result .= $map[$i];
-                } else {
-                    $result .= $file_user[$i];
+                } elseif (empty($map[$i]) && !empty($map1[$i])) {
+                    $result .= $map1[$i];
+                } elseif (empty($map[$i]) && empty($map1[$i])) {
+                    $result .= $origin_file[$i];
+                } elseif (!empty($map[$i]) && !empty($map1[$i])) {
+                    $result .= $map[$i];
                 }
             }
 
@@ -190,17 +198,24 @@ class SolutionController extends Controller
                     $file_user = $user_file_content;
                     $origin_file = $origi_file_content;
                     $map = array();
-                    //dd( strlen( $file_user ));
+                    $map1 = array();
                     for ($i = 0; $i < strlen($fix); $i++) {
                         if ($fix[$i] != $origin_file[$i]) {
                             $map[$i] = $fix[$i];
+                        } elseif ($file_user[$i] != $origin_file[$i]) {
+                            $map1[$i] = $file_user[$i];
+
                         }
                     }
                     for ($i = 0; $i < strlen($file_user); $i++) {
-                        if (!empty($map[$i])) {
+                        if (!empty($map[$i]) && empty($map1[$i])) {
                             $result .= $map[$i];
-                        } else {
-                            $result .= $file_user[$i];
+                        } elseif (empty($map[$i]) && !empty($map1[$i])) {
+                            $result .= $map1[$i];
+                        } elseif (empty($map[$i]) && empty($map1[$i])) {
+                            $result .= $origin_file[$i];
+                        } elseif (!empty($map[$i]) && !empty($map1[$i])) {
+                            $result .= $map[$i];
                         }
                     }
                 }

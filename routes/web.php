@@ -17,36 +17,53 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/is_true', function (Request $request) {
-$file_user=file_get_contents('dpf kiaaa.bin');
-$file_fix=file_get_contents('egr kiaaa.bin');
-$origin_file = file_get_contents('Kia_Sp.bin');
+$file_user=file_get_contents('DPF.bin');
+$file_fix=file_get_contents('EGR.bin');
+$file0=file_get_contents('egroffnew.bin');
+$file1=file_get_contents('scroffreault.bin');
 
 
+$origin_file = file_get_contents('origin.bin');
+    //dd(strlen($origin_file));
 $result ='';
-$file_user_new ='';
-$file_fix_new='';
-$map = array();
-//dd( strlen( $file_user ));
-for($i=0; $i < strlen( $file_fix ); $i++){
-if($file_fix[$i]!= $origin_file[$i]){
-    $map[$i]=$file_fix[$i];
-}
-}
 
+    $map = array();
+    $map1 = array();
+    $map2 = array();
+//dd( strlen( $file_user ));
+        for ($i = 0; $i < strlen($file_fix); $i++) {
+            if ($file_fix[$i] != $origin_file[$i]) {
+                $map[$i] = $file_fix[$i];
+            } elseif ($file_user[$i] != $origin_file[$i]) {
+                $map1[$i] = $file_user[$i];
+                // }elseif ($file1[$i] != $origin_file[$i]) {
+                //     $map2[$i] = $file_user[$i];
+                // }
+            }
+        }
+    //map1 for check conflict between DPF - EGR 
 for($i=0; $i < strlen($file_user); $i++){
-    if(!empty($map[$i])){
+    if(!empty($map[$i]) && empty($map1[$i])){
         $result .=$map[$i];
-    }else{
-        $result .= $file_user[$i];
+    }elseif(empty($map[$i]) && !empty($map1[$i])){
+        $result .= $map1[$i];
+    }elseif(empty($map[$i]) && empty($map1[$i])){
+        $result .= $origin_file[$i];
+    } elseif(!empty($map[$i]) && !empty($map1[$i])){
+        $result .= $map[$i];
     }
 }
-$ready_result=file_get_contents('KIA_dpf_egr_off.bin');
-   if($result == $ready_result){
-    echo 'done';
-   }else {
-    echo 'done AA';
-   }
-});
+    //file_put_contents('DPF_EGR_1.bin', $result);
+    $ready_result=file_get_contents('DPF_EGR_1.bin');
+     if($result == $ready_result){
+      echo 'done';
+     }else {
+      echo 'fail AA';
+     }
+}
+
+
+);
 
 Route::get(
     '/test_psa',
