@@ -60,7 +60,9 @@ class ECUFileController extends Controller
 
     public function destroy($uuid)
     {
-        ECUFile::query()->whereIn('uuid', explode(',', $uuid))->delete();
+        $file = ECUFile::query()->whereIn('uuid', explode(',', $uuid))->first();
+        $file->ecu_file_records()->delete();
+        $file->delete();
         return response()->json(['status' => true]);
     }
 
