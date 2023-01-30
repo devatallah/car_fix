@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
+use App\Models\ECUFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\Facades\DataTables;
@@ -54,7 +55,17 @@ class BrandController extends Controller
 
     public function destroy($uuid, Request $request)
     {
-        Brand::query()->whereIn('uuid', explode(',', $uuid))->delete();
+        $brand = Brand::query()->whereIn('uuid', explode(',', $uuid))->first();
+        $ecus = $brand->ecus;
+        $ecus_ids = $brand->ecus->pluck('uuid')->toArray();
+        ECUFile::whereIn('ecu_uuid', $ecus_ids)->get()->each(function ($item) {
+            $item->ecu_file_records()->delete();
+        });
+        $ecus->each(function ($item) {
+            $item->files()->delete();
+        });
+        $brand->ecus()->delete();
+        $brand->delete();
         return response()->json(['status' => true]);
     }
 

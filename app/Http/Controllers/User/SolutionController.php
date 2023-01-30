@@ -34,18 +34,20 @@ class SolutionController extends Controller
             $ecu_files = ECUFile::whereRelation('ecu_file_records', 'module_uuid', $request->module_uuid)
                 ->get(['uuid', 'ecu_uuid'])->pluck('ecu_uuid')->toArray();
 
-            $brands = Brand::with(['ecus' => function ($query) use ($ecu_files) {
-                $query->whereIn('uuid', $ecu_files);
-            }])->whereHas('ecus', function ($query) use ($ecu_files) {
+            $brands = Brand::with([
+                'ecus' => function ($query) use ($ecu_files) {
+                    $query->whereIn('uuid', $ecu_files);
+                }
+            ])->whereHas('ecus', function ($query) use ($ecu_files) {
                 $query->whereIn('uuid', $ecu_files);
             })->orderBy('name', 'ASC')->get();
-            
+
             return response()->json([
                 'status' => true,
                 'message' => 'Brands Loaded Successfully',
                 'data' => $brands,
             ]);
-        } catch (\Exception  $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage(),
@@ -53,7 +55,7 @@ class SolutionController extends Controller
         }
     }
 
-   public function find_solution(Request $request)
+    public function find_solution(Request $request)
     {
 
         $rules = [
@@ -69,43 +71,27 @@ class SolutionController extends Controller
         $target_files_content = [];
         $target_file_same_fix_type_conten = '';
         $result = '';
-        $brand_uuid=$request->brand_uuid;
+        $brand_uuid = $request->brand_uuid;
         $brand = Brand::find($request->brand_uuid);
         $fix_type = $request->module_uuid;
         $module = Module::where('uuid', $fix_type)->first();
         $user_file = $request->file;
         $user_file_content = file_get_contents($user_file);
-        $origi_file_content='';
-        $origin_module_uuid=Module::where('name', 'Origin')->first();                
+        $origi_file_content = '';
+        $origin_module_uuid = Module::where('name', 'Origin')->first();
 
         $user_file_name = $user_file->getClientOriginalName();
         $ecu_check = '';
-        $file_check ='' ;
-        try{
+        $file_check = '';
+        try {
+            $u_f_n = explode('_', $user_file_name);
+            $u_f_n_1 = explode('--', $user_file_name);
+            $u_f_n_ecu_name = @$u_f_n[1];
+            $u_f_n_file_uuid = @$u_f_n_1[1];
+            $ecu_check = ECU::where('name', $u_f_n_ecu_name)->first();
+            $file_check = ECUFile::find($u_f_n_file_uuid);
+        } finally {
 
-        // MagicSolution--7a120582-f50f-409d-8088-e150a8bcf40f--(KIA_EDC17C57_DPFNo--CHK).bin
-        $u_f_n = explode('_', $user_file_name);
-        $u_f_n_1 = explode('--', $user_file_name);
-        // dd($u_f_n);
-        // array:3 [
-        //     0 => "MagicSolution--7a120582-f50f-409d-8088-e150a8bcf40f--(KIA"
-        //     1 => "EDC17C57"
-        //     2 => "DPFNo--CHK).bin"
-        //   ]
-
-        // dd($u_f_n_1);
-        // array:4 [
-        //     0 => "MagicSolution"
-        //     1 => "7a120582-f50f-409d-8088-e150a8bcf40f"
-        //     2 => "(KIA_EDC17C57_DPFNo"
-        //     3 => "CHK).bin"
-        //   ]
-        $u_f_n_ecu_name = @$u_f_n[1];
-        $u_f_n_file_uuid = @$u_f_n_1[1];
-        $ecu_check = ECU::where('name', $u_f_n_ecu_name)->first();
-        $file_check = ECUFile::find($u_f_n_file_uuid);
-        }finally {
-        
         }
         if ($ecu_check && $file_check) {
             $checked_file_records = ECUFileRecord::where('ecu_file_uuid', $file_check->uuid)->get();
@@ -114,9 +100,9 @@ class SolutionController extends Controller
                 if ($c_f_r->module_uuid == $fix_type) {
                     $target_file_same_fix_type_conten = $c_f_r_content;
 
-                }elseif($c_f_r->module_uuid == $origin_module_uuid->uuid ){
-                        $origi_file_content=$c_f_r_content;
-            
+                } elseif ($c_f_r->module_uuid == $origin_module_uuid->uuid) {
+                    $origi_file_content = $c_f_r_content;
+
                 } else {
                     array_push($target_files_content, $c_f_r_content);
                 }
@@ -126,48 +112,22 @@ class SolutionController extends Controller
             $file1 = @$target_files_content[1];
             $file2 = @$target_files_content[2];
             $file_user = $user_file_content;
-            $origin_file=$origi_file_content;
+            $origin_file = $origi_file_content;
             $map = array();
-            //dd( strlen( $file_user ));
-            for($i=0; $i < strlen( $fix ); $i++){
-            if($fix[$i]!= $origin_file[$i]){
-                $map[$i]=$fix[$i];
+            for ($i = 0; $i < strlen($fix); $i++) {
+                if ($fix[$i] != $origin_file[$i]) {
+                    $map[$i] = $fix[$i];
+                }
             }
-            }
-            for($i=0; $i < strlen($file_user); $i++){
-                if(!empty($map[$i])){
-                    $result .=$map[$i];
-                }else{
+            for ($i = 0; $i < strlen($file_user); $i++) {
+                if (!empty($map[$i])) {
+                    $result .= $map[$i];
+                } else {
                     $result .= $file_user[$i];
                 }
             }
-            //  for ($i = 0; $i < strlen($file_user); $i++) {
-            //         // if ($fix[$i] != $file_user[$i] && $fix[$i] != $file0[$i] && $fix[$i] != $file1[$i] && $fix[$i] != $file2[$i]) {
-            //         //     $result .= $fix[$i];
-            //         // } else {
-            //         //     $result .= $file_user[$i];
-            //         // }
-            //         // if($file_user[$i] == $origi_file_content[$i] && $file_user [$i]==$fix [$i]){
-            //         //     $result .= $file_user[$i];
-            //         // }elseif($file_user[$i] != $origi_file_content[$i] && $file_user [$i]!=$fix [$i]){
-            //         //     $result .= $file_user[$i];
-            //         // }elseif($file_user[$i] != $origi_file_content[$i] && $file_user [$i]==$fix [$i]){
-                       
-            //         // }elseif ($file_user[$i] != $origi_file_content[$i] && $file_user [$i]!=$fix [$i] && $origi_file_content [$i]!=$fix [$i]){
-            //         //     $result .= $fix[$i];
-            //         //}else
-                    
-            //         if($file_user [$i] != $fix[$i]){
-            //                 if ($file_user [$i] != $file0[$i] or $file_user [$i] != $file1[$i] or $file_user [$i] != $file2[$i]){
-            //                     $result .= $file_user[$i];
-            //                 }else{
-            //                     $result .= $fix[$i];
-            //                 }
-            //         }
-            //     }
-    
 
-            $file_name = 'MagicSolution--' .$u_f_n_file_uuid . '--('.$brand->name . '_' .$u_f_n_ecu_name. '_' . $module->name . '(No--CHK)' . '.bin';
+            $file_name = 'MagicSolution--' . $u_f_n_file_uuid . '--(' . $brand->name . '_' . $u_f_n_ecu_name . '_' . $module->name . '(No--CHK)' . '.bin';
             Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
             $target_files_content = [];
             $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/fixed/' . $file_name;
@@ -187,7 +147,7 @@ class SolutionController extends Controller
                     'message' => 'We can not find solution for your file.',
                 ]);
             }
-        
+
         } else {
 
             try {
@@ -198,118 +158,53 @@ class SolutionController extends Controller
 
                     foreach ($file_records as $record) {
                         $record_content = file_get_contents($record->file);
-                        //To Do - we need to fix -
-                        // get file size need asynch
-                        // file_exists($record->file) && filesize($record->file)
-                        // filesize($user_file) === filesize($record->file)
-
                         if ($user_file_content === $record_content) {
                             $target_records .= $file->uuid;
                         }
                     }
                 }
-                if($target_records ==null){
-                    //barnd - ecu - ecu file 1 - ecu records - UUID
-                    $target_records=$ecu_files[0] ->uuid;
+                if ($target_records == null) {
+                    $target_records = $ecu_files[0]->uuid;
                 }
 
 
 
                 $records = ECUFileRecord::where('ecu_file_uuid', $target_records)->get();
-                // search on other records on same file
                 foreach ($records as $target) {
                     $target_content = file_get_contents($target->file);
                     if ($target->module_uuid == $fix_type) {
                         $target_file_same_fix_type_conten = $target_content;
-                    } elseif($target->module_uuid == $origin_module_uuid->uuid ){
-                        $origi_file_content=$target_content;
-                    }
-                    else{
+                    } elseif ($target->module_uuid == $origin_module_uuid->uuid) {
+                        $origi_file_content = $target_content;
+                    } else {
                         array_push($target_files_content, $target_content);
                     }
                 }
-            if($user_file_content===$origi_file_content){
-                        $result .=$target_file_same_fix_type_conten;
-            }else{
-                 //dd(strlen($target_file_same_fix_type_conten)); // 2097152
-                //dd(strlen($target_files_content[0]));          //2097152
-                //dd(strlen($target_files_content[1]));            //2097152
-                //dd(strlen($target_files_content[2]));            //2097152  //dd(strlen($target_file_same_fix_type_conten)); // 2097152
-                //dd(strlen($target_files_content[0]));          //2097152
-                //dd(strlen($target_files_content[1]));            //2097152
-                //dd(strlen($target_files_content[2]));            //2097152  //dd(strlen($target_file_same_fix_type_conten)); // 2097152
-                //dd(strlen($target_files_content[0]));          //2097152
-                //dd(strlen($target_files_content[1]));            //2097152
-                //dd(strlen($target_files_content[2]));            //2097152
-                $fix = $target_file_same_fix_type_conten;
-                $file0 = @$target_files_content[0];
-                $file1 = @$target_files_content[1];
-                $file2 = @$target_files_content[2];
-                $file_user = $user_file_content;
-                $origin_file=$origi_file_content;
-                $map = array();
-                //dd( strlen( $file_user ));
-                for($i=0; $i < strlen( $fix ); $i++){
-                if($fix[$i]!= $origin_file[$i]){
-                    $map[$i]=$fix[$i];
-                }
-                }
-                for($i=0; $i < strlen($file_user); $i++){
-                    if(!empty($map[$i])){
-                        $result .=$map[$i];
-                    }else{
-                        $result .= $file_user[$i];
+                if ($user_file_content === $origi_file_content) {
+                    $result .= $target_file_same_fix_type_conten;
+                } else {
+                    $fix = $target_file_same_fix_type_conten;
+                    $file0 = @$target_files_content[0];
+                    $file1 = @$target_files_content[1];
+                    $file2 = @$target_files_content[2];
+                    $file_user = $user_file_content;
+                    $origin_file = $origi_file_content;
+                    $map = array();
+                    //dd( strlen( $file_user ));
+                    for ($i = 0; $i < strlen($fix); $i++) {
+                        if ($fix[$i] != $origin_file[$i]) {
+                            $map[$i] = $fix[$i];
+                        }
+                    }
+                    for ($i = 0; $i < strlen($file_user); $i++) {
+                        if (!empty($map[$i])) {
+                            $result .= $map[$i];
+                        } else {
+                            $result .= $file_user[$i];
+                        }
                     }
                 }
-
-
-
-
-
-
-
-
-               // for ($i = 0; $i < strlen($file_user); $i++) {
-                    // if ($fix[$i] != $file_user[$i] && $fix[$i] != $file0[$i] && $fix[$i] != $file1[$i] && $fix[$i] != $file2[$i]) {
-                    //     $result .= $fix[$i];
-                    // } else {
-                    //     $result .= $file_user[$i];
-                    // }
-                    // if($file_user[$i] == $origi_file_content[$i] && $file_user [$i]!=$fix [$i]){
-                    //     $result .= $fix[$i];
-                    // }elseif($file_user[$i] != $origi_file_content[$i] && $file_user [$i]!=$fix [$i]){
-                    //     $result .= $file_user[$i];
-                    // }elseif($file_user[$i] == $origi_file_content[$i] && $file_user [$i]==$fix [$i]){
-                    //     $result .= $file_user[$i];
-                    // }elseif ($file_user[$i] != $origi_file_content[$i] && $file_user [$i]!=$fix [$i] && $origi_file_content [$i]!=$fix [$i]){
-                    //     $result .= $fix[$i];
-                    // }
-                //     if($file_user [$i] != $fix[$i]){
-                //         if ($file_user [$i] != $file0[$i] or $file_user [$i] != $file1[$i] or $file_user [$i] != $file2[$i]){
-                //             $result .= $file_user[$i];
-                //         }else{
-                //             $result .= $fix[$i];
-                //         }
-                // 
-
-                }
-                
-                
-
-                // **** we need to fix target_files_content loop ****
-                // for ($i = 0; $i < count($target_files_content); $i++) {
-                //dd(strlen($target_file_same_fix_type_conten));
-                // for ($j = 0; $j < strlen($target_file_same_fix_type_conten); $j++) {
-
-                // if ($target_file_same_fix_type_conten[$j] != $target_files_content[0][$j] && $target_file_same_fix_type_conten[$j] != $user_file_content[$j] && $target_file_same_fix_type_conten[$j] != $target_files_content[1][$j] && $target_file_same_fix_type_conten[$j] != $target_files_content[2][$j]) {
-                //     $result .= $target_file_same_fix_type_conten[$j];
-                // } else {
-                //     $result .= $user_file_content[$j];
-                // }
-
-                //dd(strlen($result)); //2097152
-                
-                $file_name = 'MagicSolution--' .$target_records . '--('.$brand->name . '_' .$ecu->name  . '_' . $module->name . 'No--CHK)' . '.bin';
+                $file_name = 'MagicSolution--' . $target_records . '--(' . $brand->name . '_' . $ecu->name . '_' . $module->name . 'No--CHK)' . '.bin';
                 Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
                 $target_files_content = [];
                 $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/fixed/' . $file_name;
@@ -439,18 +334,17 @@ class SolutionController extends Controller
                     $query->where('category_uuid', $request->category_uuid);
                 }
             })->addColumn('action', function ($solution) {
-                $data_attr = '';
-                $data_attr .= 'data-uuid="' . $solution->uuid . '" ';
-                $data_attr .= 'data-module_uuid="' . $solution->module_uuid . '" ';
-                $data_attr .= 'data-brand_uuid="' . $solution->brand_uuid . '" ';
-                $data_attr .= 'data-ecu_uuid="' . $solution->ecu_uuid . '" ';
-                $string = '';
-                $string .= '<button class="edit_btn btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+            $data_attr = '';
+            $data_attr .= 'data-uuid="' . $solution->uuid . '" ';
+            $data_attr .= 'data-module_uuid="' . $solution->module_uuid . '" ';
+            $data_attr .= 'data-brand_uuid="' . $solution->brand_uuid . '" ';
+            $data_attr .= 'data-ecu_uuid="' . $solution->ecu_uuid . '" ';
+            $string = '';
+            $string .= '<button class="edit_btn btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                     data-bs-target="#edit_modal" ' . $data_attr . '>' . __('edit') . '</button>';
-                $string .= ' <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="' . $solution->uuid .
-                    '">' . __('delete') . '</button>';
-                return $string;
-            })->make(true);
+            $string .= ' <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="' . $solution->uuid .
+                '">' . __('delete') . '</button>';
+            return $string;
+        })->make(true);
     }
 }
-

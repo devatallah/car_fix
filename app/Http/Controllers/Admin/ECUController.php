@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Module;
 use App\Models\ECU;
 use App\Models\Brand;
+use App\Models\ECUFileRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -60,7 +61,13 @@ class ECUController extends Controller
 
     public function destroy($uuid, Request $request)
     {
-        ECU::query()->whereIn('uuid', explode(',', $uuid))->delete();
+        $ecu = ECU::query()->whereIn('uuid', explode(',', $uuid))->first();
+        $files = $ecu->files;
+        $files->each(function ($item) {
+            $item->ecu_file_records()->delete();
+        });
+        $ecu->files()->delete();
+        $ecu->delete();
         return response()->json(['status' => true]);
     }
 
