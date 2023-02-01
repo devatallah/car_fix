@@ -34,8 +34,8 @@
                             <div class="card-header">
                                 <div class="head-label">
                                     <h4 class="card-title">
-                                        ECU Name:<b>{{$ecu->name}}</b> -
-                                        ECU Files Count:<b>{{$ecu->files_count}}</b>
+                                        ECU Name:<b>{{ $ecu->name }}</b> -
+                                        ECU Files Count:<b>{{ $ecu->files_count }}</b>
                                     </h4>
                                 </div>
                                 <div class="text-right">
@@ -121,16 +121,15 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="" id="edit_form" method="POST" data-reset="true"
-                        class="form-horizontal" enctype="multipart/form-data" novalidate>
+                    <form action="" id="edit_form" method="POST" data-reset="true" class="form-horizontal"
+                        enctype="multipart/form-data" novalidate>
                         {{ csrf_field() }}
                         {{ method_field('PUT') }}
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="edit_ecu_uuid">@lang('module')</label>
-                                    <select class="module_uuid form-control" id="edit_ecu_uuid" name="ecu_uuid"
-                                        required>
+                                    <select class="module_uuid form-control" id="edit_ecu_uuid" name="ecu_uuid" required>
                                         <option value="">@lang('select')</option>
                                         @foreach ($ecus as $item)
                                             <option value="{{ $item->uuid }}">{{ $item->name }}</option>
@@ -158,7 +157,8 @@
 @endsection
 @section('scripts')
     <script>
-        var url = '{{ url('/admin/ecu_files/file') }}';
+        var url = '{{ url('/admin/ecu_files/file') }}/';
+        var url2 = '{{ url('/admin/ecu_files/file') }}';
 
         var oTable = $('#datatable').DataTable({
             dom: '<"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
@@ -198,7 +198,7 @@
             serverSide: true,
             searching: false,
             ajax: {
-                url: '{{ url('/admin/ecu_files/indexTable/'.$ecu->uuid) }}',
+                url: '{{ url('/admin/ecu_files/indexTable/' . $ecu->uuid) }}',
             },
             columns: [{
                     "render": function(data, type, full, meta) {
@@ -227,12 +227,12 @@
             $(document).on('click', '.edit_btn', function(event) {
                 var button = $(this)
                 var uuid = button.data('uuid')
-                $('#edit_form').attr('action', url + '/' + uuid)
+                $('#edit_form').attr('action', url2 + '/' + uuid)
                 $('#edit_ecu_uuid').val(button.data('ecu_uuid')).trigger('change')
             });
             $(document).on('click', '#create_btn', function(event) {
                 $("#create_form .new_record").remove();
-                $('#create_form').attr('action', url);
+                $('#create_form').attr('action', url2);
             });
         });
     </script>
