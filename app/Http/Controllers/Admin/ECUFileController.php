@@ -71,15 +71,15 @@ class ECUFileController extends Controller
         $ecu_files = ECUFile::where('ecu_uuid', $ecu_uuid)->get();
 
         return Datatables::of($ecu_files)
-            ->addColumn('action', function ($ecu_files) {
+            ->addColumn('action', function ($ecu_file) {
                 $data_attr = '';
-                $data_attr .= 'data-uuid="' . $ecu_files->uuid . '" ';
-                $data_attr .= 'data-ecu_uuid="' . $ecu_files->ecu_uuid . '" ';
+                $data_attr .= 'data-uuid="' . $ecu_file->uuid . '" ';
+                $data_attr .= 'data-ecu_uuid="' . $ecu_file->ecu_uuid . '" ';
                 $string = '';
                 $string .= '<button class="edit_btn btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                     data-bs-target="#edit_modal" ' . $data_attr . '>' . __('edit') . '</button>';
-                $string .= ' <a href="' . url("admin/ecu_file_records?file_uuid=$ecu_files->uuid") . '" class="btn btn-sm btn-outline-primary">Records</a>';
-                $string .= ' <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="' . $ecu_files->uuid .
+                $string .= ' <a href="' . url("admin/ecu_file_records?file_uuid=$ecu_file->uuid") . '" class="btn btn-sm btn-outline-primary">Records</a>';
+                $string .= ' <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="' . $ecu_file->uuid .
                     '">' . __('delete') . '</button>';
                 return $string;
             })->make(true);

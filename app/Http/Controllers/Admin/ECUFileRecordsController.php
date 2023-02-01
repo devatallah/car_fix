@@ -122,21 +122,21 @@ class ECUFileRecordsController extends Controller
 
     public function indexTable(Request $request, $ecu_file_uuid)
     {
-        $ecu_files_records = ECUFileRecord::with(['module', 'ecu_file'])->where('ecu_file_uuid', $ecu_file_uuid)->orderByDesc('id');
+        $ecu_files_records = ECUFileRecord::where('ecu_file_uuid', $ecu_file_uuid)->orderByDesc('id')->get();
 
         return DataTables::of($ecu_files_records)
             ->filter(function ($query) use ($request) {
                 if ($request->get('module_uuid')) {
                     $query->where('module_uuid', $request->module_uuid);
                 }
-            })->addColumn('action', function ($ecu_files_records) {
+            })->addColumn('action', function ($record) {
                 $data_attr = '';
-                $data_attr .= 'data-uuid="' . $ecu_files_records->uuid . '" ';
-                $data_attr .= 'data-module_uuid="' . $ecu_files_records->module_uuid . '" ';
+                $data_attr .= 'data-uuid="' . $record->uuid . '" ';
+                $data_attr .= 'data-module_uuid="' . $record->module_uuid . '" ';
                 $string = '';
                 $string .= '<button class="edit_btn btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                     data-bs-target="#edit_modal" ' . $data_attr . '>' . __('edit') . '</button>';
-                $string .= ' <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="' . $ecu_files_records->uuid .
+                $string .= ' <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="' . $record->uuid .
                     '">' . __('delete') . '</button>';
                 return $string;
             })->make(true);
