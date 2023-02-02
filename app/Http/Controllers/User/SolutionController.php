@@ -255,7 +255,7 @@ class SolutionController extends Controller
             } catch (\Exception $ex) {
                 return response()->json([
                     'status' => false,
-                    'message' => $ex->getMessage(),
+                    'message' => $ex->getMessage() .'AASA',
                 ]);
             }
         }
