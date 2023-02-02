@@ -181,9 +181,9 @@ class SolutionController extends Controller
                     logger("target_records [0]".''.$target_records);
 
                 }
-                logger("target_records".''.strlen($target_records));
+                logger("target_records ".''.strlen($target_records));
                 $records = ECUFileRecord::where('ecu_file_uuid', $target_records)->get();
-                logger("records".''.$records);
+                logger("record s".''.count($records));
                 foreach ($records as $target) {
                     $target_content = file_get_contents($target->file);
                     if ($target->module_uuid == $fix_type) {
@@ -194,9 +194,9 @@ class SolutionController extends Controller
                         array_push($target_files_content, $target_content);
                     }
                     }
-                logger("target_file_same_fix_type_conten".''.$target_file_same_fix_type_conten);
-                logger("origi_file_content".''.strlen($origi_file_content));
-                logger("target_files_content".''.count($target_files_content));
+                logger("target_file_same_fix_type_conten ".''.strlen($target_file_same_fix_type_conten));
+                logger("origi_file_content ".''.strlen($origi_file_content));
+                logger("target_files_content ".''.count($target_files_content));
 
                 if ($user_file_content === $origi_file_content) {
                     $result .= $target_file_same_fix_type_conten;
@@ -238,8 +238,8 @@ class SolutionController extends Controller
                 Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'aa');
                 Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'aa');
 
-                logger("file_name".''.$file_name);
-                logger("target_files_content".''.strlen($result));
+                logger("file_name ".''.$file_name);
+                logger("target_files_content ".''.strlen($result));
 
                 $target_files_content = [];
                 $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/fixed/' . $file_name;
