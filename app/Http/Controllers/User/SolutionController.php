@@ -184,9 +184,11 @@ class SolutionController extends Controller
                 logger("target_records ".''.strlen($target_records));
                 logger("ecu_file_uuid ".''.$target_records);
                 $records = ECUFileRecord::where('ecu_file_uuid', $target_records)->get();
-                logger("record s".''.count($records));
+                logger("record ".''.count($records));
+
                 foreach ($records as $target) {
                     $target_content = file_get_contents($target->file);
+                    logger("target uuid ".''.$target->uuid);
                     if ($target->module_uuid == $fix_type) {
                         $target_file_same_fix_type_conten = $target_content;
                     } elseif ($target->module_uuid == $origin_module_uuid->uuid) {
@@ -208,17 +210,17 @@ class SolutionController extends Controller
                     // $file1 = @$target_files_content[1];
                     // $file2 = @$target_files_content[2];
                     $file_user = $user_file_content;
-                    $origin_file = $origi_file_content;
+                    $origin_file_new = $origi_file_content;
                     logger("fix ".''.strlen($fix));
                     logger("file_user ".''.strlen($file_user));
-                    logger("origin_file ".''.strlen($origin_file));
+                    logger("origin_file ".''.strlen($origin_file_new));
 
                     $map = array();
                     $map1 = array();
                     for ($i = 0; $i < strlen($fix); $i++) {
-                        if ($fix[$i] != $origin_file[$i]) {
+                        if ($fix[$i] != $origin_file_new[$i]) {
                             $map[$i] = $fix[$i];
-                        } elseif ($file_user[$i] != $origin_file[$i]) {
+                        } elseif ($file_user[$i] != $origin_file_new[$i]) {
                             $map1[$i] = $file_user[$i];
                         }
                     }
@@ -228,7 +230,7 @@ class SolutionController extends Controller
                         } elseif (empty($map[$i]) && !empty($map1[$i])) {
                             $result .= $map1[$i];
                         } elseif (empty($map[$i]) && empty($map1[$i])) {
-                            $result .= $origin_file[$i];
+                            $result .= $origin_file_new[$i];
                         } elseif (!empty($map[$i]) && !empty($map1[$i])) {
                             $result .= $map[$i];
                         }
@@ -238,9 +240,7 @@ class SolutionController extends Controller
 
                 
                 $file_name = 'MagicSolution--' . $target_records . '--(' . $brand->name . '_' . $ecu->name . '_' . $module->name . '(No--CHK)' . '.bin';
-                Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'aa');
-                Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'aa');
-
+                Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
                 logger("file_name ".''.$file_name);
                 logger("target_files_content ".''.strlen($result));
 
