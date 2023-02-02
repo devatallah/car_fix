@@ -182,6 +182,7 @@ class SolutionController extends Controller
 
                 }
                 logger("target_records ".''.strlen($target_records));
+                logger("ecu_file_uuid ".''.$target_records);
                 $records = ECUFileRecord::where('ecu_file_uuid', $target_records)->get();
                 logger("record s".''.count($records));
                 foreach ($records as $target) {
