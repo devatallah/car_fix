@@ -180,6 +180,9 @@ class SolutionController extends Controller
                     }
                 }
                 } else {
+                    logger("brand ".''.$brand->name);
+                    logger("ecu ".''.$ecu->name);
+                    logger("module ".''.$module->name);
                         return response()->json([
                         'status' => false,
                         'message' => 'We can not find solution for your file , you can request soulution by click over + icon',
