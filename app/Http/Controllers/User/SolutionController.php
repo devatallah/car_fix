@@ -195,7 +195,7 @@ class SolutionController extends Controller
                     }
                     }
                 logger("target_file_same_fix_type_conten".''.$target_file_same_fix_type_conten);
-                logger("origi_file_content".''.$origi_file_content);
+                logger("origi_file_content".''.strlen($origi_file_content));
                 logger("target_files_content".''.count($target_files_content));
 
                 if ($user_file_content === $origi_file_content) {
