@@ -201,7 +201,7 @@ class SolutionController extends Controller
                     $file_user = $user_file_content;
                     $origin_file = $origi_file_content;
 
-                if(strln($fix)==strln($origin_file)){
+                if(strlen($fix)==strlen($origin_file)){
                     $map = array();
                     $map1 = array();
                     for ($i = 0; $i < strlen($fix); $i++) {
