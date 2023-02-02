@@ -200,6 +200,7 @@ class SolutionController extends Controller
 
                 if ($user_file_content === $origi_file_content) {
                     $result .= $target_file_same_fix_type_conten;
+                    logger("result ".''.strlen($result));
                 } else {
                     $fix = $target_file_same_fix_type_conten;
                     // $file0 = @$target_files_content[0];
@@ -207,8 +208,10 @@ class SolutionController extends Controller
                     // $file2 = @$target_files_content[2];
                     $file_user = $user_file_content;
                     $origin_file = $origi_file_content;
+                    logger("fix ".''.strlen($fix));
+                    logger("file_user ".''.strlen($file_user));
+                    logger("origin_file ".''.strlen($origin_file));
 
-                if(strlen($fix)==strlen($origin_file)){
                     $map = array();
                     $map1 = array();
                     for ($i = 0; $i < strlen($fix); $i++) {
@@ -216,7 +219,6 @@ class SolutionController extends Controller
                             $map[$i] = $fix[$i];
                         } elseif ($file_user[$i] != $origin_file[$i]) {
                             $map1[$i] = $file_user[$i];
-
                         }
                     }
                     for ($i = 0; $i < strlen($file_user); $i++) {
@@ -231,7 +233,7 @@ class SolutionController extends Controller
                         }
                     }
                 }
-                }
+                
 
                 
                 $file_name = 'MagicSolution--' . $target_records . '--(' . $brand->name . '_' . $ecu->name . '_' . $module->name . '(No--CHK)' . '.bin';
