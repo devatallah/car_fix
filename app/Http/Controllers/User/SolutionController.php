@@ -210,7 +210,10 @@ class SolutionController extends Controller
                 logger("target_file_same_fix_type_conten ".''.strlen($target_file_same_fix_type_conten));
                 logger("origi_file_content ".''.strlen($origi_file_content));
                 logger("target_files_content ".''.count($target_files_content));
-
+                logger("target_records ".''.count($target_records));
+                logger("brand ".''.$brand->name);
+                logger("ecu ".''.$ecu->name);
+                logger("module ".''.$module->name);
                 if ($user_file_content === $origi_file_content) {
                     $result .= $target_file_same_fix_type_conten;
                     logger("result ".''.strlen($result));
