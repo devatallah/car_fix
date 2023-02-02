@@ -166,15 +166,25 @@ class SolutionController extends Controller
             try {
                 $ecu = ECU::where('brand_uuid', $request->brand_uuid)->first();
                 $ecu_files = ECUFile::where('ecu_uuid', $ecu->uuid)->get();
+                //logger("ecu_files".''.$ecu_files);
+
+                if(strlen($user_file_content) == strlen(file_get_contents($ecu_files[0]->ecu_file_records [0]->file))) {
                 foreach ($ecu_files as $file) {
                     $file_records = $file->ecu_file_records;
-                    logger("file_records".''.$file_records);
+                logger("file_records".''.$file_records);
                     foreach ($file_records as $record) {
                         $record_content = file_get_contents($record->file);
                         if ($user_file_content === $record_content) {
                             $target_records .= $file->uuid;
                         }
                     }
+                }
+                } else {
+                        return response()->json([
+                        'status' => false,
+                        'message' => 'We can not find solution for your file , you can request soulution by click over + icon',
+                    ]);
+
                 }
                 if ($target_records == null) {
                     $target_records = $ecu_files[0]->uuid;
@@ -241,6 +251,7 @@ class SolutionController extends Controller
                 
                 $file_name = 'MagicSolution--' . $target_records . '--(' . $brand->name . '_' . $ecu->name . '_' . $module->name . '(No--CHK)' . '.bin';
                 Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
+
                 logger("file_name ".''.$file_name);
                 logger("target_files_content ".''.strlen($result));
 
