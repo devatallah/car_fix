@@ -108,9 +108,9 @@ class SolutionController extends Controller
                 }
             }
             $fix = $target_file_same_fix_type_conten;
-            $file0 = @$target_files_content[0];
-            $file1 = @$target_files_content[1];
-            $file2 = @$target_files_content[2];
+            // $file0 = @$target_files_content[0];
+            // $file1 = @$target_files_content[1];
+            // $file2 = @$target_files_content[2];
             $file_user = $user_file_content;
             $origin_file = $origi_file_content;
             $map = array();
@@ -192,9 +192,9 @@ class SolutionController extends Controller
                     $result .= $target_file_same_fix_type_conten;
                 } else {
                     $fix = $target_file_same_fix_type_conten;
-                    $file0 = @$target_files_content[0];
-                    $file1 = @$target_files_content[1];
-                    $file2 = @$target_files_content[2];
+                    // $file0 = @$target_files_content[0];
+                    // $file1 = @$target_files_content[1];
+                    // $file2 = @$target_files_content[2];
                     $file_user = $user_file_content;
                     $origin_file = $origi_file_content;
                     $map = array();
