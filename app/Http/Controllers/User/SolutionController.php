@@ -57,7 +57,6 @@ class SolutionController extends Controller
 
     public function find_solution(Request $request)
     {
-
         $rules = [
             'module_uuid' => 'required',
             'brand_uuid' => 'required',
@@ -65,7 +64,6 @@ class SolutionController extends Controller
             'file' => 'required',
         ];
         $this->validate($request, $rules);
-
         $file_records = [];
         $target_records = '';
         $target_files_content = [];
@@ -79,7 +77,7 @@ class SolutionController extends Controller
         $user_file_content = file_get_contents($user_file);
         $origi_file_content = '';
         $origin_module_uuid = Module::where('name', 'Origin')->first();
-
+        
         $user_file_name = $user_file->getClientOriginalName();
         $ecu_check = '';
         $file_check = '';
@@ -177,8 +175,6 @@ class SolutionController extends Controller
                 if ($target_records == null) {
                     $target_records = $ecu_files[0]->uuid;
                 }
-
-
 
                 $records = ECUFileRecord::where('ecu_file_uuid', $target_records)->get();
                 foreach ($records as $target) {
