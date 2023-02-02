@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
-
+ini_set('memory_limit', '1024M');
 class SolutionController extends Controller
 {
 
@@ -219,7 +219,7 @@ class SolutionController extends Controller
                         }
                     }
                 }
-                $file_name = 'MagicSolution--' . $target_records . '--(' . $brand->name . '_' . $ecu->name . '_' . $module->name . 'No--CHK)' . '.bin';
+                $file_name = 'MagicSolution--' . $target_records . '--(' . $brand->name . '_' . $ecu->name . '_' . $module->name . '(No--CHK)' . '.bin';
                 Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
                 $target_files_content = [];
                 $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/fixed/' . $file_name;
