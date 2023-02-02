@@ -172,7 +172,6 @@ class SolutionController extends Controller
                 if(strlen($user_file_content) == strlen(file_get_contents($ecu_files[0]->ecu_file_records [0]->file))) {
                 foreach ($ecu_files as $file) {
                     $file_records = $file->ecu_file_records;
-                logger("file_records".''.$file_records);
                     foreach ($file_records as $record) {
                         $record_content = file_get_contents($record->file);
                         if ($user_file_content === $record_content) {
@@ -192,17 +191,13 @@ class SolutionController extends Controller
                 }
                 if ($target_records == null) {
                     $target_records = $ecu_files[0]->uuid;
-                    logger("target_records [0]".''.$target_records);
 
                 }
-                logger("target_records ".''.strlen($target_records));
-                logger("ecu_file_uuid ".''.$target_records);
+
                 $records = ECUFileRecord::where('ecu_file_uuid', $target_records)->get();
-                logger("record ".''.count($records));
 
                 foreach ($records as $target) {
                     $target_content = file_get_contents($target->file);
-                    logger("target uuid ".''.$target->uuid);
                     if ($target->module_uuid == $fix_type) {
                         $target_file_same_fix_type_conten = $target_content;
                     } elseif ($target->module_uuid == $origin_module_uuid->uuid) {
@@ -211,16 +206,9 @@ class SolutionController extends Controller
                         array_push($target_files_content, $target_content);
                     }
                     }
-                logger("target_file_same_fix_type_conten ".''.strlen($target_file_same_fix_type_conten));
-                logger("origi_file_content ".''.strlen($origi_file_content));
-                logger("target_files_content ".''.count($target_files_content));
-                logger("target_records ".''.count($target_records));
-                logger("brand ".''.$brand->name);
-                logger("ecu ".''.$ecu->name);
-                logger("module ".''.$module->name);
+
                 if ($user_file_content === $origi_file_content) {
                     $result .= $target_file_same_fix_type_conten;
-                    logger("result ".''.strlen($result));
                 } else {
                     $fix = $target_file_same_fix_type_conten;
                     // $file0 = @$target_files_content[0];
@@ -228,10 +216,6 @@ class SolutionController extends Controller
                     // $file2 = @$target_files_content[2];
                     $file_user = $user_file_content;
                     $origin_file_new = $origi_file_content;
-                    logger("fix ".''.strlen($fix));
-                    logger("file_user ".''.strlen($file_user));
-                    logger("origin_file ".''.strlen($origin_file_new));
-
                     $map = array();
                     $map1 = array();
                     for ($i = 0; $i < strlen($fix); $i++) {
@@ -258,10 +242,6 @@ class SolutionController extends Controller
                 
                 $file_name = 'MagicSolution--' . $target_records . '--(' . $brand->name . '_' . $ecu->name . '_' . $module->name . '(No--CHK)' . '.bin';
                 Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
-
-                logger("file_name ".''.$file_name);
-                logger("target_files_content ".''.strlen($result));
-
                 $target_files_content = [];
                 $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/fixed/' . $file_name;
                     
