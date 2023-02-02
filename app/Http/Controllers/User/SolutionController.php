@@ -77,7 +77,8 @@ class SolutionController extends Controller
         $user_file_content = file_get_contents($user_file);
         $origi_file_content = '';
         $origin_module_uuid = Module::where('name', 'Origin')->first();
-        
+        $ecu_uuid_re = $request->ecu_uuid;
+        logger("ecu_uuid_re : " .$ecu_uuid_re);
         $user_file_name = $user_file->getClientOriginalName();
         $ecu_check = '';
         $file_check = '';
@@ -164,8 +165,8 @@ class SolutionController extends Controller
              
         }else {
             try {
-                $ecu = ECU::where('brand_uuid', $request->brand_uuid)->first();
-                $ecu_files = ECUFile::where('ecu_uuid', $ecu->uuid)->get();
+                $ecu = ECU::where('uuid', $ecu_uuid_re)->first();
+                $ecu_files = ECUFile::where('ecu_uuid', $ecu_uuid_re)->get();
                 //logger("ecu_files".''.$ecu_files);
 
                 if(strlen($user_file_content) == strlen(file_get_contents($ecu_files[0]->ecu_file_records [0]->file))) {
