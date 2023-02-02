@@ -232,8 +232,15 @@ class SolutionController extends Controller
                     }
                 }
                 }
+
+                
                 $file_name = 'MagicSolution--' . $target_records . '--(' . $brand->name . '_' . $ecu->name . '_' . $module->name . '(No--CHK)' . '.bin';
-                Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
+                Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'aa');
+                Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'aa');
+
+                logger("file_name".''.$file_name);
+                logger("target_files_content".''.strlen($result));
+
                 $target_files_content = [];
                 $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/fixed/' . $file_name;
                     
