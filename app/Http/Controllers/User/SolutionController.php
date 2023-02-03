@@ -187,7 +187,6 @@ class SolutionController extends Controller
                         if($user_file_content == $test_file){
                             $target_record_uuid.= $ecu_recordes_uuid[$j]->ecu_file_uuid;
                             logger("ecu_recordes_uuid[$j]->ecu_file_uuid".$ecu_recordes_uuid[$j]->ecu_file_uuid);
-                            logger('ecu_file_uuid', $ecu_files[$j]->uuid);
                         }
                     }
 
