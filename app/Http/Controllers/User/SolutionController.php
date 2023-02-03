@@ -181,7 +181,7 @@ class SolutionController extends Controller
                     $ecu_recordes_uuid=ECUFileRecord::where('ecu_file_uuid', $ecu_files[$i]->uuid)->get();
                     //dd($ecu_recordes_uuid);
                     logger("ecu_recordes_uuid" . count($ecu_recordes_uuid));
-                    for ($i = 0; $i <= count($ecu_recordes_uuid); $i++){
+                    for ($i = 0; $i < count($ecu_recordes_uuid); $i++){
                         $test_file = file_get_contents($ecu_recordes_uuid[$i]->file);
                         logger("test_file -" .$i.'-'. strlen($test_file));
                         if($user_file_content == $test_file){
