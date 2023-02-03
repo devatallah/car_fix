@@ -176,14 +176,14 @@ class SolutionController extends Controller
                 logger("ecu_files count" . $ecu_files);
                 //$ecu_recordes_uuid=ECUFileRecord::where('ecu_file_uuid', $ecu_files[0]->uuid)->get();
                 //logger("ecu_recordes_uuid " . $ecu_recordes_uuid);
-                
+                $target_record_uuid = '';
                 for ($i = 0; $i < count($ecu_files); $i++) {
                     $ecu_recordes_uuid=ECUFileRecord::where('ecu_file_uuid', $ecu_files[$i]->uuid)->get();
                     //dd($ecu_recordes_uuid);
                     logger("$ecu_recordes_uuid" . count($ecu_recordes_uuid));
                     for ($i = 0; $i < count($ecu_recordes_uuid); $i++){
                         if($user_file_content == file_get_contents($ecu_recordes_uuid[$i]->file)){
-                            $target_record_uuid = $ecu_recordes_uuid[$i]->ecu_file_uuid;
+                            $target_record_uuid.= $ecu_recordes_uuid[$i]->ecu_file_uuid;
                         }
                     }
                 }
