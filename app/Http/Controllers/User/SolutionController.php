@@ -168,7 +168,7 @@ class SolutionController extends Controller
                 $ecu = ECU::where('uuid', $ecu_uuid_re)->first();
                 $ecu_files = ECUFile::where('ecu_uuid', $ecu_uuid_re)->get();
                 //logger("ecu_files".''.$ecu_files);
-
+                logger("ecu_files count" . count($ecu_files));
                 if(strlen($user_file_content) == strlen(file_get_contents($ecu_files[0]->ecu_file_records [0]->file))) {
                 foreach ($ecu_files as $file) {
                     $file_records = $file->ecu_file_records;
@@ -195,7 +195,7 @@ class SolutionController extends Controller
                 }
 
                 $records = ECUFileRecord::where('ecu_file_uuid', $target_records)->get();
-
+                logger("Records count " . count($records));
                 foreach ($records as $target) {
                     $target_content = file_get_contents($target->file);
                     if ($target->module_uuid == $fix_type) {
@@ -237,9 +237,7 @@ class SolutionController extends Controller
                         }
                     }
                 }
-                
-
-                
+            
                 $file_name = 'MagicSolution--' . $target_records . '--(' . $brand->name . '_' . $ecu->name . '_' . $module->name . '(No--CHK)' . '.bin';
                 Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
                 $target_files_content = [];
