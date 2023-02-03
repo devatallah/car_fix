@@ -174,17 +174,15 @@ class SolutionController extends Controller
                 //count[{"id":1,"uuid":"b541b4cd-1a1a-4dd5-8f1d-4b5e1f07310d","ecu_uuid":"7673557c-6759-451a-9168-e04b9397a9d6","ecu_name":"EDC17C57"},{"id":5,"uuid":"27749fb6-b805-47bd-b66d-f410ccb0008a","ecu_uuid":"7673557c-6759-451a-9168-e04b9397a9d6","ecu_name":"EDC17C57"}]
                 //logger("ecu_files".''.$ecu_files);
                 logger("ecu_files count" . $ecu_files);
-                logger("ecu_files count 0" . $ecu_files[0]->uuid);
-                logger("ecu_files count 1" . $ecu_files[1]-> uuid);
-                $record_content_array = [];
-                $target_record_uuid = '';
                 //$ecu_recordes_uuid=ECUFileRecord::where('ecu_file_uuid', $ecu_files[0]->uuid)->get();
                 //logger("ecu_recordes_uuid " . $ecu_recordes_uuid);
+                
                 for ($i = 0; $i < count($ecu_files); $i++) {
                     $ecu_recordes_uuid=ECUFileRecord::where('ecu_file_uuid', $ecu_files[$i]->uuid)->get();
                     //dd($ecu_recordes_uuid);
+                    logger("$ecu_recordes_uuid" . count($ecu_recordes_uuid));
                     for ($i = 0; $i < count($ecu_recordes_uuid); $i++){
-                        if($user_file_content === file_get_contents($ecu_recordes_uuid[$i]->file)){
+                        if($user_file_content == file_get_contents($ecu_recordes_uuid[$i]->file)){
                             $target_record_uuid = $ecu_recordes_uuid[$i]->ecu_file_uuid;
                         }
                     }
