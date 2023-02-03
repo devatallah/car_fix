@@ -166,37 +166,37 @@ class SolutionController extends Controller
         }else {
             try {
                 $ecu = ECU::where('uuid', $ecu_uuid_re)->first();
+                //$ecu_recordes_uuid=ECUFile::where('ecu_uuid', $ecu_uuid_re)->get();
+
                 $ecu_files = ECUFile::where('ecu_uuid', $ecu_uuid_re)->get();
+
+
+                //count[{"id":1,"uuid":"b541b4cd-1a1a-4dd5-8f1d-4b5e1f07310d","ecu_uuid":"7673557c-6759-451a-9168-e04b9397a9d6","ecu_name":"EDC17C57"},{"id":5,"uuid":"27749fb6-b805-47bd-b66d-f410ccb0008a","ecu_uuid":"7673557c-6759-451a-9168-e04b9397a9d6","ecu_name":"EDC17C57"}]
                 //logger("ecu_files".''.$ecu_files);
-                logger("ecu_files count" . count($ecu_files));
-                dd($ecu_files);
-                if(strlen($user_file_content) == strlen(file_get_contents($ecu_files[0]->ecu_file_records [0]->file))) {
-                foreach ($ecu_files as $file) {
-                    $file_records = $file->ecu_file_records;
-                    foreach ($file_records as $record) {
-                        $record_content = file_get_contents($record->file);
-                        if ($user_file_content === $record_content) {
-                            $target_records .= $file->uuid;
+                logger("ecu_files count" . $ecu_files);
+                logger("ecu_files count 0" . $ecu_files[0]->uuid);
+                logger("ecu_files count 1" . $ecu_files[1]-> uuid);
+                $record_content_array = [];
+                $target_record_uuid = '';
+                //$ecu_recordes_uuid=ECUFileRecord::where('ecu_file_uuid', $ecu_files[0]->uuid)->get();
+                //logger("ecu_recordes_uuid " . $ecu_recordes_uuid);
+                for ($i = 0; $i < count($ecu_files); $i++) {
+                    $ecu_recordes_uuid=ECUFile::where('ecu_file_uuid', $ecu_files[$i]->uuid)->get();
+                    for ($i = 0; $i < count($ecu_recordes_uuid); $i++){
+                        if($user_file_content === file_get_contents($ecu_recordes_uuid[$i]->file)){
+                            $target_record_uuid = $ecu_recordes_uuid[$i]->ecu_file_uuid;
                         }
                     }
                 }
-                } else {
-                    logger("brand ".''.$brand->name);
-                    logger("ecu ".''.$ecu->name);
-                    logger("module ".''.$module->name);
-                        return response()->json([
+  
+                $records = ECUFileRecord::where('ecu_file_uuid', $target_record_uuid)->get();
+                logger("Records count " . count($records));
+                if(count($records) <= 0){
+                    return response()->json([
                         'status' => false,
                         'message' => 'We can not find solution for your file , you can request soulution by click over + icon',
                     ]);
-
                 }
-                if ($target_records == null) {
-                    $target_records = $ecu_files[0]->uuid;
-
-                }
-
-                $records = ECUFileRecord::where('ecu_file_uuid', $target_records)->get();
-                logger("Records count " . count($records));
                 foreach ($records as $target) {
                     $target_content = file_get_contents($target->file);
                     if ($target->module_uuid == $fix_type) {
@@ -239,7 +239,7 @@ class SolutionController extends Controller
                     }
                 }
             
-                $file_name = 'MagicSolution--' . $target_records . '--(' . $brand->name . '_' . $ecu->name . '_' . $module->name . '(No--CHK)' . '.bin';
+                $file_name = 'MagicSolution--' . $target_record_uuid . '--(' . $brand->name . '_' . $ecu->name . '_' . $module->name . '(No--CHK)' . '.bin';
                 Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
                 $target_files_content = [];
                 $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/fixed/' . $file_name;
