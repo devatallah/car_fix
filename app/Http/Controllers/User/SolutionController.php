@@ -186,12 +186,11 @@ class SolutionController extends Controller
                         logger("test_file -" .$j.'-'. strlen($test_file));
                         if($user_file_content == $test_file){
                             $target_record_uuid.= $ecu_recordes_uuid[$j]->ecu_file_uuid;
-                            logger("ecu_recordes_uuid[$j]->ecu_file_uuid".$ecu_recordes_uuid[$j]->ecu_file_uuid);
+                            break;
                         }
                     }
 
                 }
-                logger("target_record_uuid  " . $target_record_uuid);
                 $records = ECUFileRecord::where('ecu_file_uuid', $target_record_uuid)->get();
                 logger("Records count " . count($records));
                 if(count($records) <= 0){
