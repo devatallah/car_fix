@@ -177,7 +177,7 @@ class SolutionController extends Controller
                 //$ecu_recordes_uuid=ECUFileRecord::where('ecu_file_uuid', $ecu_files[0]->uuid)->get();
                 //logger("ecu_recordes_uuid " . $ecu_recordes_uuid);
                 $target_record_uuid = '';
-                for ($i = 0; $i <= count($ecu_files); $i++) {
+                for ($i = 0; $i < count($ecu_files); $i++) {
                     $ecu_recordes_uuid=ECUFileRecord::where('ecu_file_uuid', $ecu_files[$i]->uuid)->get();
                     //dd($ecu_recordes_uuid);
                     logger("ecu_recordes_uuid" . count($ecu_recordes_uuid));
@@ -191,6 +191,7 @@ class SolutionController extends Controller
                     }
 
                 }
+
                 $records = ECUFileRecord::where('ecu_file_uuid', $target_record_uuid)->get();
                 logger("Records count " . count($records));
                 if(count($records) <= 0){
