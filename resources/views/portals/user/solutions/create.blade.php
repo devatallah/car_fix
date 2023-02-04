@@ -86,11 +86,13 @@
                         <button type="submit">Solution</button>
                     </div>
                     <br>
+                    <h3 class="mb-2">Progress</h3>
                     <div class="progress-bar">
                         <div class="progress-container">
                             <div class="progress-bg"></div>
                         </div>
                     </div>
+                    <h3 class="mb-2">Messages:</h3>
                     <div class="file-details">
                         <p><b>Selected Module:</b> <span id="selectedModule"></span></p>
                         <p><b>Selected Brand:</b> <span id="selectedBrand"></span></p>
