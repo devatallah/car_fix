@@ -61,7 +61,7 @@
                                 <p class="text-gray text-left">{{ auth()->user()->email }}</p>
                             </div>
                             <div class="balance d-flex flex-column flex-md-row justify-content-between align-items-center">
-                                <h3 class="text-gray">Balance:</h3>
+                                <h3 class="text-gray">Credit:</h3>
                                 <p class="text-gray text-left">{{ auth()->user()->balance }}</p>
                             </div>
                         </div>
