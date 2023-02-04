@@ -82,8 +82,8 @@ class SolutionController extends Controller
         $user_file_content = file_get_contents($user_file);
         $origi_file_content = '';
         $origin_module_uuid = Module::where('name', 'Origin')->first();
+        if($user_credit > 0){
         if ($user_credit >= $price or $is_free) {
-
             $ecu_uuid_re = $request->ecu_uuid;
             logger("ecu_uuid_re : " . $ecu_uuid_re);
             $user_file_name = $user_file->getClientOriginalName();
@@ -269,23 +269,30 @@ class SolutionController extends Controller
                     } else {
                         return response()->json([
                             'status' => false,
-                            'message' => 'We can not find solution for your file , if you need it , craete a Solution request by click over + icon',
+                            'message' => 'We can not fix your file , if you need it , craete a Solution request by click over (+)icon',
                         ]);
                     }
                 } catch (\Exception $ex) {
                     return response()->json([
                         'status' => false,
-                        'message' => $ex->getMessage() . 'AASA',
+                        'message' => $ex->getMessage() . 'Message',
                     ]);
                 }
             }
         } else {
             return response()->json([
                 'status' => false,
-                'message' => 'You do not have any Balance ',
+                'message' => 'You do not have any Credit ',
             ]);
         }
-    }
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'You do not have any Credit ',
+            ]);
+        }
+
+}
 
     public function store(Request $request)
     {

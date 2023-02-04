@@ -14,7 +14,7 @@
 
     <header>
         <div class="left-navbar">
-            <img class="logo" src="{{ asset('landing/assets/images/landpage/Logo.svg') }}" alt="logo">
+            <img class="logo" src="{{ asset('landing/assets/images/landpage/logo.png') }}" alt="logo">
             <ul class="nav-links">
                 <li class="nav-item"><a href="#howItWork">How it work</a></li>
                 <li class="nav-item"><a href="#pricing">Pricing</a></li>
@@ -29,7 +29,7 @@
     <div class="mobile-menu">
         <div class="head">
             <div class="content">
-                <img class="logo" src="{{ asset('landing/assets/images/landpage/Logo.svg') }}" alt="logo">
+                <img class="logo" src="{{ asset('landing/assets/images/landpage/logo.png') }}" alt="logo">
                 <button class="menu-toggle-btn" id="show-menu-btn" onclick="showMenu()">
                     <img src="{{ asset('landing/assets/images/landpage/menu.svg') }}" alt="menu">
                 </button>
@@ -232,7 +232,7 @@
     <footer>
         <div>
             <div class="logo">
-                <img src="{{ asset('landing/assets/images/landpage/Logo.svg') }}" alt="logo">
+                <img src="{{ asset('landing/assets/images/landpage/logo.png') }}" alt="logo">
             </div>
             <h3 class="footer-description">TESHIL GROUP DANIŞMANLIK SAN. VE TİC. LTD. ŞTİ</h3>
         </div>
