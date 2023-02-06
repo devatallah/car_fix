@@ -82,7 +82,7 @@ class SolutionController extends Controller
         $user_file_content = file_get_contents($user_file);
         $origi_file_content = '';
         $origin_module_uuid = Module::where('name', 'Origin')->first();
-        if($user_credit > 0){
+        if($user_credit >= 0){
         if ($user_credit >= $price or $is_free) {
             $ecu_uuid_re = $request->ecu_uuid;
             logger("ecu_uuid_re : " . $ecu_uuid_re);
