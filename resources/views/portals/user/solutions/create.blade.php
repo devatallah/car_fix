@@ -83,7 +83,7 @@
                     <div class="btn-groups d-flex justify-content-between gap-3">
                         <input type="file" id="originalFile" accept=".bin" onchange="uploadFile(this)" hidden>
                         <button type="button" onclick="fileExplorer()">Open</button>
-                        <button type="submit">Solution</button>
+                        <button type="submit" style="background-color:#5fdd9a">Solution</button>
                     </div>
                     <br>
                     <h3 class="mb-2">Progress</h3>
