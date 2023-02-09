@@ -36,7 +36,7 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <button class="group-title btn btn-danger" disabled>DTC Comming Soon</button>
+                            <button class="group-title btn btn-danger" disabled>DTC SOON ...</button>
                         </div>
                     </div>
                     <div class="row">
@@ -53,7 +53,7 @@
                                 <p class="text-gray text-left">{{ auth()->user()->name }}</p>
                             </div>
                             <div class="linces d-flex flex-column flex-md-row justify-content-between align-items-center">
-                                <h3 class="text-gray">License EXP.</h3>
+                                <h3 class="text-gray">License Exp.</h3>
                                 <p class="text-gray text-left">{{ auth()->user()->license_expire_date }}</p>
                             </div>
                             <div class="email d-flex flex-column flex-md-row justify-content-between align-items-center">
