@@ -73,10 +73,10 @@ class LoginController extends Controller
         $macAddr = strtok($macAddr, ' ');
         $mac = explode(' ',$macAddr);
         $user = User::where('email', $request->email)->first();
-        if ($user->mac_address != null && $user->mac_address != $mac[0]) {
+        if ($user->mac_address != null && $user->mac_address != $mac) {
             return back()->with('faild', 'Your device does not exist on our system, try another one.');
         } else {
-            $user->update(['mac_address' => $mac[0]]);
+            $user->update(['mac_address' => $mac]);
         }
 
 

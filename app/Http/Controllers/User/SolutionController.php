@@ -77,6 +77,7 @@ class SolutionController extends Controller
         $module = Module::where('uuid', $fix_type)->first();
         $is_free = $module->is_free;
         $price = $module->price;
+        $user_email = $user->email;
         $user_credit = $user->balance;
         $user_file = $request->file;
         $user_file_content = file_get_contents($user_file);
@@ -246,8 +247,9 @@ class SolutionController extends Controller
                             }
                         }
                     }
-
-                    $file_name = 'MagicSolution--' . $target_record_uuid . '--(' . $brand->name . '_' . $ecu->name . '_' . $module->name . '(No--CHK)' . '.bin';
+                    $file_name = 'MagicSolution--' . $target_record_uuid . '--(' . $brand->name . '_' . $ecu->name . '_' . $module->name . '(NoCHK)' . '.bin';
+                    logger("User Email :" .$user_email);
+                    logger("File Name :" . $file_name);
                     Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
                     $target_files_content = [];
                     $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/fixed/' . $file_name;
