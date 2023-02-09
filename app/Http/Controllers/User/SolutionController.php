@@ -77,6 +77,7 @@ class SolutionController extends Controller
         $module = Module::where('uuid', $fix_type)->first();
         $is_free = $module->is_free;
         $price = $module->price;
+        $user_name = $user->name;
         $user_email = $user->email;
         $user_credit = $user->balance;
         $user_file = $request->file;
@@ -86,7 +87,7 @@ class SolutionController extends Controller
         if($user_credit >= 0){
         if ($user_credit >= $price or $is_free) {
             $ecu_uuid_re = $request->ecu_uuid;
-            logger("ecu_uuid_re : " . $ecu_uuid_re);
+            //logger("ecu_uuid_re : " . $ecu_uuid_re);
             $user_file_name = $user_file->getClientOriginalName();
             $ecu_check = '';
             $file_check = '';
@@ -180,17 +181,17 @@ class SolutionController extends Controller
 
                     //count[{"id":1,"uuid":"b541b4cd-1a1a-4dd5-8f1d-4b5e1f07310d","ecu_uuid":"7673557c-6759-451a-9168-e04b9397a9d6","ecu_name":"EDC17C57"},{"id":5,"uuid":"27749fb6-b805-47bd-b66d-f410ccb0008a","ecu_uuid":"7673557c-6759-451a-9168-e04b9397a9d6","ecu_name":"EDC17C57"}]
                     //logger("ecu_files".''.$ecu_files);
-                    logger("ecu_files count" . count($ecu_files));
+                    //logger("ecu_files count" . count($ecu_files));
                     //$ecu_recordes_uuid=ECUFileRecord::where('ecu_file_uuid', $ecu_files[0]->uuid)->get();
                     //logger("ecu_recordes_uuid " . $ecu_recordes_uuid);
                     $target_record_uuid = '';
                     for ($i = 0; $i < count($ecu_files); $i++) {
                         $ecu_recordes_uuid = ECUFileRecord::where('ecu_file_uuid', $ecu_files[$i]->uuid)->get();
                         //dd($ecu_recordes_uuid);
-                        logger("ecu_recordes_uuid" . count($ecu_recordes_uuid));
+                        //logger("ecu_recordes_uuid" . count($ecu_recordes_uuid));
                         for ($j = 0; $j < count($ecu_recordes_uuid); $j++) {
                             $test_file = file_get_contents($ecu_recordes_uuid[$j]->file);
-                            logger("test_file -" . $j . '-' . strlen($test_file));
+                            //logger("test_file -" . $j . '-' . strlen($test_file));
                             if ($user_file_content == $test_file) {
                                 $target_record_uuid .= $ecu_recordes_uuid[$j]->ecu_file_uuid;
                                 break;
@@ -199,7 +200,7 @@ class SolutionController extends Controller
                     }
 
                     $records = ECUFileRecord::where('ecu_file_uuid', $target_record_uuid)->get();
-                    logger("Records count " . count($records));
+                    //logger("Records count " . count($records));
                     if (count($records) <= 0) {
                         return response()->json([
                             'status' => false,
@@ -248,6 +249,7 @@ class SolutionController extends Controller
                         }
                     }
                     $file_name = 'MagicSolution--' . $target_record_uuid . '--(' . $brand->name . '_' . $ecu->name . '_' . $module->name . '(NoCHK)' . '.bin';
+                    logger("User name :" .$user_name );
                     logger("User Email :" .$user_email);
                     logger("File Name :" . $file_name);
                     Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
