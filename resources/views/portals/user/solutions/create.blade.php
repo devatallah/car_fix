@@ -92,13 +92,15 @@
                             <div class="progress-bg"></div>
                         </div>
                     </div>
-                    <h3 class="mb-2">Messages:</h3>
+                    <h3 class="mb-2">File Info:</h3>
                     <div class="file-details">
                         <p><b>Selected Module:</b> <span id="selectedModule"></span></p>
                         <p><b>Selected Brand:</b> <span id="selectedBrand"></span></p>
                         <p><b>Selected ECU:</b> <span id="selectedECU"></span></p>
                         <p><b>Selected File:</b> <span id="selectedFile"></span></p>
                         <p><b>File Size:</b> <span id="selectedSize"></span></p>
+                        <p><b>Note :</b> <span id="selectedSize"></span></p>
+
                     </div>
                 </section>
             </form>
