@@ -251,7 +251,7 @@ class SolutionController extends Controller
                     $file_name = 'MagicSolution--' . $target_record_uuid . '--(' . $brand->name . '_' . $ecu->name . '_' . $module->name . '(NoCHK)' . '.bin';
                     logger("User name :" .$user_name );
                     logger("User Email :" .$user_email);
-                    logger("File Name :" . $file_name);
+                    logger("Brand Name :" . $brand->name .' '."ECU Name :".$ecu->name.' '."Fix Type :".$module->name);
                     Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
                     $target_files_content = [];
                     $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/fixed/' . $file_name;
