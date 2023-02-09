@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -64,6 +65,16 @@ class LoginController extends Controller
             return $this->sendLockoutResponse($request);
         }
 
+        $macAddr = exec('getmac');
+        $mac = explode(' ',$macAddr);
+        $user = User::where('email', $request->email)->first();
+        if ($user->mac_address != null && $user->mac_address != $mac[0]) {
+            return back()->with('faild', 'Your device does not exist on our system, try another one.');
+        } else {
+            $user->update(['mac_address' => $mac[0]]);
+        }
+
+
         if ($this->attemptLogin($request)) {
             return $this->sendLoginResponse($request);
         }
@@ -84,8 +95,8 @@ class LoginController extends Controller
     protected function attemptLogin(Request $request)
     {
         return auth()->guard('web')->attempt(
-            $this->credentials($request), $request->filled('remember')
+            $this->credentials($request),
+            $request->filled('remember')
         );
     }
-
 }
