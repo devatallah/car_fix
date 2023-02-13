@@ -76,7 +76,7 @@ class ECUFileRecord extends Model
 
     public function getFileAttribute($value)
     {
-        $path = 'https://carfix22.s3-eu-west-1.amazonaws.com/';
+        $path = 'https://carfix23.s3-eu-west-1.amazonaws.com/';
         return !is_null($value) ? $path . $value : '';
     }
 
