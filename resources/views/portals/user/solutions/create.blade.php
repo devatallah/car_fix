@@ -99,7 +99,6 @@
                         <p><b>Selected ECU:</b> <span id="selectedECU"></span></p>
                         <p><b>Selected File:</b> <span id="selectedFile"></span></p>
                         <p><b>File Size:</b> <span id="selectedSize"></span></p>
-                        <p><b>Note :</b> <span id="selectedSize"></span></p>
 
                     </div>
                 </section>
