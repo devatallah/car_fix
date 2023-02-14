@@ -11,7 +11,7 @@
     <meta name="author" content="PIXINVENT">
     <title>Login Page - Vuexy - Bootstrap HTML admin template</title>
     <link rel="apple-touch-icon" href="{{asset('portals/app-assets/images/ico/apple-icon-120.png')}}">
-    <link rel="shortcut icon" type="image/x-icon" href="{{asset('portals/app-assets/images/ico/favicon.ico')}}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{asset('landing/assets/images/landpage/svg/icon.svg')}}">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600" rel="stylesheet">
 
     <!-- BEGIN: Vendor CSS-->
@@ -57,7 +57,7 @@
                     <div class="card mb-0">
                         <div class="card-body">
                             <a href="index.html" class="brand-logo">
-                                <img src="{{asset('portals/app-assets/images/logo.svg')}}" style="width: 120px" alt="">
+                                <img src="{{asset('landing/assets/images/landpage/svg/logo3.svg')}}" style="width: 120px" alt="">
 {{--                                <h2 class="brand-text text-primary ms-1">magicSolution</h2>--}}
                             </a>
 
