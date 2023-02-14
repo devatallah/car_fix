@@ -14,22 +14,19 @@
 
     <header>
         <div class="left-navbar">
-            <img class="logo" src="{{ asset('landing/assets/images/landpage/svg/logo1.svg') }}" alt="logo">
+            <img class="logo" src="{{ asset('landing/assets/images/landpage/svg/logo3.svg') }}" alt="logo">
             <ul class="nav-links">
-                <li class="nav-item"><a href="#howItWork">How it work</a></li>
+                <li class="nav-item"><a href="#howItWork"></a></li>
                 <li class="nav-item"><a href="#pricing">Pricing</a></li>
             </ul>
         </div>
-        <div class="right-navbar">
-            <button class="login-link"><a href="#">Login</a></button>
-            <button class="get-started-link"><a href="#">Get Started</a></button>
-        </div>
+       
     </header>
 
     <div class="mobile-menu">
         <div class="head">
             <div class="content">
-                <img class="logo" src="{{ asset('landing/assets/images/landpage/svg/logo1.svg') }}" alt="logo">
+                <img class="logo" src="{{ asset('landing/assets/images/landpage/svg/logo3.svg') }}" alt="logo">
                 <button class="menu-toggle-btn" id="show-menu-btn" onclick="showMenu()">
                     <img src="{{ asset('landing/assets/images/landpage/menu.svg') }}" alt="menu">
                 </button>
@@ -232,7 +229,7 @@
     <footer>
         <div>
             <div class="logo">
-                <img src="{{ asset('landing/assets/images/landpage/svg/logo1.svg') }}" alt="logo">
+                <img src="{{ asset('landing/assets/images/landpage/svg/logo3.svg') }}" alt="logo">
             </div>
             <h3 class="footer-description">Magic Solution </h3>
         </div>
