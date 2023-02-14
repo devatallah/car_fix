@@ -24,7 +24,7 @@
                 <section>
                     <div class="row">
                         <div class="col-md-12 mb-2 d-flex justify-content-start align-items-center">
-                            <img class="logo" src="{{ asset('portals/app-assets/images/logo.svg') }}" alt="logo"
+                            <img class="logo" src="{{ asset('landing/assets/images/landpage/svg/logo3.svg') }}" alt="logo"
                                 width="100" height="100">
                         </div>
                         <div

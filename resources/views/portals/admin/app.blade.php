@@ -7,8 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <title>magicSolution</title>
-    <link rel="apple-touch-icon" href="{{ asset('portals/app-assets/images/logo.svg') }}">
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('portals/app-assets/images/ico/favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ asset('landing/assets/images/landpage/svg/logo3.svg') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('landing/assets/images/landpage/svg/icon.svg') }}">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600"
         rel="stylesheet">
 
@@ -253,7 +253,7 @@
             <ul class="nav navbar-nav flex-row">
                 <li class="nav-item me-auto"><a class="navbar-brand" href="{{ url('admin') }}"><span
                             class="brand-logo" style="width: 36px;">
-                            <img src="{{ asset('portals/app-assets/images/logo.svg') }}" alt=""></span>
+                            <img src="{{ asset('landing/assets/images/landpage/svg/logo3.svg') }}" alt=""></span>
                         <h2 class="brand-text">magicSolution</h2>
                     </a></li>
                 <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pe-0"
