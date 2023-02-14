@@ -25,7 +25,7 @@
                     <div class="row">
                         <div class="col-md-12 mb-2 d-flex justify-content-start align-items-center">
                             <img class="logo" src="{{ asset('landing/assets/images/landpage/svg/logo3.svg') }}" alt="logo"
-                                width="250" height="250">
+                                width="400" height="180">
                         </div>
                         <div
                             class="col-md-12 mb-2 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 modules-list">
