@@ -76,7 +76,7 @@ class LoginController extends Controller
         if ($user->mac_address != null && $user->mac_address != $mac) {
             return back()->with('faild', 'Your device does not exist on our system, try another one.');
         } else {
-            $user->update(['mac_address' => $mac]);
+           // $user->update(['mac_address' => $mac]);
         }
 
 
