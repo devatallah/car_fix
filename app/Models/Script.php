@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Webpatser\Uuid\Uuid;
 
-class ECU extends Model
+class Script extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -18,10 +18,10 @@ class ECU extends Model
     */
 
     public $incrementing = false;
-    protected $table = 'ecus';
+    protected $table = 'scripts';
     protected $guarded = [];
-    protected $appends = ['brand_name'];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'brand'];
+    protected $appends = ['ecu_name', 'brand_name', 'module_name'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
     protected $primaryKey = 'uuid';
 
 
@@ -56,19 +56,19 @@ class ECU extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function brand()
+    public function ecu()
     {
-        return $this->belongsTo(Brand::class)->withTrashed();
+        return $this->belongsTo(ECU::class)->withTrashed();
+    }
+
+    public function module()
+    {
+        return $this->belongsTo(Module::class)->withTrashed();
     }
 
     public function files()
     {
-        return $this->hasMany(ECUFile::class, 'ecu_uuid', 'uuid');
-    }
-
-    public function scripts()
-    {
-        return $this->hasMany(Script::class, 'ecu_uuid', 'uuid');
+        return $this->hasMany(ScriptFile::class, 'script_uuid', 'uuid');
     }
 
     /*
@@ -83,15 +83,24 @@ class ECU extends Model
     |--------------------------------------------------------------------------
     */
 
-
     /*
     |--------------------------------------------------------------------------
     | MUTATORS
     |--------------------------------------------------------------------------
     */
 
+    public function getEcuNameAttribute()
+    {
+        return $this->ecu->name;
+    }
+
     public function getBrandNameAttribute()
     {
-        return @$this->brand->name;
+        return $this->ecu->brand->name;
+    }
+
+    public function getModuleNameAttribute()
+    {
+        return $this->module->name;
     }
 }

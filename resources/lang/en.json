@@ -311,9 +311,14 @@
     "modules": "Fix Type",
     "module": "Fix Type",
     "brands" : "Brands",
+    "ecu"  : "ECU",
     "ecus"  : "ECUS",
     "ecu_files" : "ECUS Files",
     "ecu_file_records" : "ECUS File Records",
+
+    "scripts": "Scripts",
+    "script_type" : "Script Type",
+    "script_files" : "Script Files",
 
     "": ""
 }

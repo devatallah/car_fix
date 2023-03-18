@@ -65,6 +65,12 @@ class Module extends Model
     {
         return $this->hasMany(ECUFile::class, 'module_uuid', 'uuid');
     }
+
+    public function scripts()
+    {
+        return $this->hasMany(Script::class, 'module_uuid', 'uuid');
+    }
+
     /*
         |--------------------------------------------------------------------------
         | SCOPES

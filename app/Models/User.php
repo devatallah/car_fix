@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 use Webpatser\Uuid\Uuid;
 
 class User extends Authenticatable
 {
-    use SoftDeletes, HasFactory, Notifiable;
+    use SoftDeletes, HasFactory, Notifiable, HasApiTokens;
 
     public $incrementing = false;
     /**
@@ -63,9 +64,14 @@ class User extends Authenticatable
     {
         return 'uuid';
     }
-//    public function getImageAttribute($value)
-//    {
-//        return !is_null($value) ? asset(Storage::url($value)) : '';
-//    }
 
+    //    public function getImageAttribute($value)
+    //    {
+    //        return !is_null($value) ? asset(Storage::url($value)) : '';
+    //    }
+
+    public function balance_log()
+    {
+        return $this->hasMany(BalanceLog::class, 'user_uuid', 'uuid');
+    }
 }

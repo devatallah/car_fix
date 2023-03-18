@@ -22,9 +22,10 @@ class ModuleController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required_if:is_free,0',
             'is_free' => 'required|boolean',
+            'note' => 'required',
         ];
         $this->validate($request, $rules);
-        $data = $request->only('name', 'price', 'is_free');
+        $data = $request->only('name', 'price', 'is_free', 'note');
         $module->update($data);
 
         if ($request->ajax()) {
@@ -41,9 +42,10 @@ class ModuleController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required_if:is_free,0',
             'is_free' => 'required|boolean',
+            'note' => 'required',
         ];
         $this->validate($request, $rules);
-        $data = $request->only('name', 'price', 'is_free');
+        $data = $request->only('name', 'price', 'is_free', 'note');
         Module::query()->create($data);
 
 
@@ -75,6 +77,7 @@ class ModuleController extends Controller
                 $data_attr .= 'data-name="' . $module->name . '" ';
                 $data_attr .= 'data-is_free="' . $module->is_free . '" ';
                 $data_attr .= 'data-price="' . $module->price . '" ';
+                $data_attr .= 'data-note="' . $module->note . '" ';
                 $string = '';
                 $string .= '<button class="edit_btn btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                     data-bs-target="#edit_modal" ' . $data_attr . '>' . __('edit') . '</button>';

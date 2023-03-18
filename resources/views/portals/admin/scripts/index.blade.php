@@ -1,7 +1,15 @@
 @extends('portals.admin.app')
 
 @section('title')
-    @lang('modules')
+    @lang('scripts')
+@endsection
+
+@section('styles')
+    <style>
+        .pac-container {
+            z-index: 1051 !important;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -10,12 +18,12 @@
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">@lang('modules')</h2>
+                        <h2 class="content-header-title float-left mb-0">@lang('scripts')</h2>
                         <div class="breadcrumb-wrapper">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ url('/admin') }}">@lang('home')</a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="{{ url('/admin/modules') }}">@lang('modules')</a>
+                                <li class="breadcrumb-item"><a href="{{ url('/admin/scripts') }}">@lang('scripts')</a>
                                 </li>
                             </ol>
                         </div>
@@ -24,14 +32,13 @@
             </div>
         </div>
         <div class="content-body">
-
             <section id="">
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
                                 <div class="head-label">
-                                    <h4 class="card-title">@lang('modules')</h4>
+                                    <h4 class="card-title">@lang('scripts')</h4>
                                 </div>
                                 <div class="text-right">
                                     <div class="form-gruop">
@@ -43,7 +50,6 @@
                                             <span><i class="fa fa-lg fa-trash-alt" aria-hidden="true"></i>
                                                 @lang('delete')</span>
                                         </button>
-
                                     </div>
                                 </div>
                             </div>
@@ -52,9 +58,24 @@
                                     <div class="row">
                                         <div class="col-3">
                                             <div class="form-group">
-                                                <label for="s_name">@lang('name')</label>
-                                                <input id="s_name" type="text" class="search_input form-control"
-                                                    placeholder="@lang('name')">
+                                                <label for="s_ecu_uuid">@lang('ecu')</label>
+                                                <select name="s_ecu_uuid" id="s_ecu_uuid" class="form-control">
+                                                    <option value="">@lang('select')</option>
+                                                    @foreach ($ecus as $ecu)
+                                                        <option value="{{ $ecu->uuid }}">{{ $ecu->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="form-group">
+                                                <label for="s_module_uuid">@lang('script_type')</label>
+                                                <select name="s_module_uuid" id="s_module_uuid" class="form-control">
+                                                    <option value="">@lang('select')</option>
+                                                    @foreach ($modules as $module)
+                                                        <option value="{{ $module->uuid }}">{{ $module->name }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-3" style="margin-top: 20px">
@@ -65,7 +86,6 @@
                                                 <button id="clear_btn" class="btn btn-outline-secondary" type="submit">
                                                     <span><i class="fa fa-undo"></i> @lang('reset')</span>
                                                 </button>
-
                                             </div>
                                         </div>
                                     </div>
@@ -85,10 +105,9 @@
                                                 </div>
                                             </th>
                                             <th>@lang('uuid')</th>
-                                            <th>@lang('name')</th>
-                                            <th>@lang('is_free')</th>
-                                            <th>@lang('price')</th>
-                                            <th>@lang('note')</th>
+                                            <th>@lang('ecu')</th>
+                                            <th>@lang('brand')</th>
+                                            <th>@lang('script_type')</th>
                                             <th style="width: 225px;">@lang('actions')</th>
                                         </tr>
                                     </thead>
@@ -103,7 +122,7 @@
     </div>
     <div class="modal fade" id="create_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">@lang('create')</h5>
@@ -116,38 +135,30 @@
                         enctype="multipart/form-data" novalidate>
                         {{ csrf_field() }}
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-6">
                                 <div class="form-group">
-                                    <label for="name">@lang('name')</label>
-                                    <input type="text" class="form-control" placeholder="@lang('name')"
-                                        name="name" id="name">
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="is_free">@lang('is_free')</label>
-                                    <select name="is_free" id="is_free" class="form-control">
+                                    <label for="ecu_uuid">@lang('ecu')</label>
+                                    <select class="ecu_uuid form-control" id="ecu_uuid" name="ecu_uuid" required>
                                         <option value="">@lang('select')</option>
-                                        <option value="1">@lang('yes')</option>
-                                        <option value="0">@lang('no')</option>
+                                        @foreach ($ecus as $ecu)
+                                            <option value="{{ $ecu->uuid }}">
+                                                {{ $ecu->brand->name . '-' . $ecu->name }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
-                            <div class="col-12">
+                            <div class="col-6">
                                 <div class="form-group">
-                                    <label for="price">@lang('price')</label>
-                                    <input type="text" class="form-control" placeholder="@lang('price')"
-                                        name="price" id="price">
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="note">@lang('note')</label>
-                                    <input type="text" class="form-control" placeholder="@lang('note')"
-                                        name="note" id="note">
+                                    <label for="module_uuid">@lang('script_type')</label>
+                                    <select class="module_uuid form-control" id="module_uuid" name="module_uuid"
+                                        required>
+                                        <option value="">@lang('select')</option>
+                                        @foreach ($modules as $module)
+                                            <option value="{{ $module->uuid }}">{{ $module->name }}</option>
+                                        @endforeach
+                                    </select>
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
@@ -168,7 +179,7 @@
 
     <div class="modal fade" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">@lang('edit')</h5>
@@ -182,36 +193,30 @@
                         {{ csrf_field() }}
                         {{ method_field('PUT') }}
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-6">
                                 <div class="form-group">
-                                    <label for="edit_name">@lang('name')</label>
-                                    <input type="text" class="form-control" placeholder="@lang('name')"
-                                        name="name" id="edit_name">
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="edit_is_free">@lang('is_free')</label>
-                                    <select name="is_free" id="edit_is_free" class="form-control">
+                                    <label for="edit_ecu_uuid">@lang('ecu')</label>
+                                    <select class="ecu_uuid form-control" id="edit_ecu_uuid" name="ecu_uuid" required>
                                         <option value="">@lang('select')</option>
-                                        <option value="1">@lang('yes')</option>
-                                        <option value="0">@lang('no')</option>
+                                        @foreach ($ecus as $ecu)
+                                            <option value="{{ $ecu->uuid }}">
+                                                {{ $ecu->brand->name . '-' . $ecu->name }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                     <div class="invalid-feedback"></div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="edit_price">@lang('price')</label>
-                                    <input type="text" class="form-control" placeholder="@lang('price')"
-                                        name="price" id="edit_price">
-                                    <div class="invalid-feedback"></div>
-                                </div>
                             </div>
-                            <div class="col-12">
+                            <div class="col-6">
                                 <div class="form-group">
-                                    <label for="note">@lang('note')</label>
-                                    <input type="text" class="form-control" placeholder="@lang('note')"
-                                        name="note" id="edit_note">
+                                    <label for="edit_module_uuid">@lang('script_type')</label>
+                                    <select class="module_uuid form-control" id="edit_module_uuid" name="module_uuid"
+                                        required>
+                                        <option value="">@lang('select')</option>
+                                        @foreach ($modules as $module)
+                                            <option value="{{ $module->uuid }}">{{ $module->name }}</option>
+                                        @endforeach
+                                    </select>
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
@@ -234,7 +239,7 @@
 @endsection
 @section('scripts')
     <script>
-        var url = '{{ url('/admin/modules') }}/';
+        var url = '{{ url('/admin/scripts') }}/';
 
         var oTable = $('#datatable').DataTable({
             dom: '<"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
@@ -256,7 +261,6 @@
                     },
                 @endif
                 "oPaginate": {
-                    // remove previous & next text from pagination
                     "sPrevious": '&nbsp;',
                     "sNext": '&nbsp;'
                 }
@@ -271,7 +275,6 @@
                     "orderable": false
                 },
             ],
-            // dom: 'lrtip',
             "order": [
                 [1, 'asc']
             ],
@@ -279,9 +282,10 @@
             serverSide: true,
             searching: false,
             ajax: {
-                url: '{{ url('/admin/modules/indexTable') }}',
+                url: '{{ url('/admin/scripts/indexTable') }}',
                 data: function(d) {
-                    d.name = $('#s_name').val();
+                    d.module_uuid = $('#s_module_uuid').val();
+                    d.ecu_uuid = $('#s_ecu_uuid').val();
                 }
             },
             columns: [{
@@ -300,20 +304,16 @@
                     name: 'uuid'
                 },
                 {
-                    data: 'name',
-                    name: 'name'
+                    data: 'ecu_name',
+                    name: 'ecu_name'
                 },
                 {
-                    data: 'is_free',
-                    name: 'is_free'
+                    data: 'brand_name',
+                    name: 'brand_name'
                 },
                 {
-                    data: 'price',
-                    name: 'price'
-                },
-                {
-                    data: 'note',
-                    name: 'note'
+                    data: 'module_name',
+                    name: 'module_name'
                 },
                 {
                     data: 'action',
@@ -325,14 +325,13 @@
         });
 
         $(document).ready(function() {
+
             $(document).on('click', '.edit_btn', function(event) {
                 var button = $(this)
                 var uuid = button.data('uuid')
                 $('#edit_form').attr('action', url + uuid)
-                $('#edit_name').val(button.data('name'))
-                $('#edit_is_free').val(button.data('is_free')).trigger('change')
-                $('#edit_price').val(button.data('price'))
-                $('#edit_note').val(button.data('note'))
+                $('#edit_ecu_uuid').val(button.data('ecu_uuid')).trigger('change')
+                $('#edit_module_uuid').val(button.data('module_uuid')).trigger('change')
             });
             $(document).on('click', '#create_btn', function(event) {
                 $('#create_form').attr('action', url);
