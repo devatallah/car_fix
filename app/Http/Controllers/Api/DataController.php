@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\BrandCollection;
+use App\Http\Resources\BrandResource;
 use App\Http\Resources\ScriptFilesResource;
 use App\Models\Brand;
 use App\Models\ECU;
-use App\Models\ECUFile;
 use App\Models\Module;
 use App\Models\Script;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class DataController extends Controller
@@ -22,14 +20,8 @@ class DataController extends Controller
         return response()->json([
             'success' => true,
             "message" => "Loaded Successfully",
-            "data" => new BrandCollection($brands)
+            "data" => BrandResource::collection($brands)
         ]);
-
-        // $ecus = ECU::whereIn("brand_uuid", $brands->pluck("uuid")->toArray())->get();
-
-        // $files = ECUFile::whereIn("ecu_uuid", $ecus->pluck("uuid")->toArray())->with("ecu_file_records")->whereHas("ecu_file_records")->get();
-
-        // return $files;
     }
 
     public function scripts(Request $request)

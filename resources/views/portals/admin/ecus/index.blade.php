@@ -117,6 +117,7 @@
                                             <th>@lang('name')</th>
                                             {{-- <th>@lang('module')</th> --}}
                                             <th>@lang('brand')</th>
+                                            <th>@lang('note')</th>
                                             <th style="width: 225px;">@lang('actions')</th>
                                         </tr>
                                     </thead>
@@ -177,7 +178,14 @@
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
-
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="note">@lang('note')</label>
+                                    <input type="text" class="form-control" placeholder="@lang('note')"
+                                        name="note" id="note">
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -240,6 +248,14 @@
                                             <option value="{{ $brand->uuid }}">{{ $brand->name }}</option>
                                         @endforeach
                                     </select>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="edit_note">@lang('note')</label>
+                                    <input type="text" class="form-control" placeholder="@lang('note')"
+                                        name="note" id="edit_note">
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
@@ -342,6 +358,10 @@
                     name: 'brand_uuid'
                 },
                 {
+                    data: 'note',
+                    name: 'note'
+                },
+                {
                     data: 'action',
                     name: 'action',
                     orderable: false,
@@ -361,6 +381,7 @@
                 var user_uuid = button.data('user_uuid')
                 // $('#edit_module_uuid').val(button.data('module_uuid')).trigger('change')
                 $('#edit_brand_uuid').val(button.data('brand_uuid')).trigger('change')
+                $('#edit_note').val(button.data('note'))
             });
             $(document).on('click', '#create_btn', function(event) {
                 $('#create_form').attr('action', url);

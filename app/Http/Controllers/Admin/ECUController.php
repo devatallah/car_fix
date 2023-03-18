@@ -26,9 +26,10 @@ class ECUController extends Controller
         $rules = [
             'brand_uuid' => 'required',
             'name' => 'required|string|max:255',
+            'note' => 'required',
         ];
         $this->validate($request, $rules);
-        $data = $request->only(['name', 'brand_uuid']);
+        $data = $request->only(['name', 'brand_uuid', 'note']);
         $brand = Brand::query()->find($request->brand_uuid);
         ECU::query()->create($data);
 
@@ -45,9 +46,10 @@ class ECUController extends Controller
         $rules = [
             'brand_uuid' => 'required',
             'name' => 'required|string|max:255',
+            'note' => 'required',
         ];
         $this->validate($request, $rules);
-        $data = $request->only(['name', 'brand_uuid']);
+        $data = $request->only(['name', 'brand_uuid', 'note']);
         $brand = Brand::query()->find($request->brand_uuid);
         $ecu->update($data);
 
@@ -87,6 +89,7 @@ class ECUController extends Controller
                 $data_attr .= 'data-uuid="' . $ecu->uuid . '" ';
                 $data_attr .= 'data-brand_uuid="' . $ecu->brand_uuid . '" ';
                 $data_attr .= 'data-name="' . $ecu->name . '" ';
+                $data_attr .= 'data-note="' . $ecu->note . '" ';
                 $string = '';
                 $string .= '<button class="edit_btn btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                     data-bs-target="#edit_modal" ' . $data_attr . '>' . __('edit') . '</button>';
