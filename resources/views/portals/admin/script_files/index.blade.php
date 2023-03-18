@@ -1,21 +1,23 @@
 @extends('portals.admin.app')
 
 @section('title')
-    @lang('modules')
+    @lang('script_files')
 @endsection
 
+@section('styles')
+@endsection
 @section('content')
     <div class="content-wrapper">
         <div class="content-header row">
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">@lang('modules')</h2>
+                        <h2 class="content-header-title float-left mb-0">@lang('script_files')</h2>
                         <div class="breadcrumb-wrapper">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ url('/admin') }}">@lang('home')</a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="{{ url('/admin/modules') }}">@lang('modules')</a>
+                                <li class="breadcrumb-item"><a href="{{ url('/admin/scripts') }}">@lang('scripts')</a>
                                 </li>
                             </ol>
                         </div>
@@ -31,12 +33,12 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="head-label">
-                                    <h4 class="card-title">@lang('modules')</h4>
+                                    <h4 class="card-title">Script Files ID: - {{ $script->id }}</h4>
                                 </div>
                                 <div class="text-right">
                                     <div class="form-gruop">
                                         <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#create_modal"><span><i class="fa fa-plus"></i>
+                                            data-bs-target="#create_modal" id="create_btn"><span><i class="fa fa-plus"></i>
                                                 @lang('add_new_record')</span>
                                         </button>
                                         <button disabled="" id="delete_btn" class="delete-btn btn btn-outline-danger">
@@ -48,35 +50,13 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <form id="search_form">
-                                    <div class="row">
-                                        <div class="col-3">
-                                            <div class="form-group">
-                                                <label for="s_name">@lang('name')</label>
-                                                <input id="s_name" type="text" class="search_input form-control"
-                                                    placeholder="@lang('name')">
-                                            </div>
-                                        </div>
-                                        <div class="col-3" style="margin-top: 20px">
-                                            <div class="form-group">
-                                                <button id="search_btn" class="btn btn-outline-info" type="submit">
-                                                    <span><i class="fa fa-search"></i> @lang('search')</span>
-                                                </button>
-                                                <button id="clear_btn" class="btn btn-outline-secondary" type="submit">
-                                                    <span><i class="fa fa-undo"></i> @lang('reset')</span>
-                                                </button>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
                             </div>
                             <div class="table-responsive card-datatable">
                                 <table class="table" id="datatable">
                                     <thead>
                                         <tr>
-                                            <th class="checkbox-column sorting_disabled" rowspan="1" colspan="1"
-                                                style="width: 35px;" aria-label=" Record Id ">
+                                            <th class="checkbox-column sorting_disabled" style="width: 35px;"
+                                                aria-label=" Record Id ">
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox"
                                                         class="table_ids custom-control-input dt-checkboxes"
@@ -84,15 +64,13 @@
                                                     <label class="custom-control-label" for="select_all"></label>
                                                 </div>
                                             </th>
-                                            <th>@lang('uuid')</th>
-                                            <th>@lang('name')</th>
-                                            <th>@lang('is_free')</th>
-                                            <th>@lang('price')</th>
-                                            <th>@lang('note')</th>
+                                            <th>ID</th>
+                                            <th>@lang('file')</th>
                                             <th style="width: 225px;">@lang('actions')</th>
                                         </tr>
                                     </thead>
                                 </table>
+                                <tbody></tbody>
                             </div>
                         </div>
                     </div>
@@ -103,7 +81,7 @@
     </div>
     <div class="modal fade" id="create_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">@lang('create')</h5>
@@ -115,46 +93,25 @@
                     <form action="" id="create_form" method="POST" data-reset="true" class="ajax_form form-horizontal"
                         enctype="multipart/form-data" novalidate>
                         {{ csrf_field() }}
+                        <input type="hidden" name="script_uuid" value="{{ $script->uuid }}">
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-6">
                                 <div class="form-group">
-                                    <label for="name">@lang('name')</label>
-                                    <input type="text" class="form-control" placeholder="@lang('name')"
-                                        name="name" id="name">
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="is_free">@lang('is_free')</label>
-                                    <select name="is_free" id="is_free" class="form-control">
-                                        <option value="">@lang('select')</option>
-                                        <option value="1">@lang('yes')</option>
-                                        <option value="0">@lang('no')</option>
-                                    </select>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="price">@lang('price')</label>
-                                    <input type="text" class="form-control" placeholder="@lang('price')"
-                                        name="price" id="price">
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="note">@lang('note')</label>
-                                    <input type="text" class="form-control" placeholder="@lang('note')"
-                                        name="note" id="note">
-                                    <div class="invalid-feedback"></div>
+                                    <div class="fileinput fileinput-exists" data-provides="fileinput">
+                                        <div>
+                                            <label for="file">@lang('select_file')</label>
+                                            <input type="file" class="form-control" name="file[0]"
+                                                id="file" accept="text/bin">
+                                            <div class="invalid-feedback"></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
+                    <button class="btn btn-info" onclick="appendRecord()">Add record</button>
                     <button type="submit" form="create_form" class="submit_btn btn btn-primary">
                         <i class="fa fa-spinner fa-spin" style="display: none;"></i>
                         @lang('save')
@@ -182,37 +139,19 @@
                         {{ csrf_field() }}
                         {{ method_field('PUT') }}
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-6">
+                                <label for="file">@lang('file')</label>
                                 <div class="form-group">
-                                    <label for="edit_name">@lang('name')</label>
-                                    <input type="text" class="form-control" placeholder="@lang('name')"
-                                        name="name" id="edit_name">
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="edit_is_free">@lang('is_free')</label>
-                                    <select name="is_free" id="edit_is_free" class="form-control">
-                                        <option value="">@lang('select')</option>
-                                        <option value="1">@lang('yes')</option>
-                                        <option value="0">@lang('no')</option>
-                                    </select>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="edit_price">@lang('price')</label>
-                                    <input type="text" class="form-control" placeholder="@lang('price')"
-                                        name="price" id="edit_price">
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="note">@lang('note')</label>
-                                    <input type="text" class="form-control" placeholder="@lang('note')"
-                                        name="note" id="edit_note">
-                                    <div class="invalid-feedback"></div>
+                                    <div class="fileinput fileinput-exists" data-provides="fileinput">
+                                        <div>
+                                            <span class="btn btn-secondary btn-file">
+                                                <label for="file">@lang('select_file')</label>
+                                                <input type="file" class="form-control" name="file"
+                                                    id="file">
+                                            </span>
+                                        </div>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -234,7 +173,8 @@
 @endsection
 @section('scripts')
     <script>
-        var url = '{{ url('/admin/modules') }}/';
+        var url = '{{ url('/admin/script_files') }}/';
+        var url2 = '{{ url('/admin/script_files') }}';
 
         var oTable = $('#datatable').DataTable({
             dom: '<"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
@@ -262,15 +202,10 @@
                 }
             },
             'columnDefs': [{
-                    "targets": 1,
-                    "visible": false
-                },
-                {
-                    'targets': 0,
-                    "searchable": false,
-                    "orderable": false
-                },
-            ],
+                'targets': 0,
+                "searchable": false,
+                "orderable": false
+            }, ],
             // dom: 'lrtip',
             "order": [
                 [1, 'asc']
@@ -279,10 +214,7 @@
             serverSide: true,
             searching: false,
             ajax: {
-                url: '{{ url('/admin/modules/indexTable') }}',
-                data: function(d) {
-                    d.name = $('#s_name').val();
-                }
+                url: '{{ url('/admin/script_files/indexTable/'.$script->uuid) }}',
             },
             columns: [{
                     "render": function(data, type, full, meta) {
@@ -294,26 +226,14 @@
                                 </div></td>`;
                     }
                 },
-
                 {
-                    data: 'uuid',
-                    name: 'uuid'
+                    data: 'id',
+                    name: 'id'
                 },
                 {
-                    data: 'name',
-                    name: 'name'
-                },
-                {
-                    data: 'is_free',
-                    name: 'is_free'
-                },
-                {
-                    data: 'price',
-                    name: 'price'
-                },
-                {
-                    data: 'note',
-                    name: 'note'
+                    "render": function(data, type, full, meta) {
+                        return `<a href="` + full.file + `" target="_blank">@lang('download_file')</a>`;
+                    }
                 },
                 {
                     data: 'action',
@@ -328,15 +248,36 @@
             $(document).on('click', '.edit_btn', function(event) {
                 var button = $(this)
                 var uuid = button.data('uuid')
-                $('#edit_form').attr('action', url + uuid)
-                $('#edit_name').val(button.data('name'))
-                $('#edit_is_free').val(button.data('is_free')).trigger('change')
-                $('#edit_price').val(button.data('price'))
-                $('#edit_note').val(button.data('note'))
+                $('#edit_form').attr('action', url2 + '/' + uuid)
             });
             $(document).on('click', '#create_btn', function(event) {
-                $('#create_form').attr('action', url);
+                $("#create_form .new_record").remove();
+                $('#create_form').attr('action', url2);
             });
         });
+    </script>
+
+    <script>
+        var index = 0;
+        const template = function() {
+            index++;
+            return `<div class="row new_record">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <div class="fileinput fileinput-exists" data-provides="fileinput">
+                                        <div>
+                                            <label for="file">@lang('select_file')</label>
+                                            <input type="file" class="form-control" name="file[${index}]"
+                                                id="file">
+                                            <div class="invalid-feedback"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+        };
+        function appendRecord() {
+            $("#create_form").append(template());
+        }
     </script>
 @endsection

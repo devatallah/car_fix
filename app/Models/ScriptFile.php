@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Webpatser\Uuid\Uuid;
 
-class ECU extends Model
+class ScriptFile extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -18,10 +18,10 @@ class ECU extends Model
     */
 
     public $incrementing = false;
-    protected $table = 'ecus';
+    protected $table = 'script_files';
     protected $guarded = [];
-    protected $appends = ['brand_name'];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'brand'];
+    protected $appends = [];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
     protected $primaryKey = 'uuid';
 
 
@@ -56,19 +56,9 @@ class ECU extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function brand()
+    public function script()
     {
-        return $this->belongsTo(Brand::class)->withTrashed();
-    }
-
-    public function files()
-    {
-        return $this->hasMany(ECUFile::class, 'ecu_uuid', 'uuid');
-    }
-
-    public function scripts()
-    {
-        return $this->hasMany(Script::class, 'ecu_uuid', 'uuid');
+        return $this->belongsTo(Script::class)->withTrashed();
     }
 
     /*
@@ -83,15 +73,15 @@ class ECU extends Model
     |--------------------------------------------------------------------------
     */
 
-
     /*
     |--------------------------------------------------------------------------
     | MUTATORS
     |--------------------------------------------------------------------------
     */
 
-    public function getBrandNameAttribute()
+    public function getFileAttribute($value)
     {
-        return @$this->brand->name;
+        $path = 'https://carfix23.s3-eu-west-1.amazonaws.com/';
+        return !is_null($value) ? $path . $value : '';
     }
 }

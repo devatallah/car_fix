@@ -8,62 +8,12 @@ use App\Http\Controllers\Admin\ECUFileRecordsController;
 use App\Http\Controllers\Admin\ECURequestController;
 use App\Http\Controllers\Admin\ModuleController;
 use App\Http\Controllers\Admin\ProfileController;
-use App\Http\Controllers\Admin\SolutionController;
+use App\Http\Controllers\Admin\ScriptController;
+use App\Http\Controllers\Admin\ScriptFileController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
-//use App\Http\Controllers\Admin\Auth\LoginController;
-
-
-Route::get('/is_true', function (Request $request) {
-$file_user=file_get_contents('DPF.bin');
-$file_fix=file_get_contents('EGR.bin');
-$file0=file_get_contents('egroffnew.bin');
-$file1=file_get_contents('scroffreault.bin');
-
-
-$origin_file = file_get_contents('origin.bin');
-    //dd(strlen($origin_file));
-$result ='';
-
-    $map = array();
-    $map1 = array();
-    $map2 = array();
-//dd( strlen( $file_user ));
-        for ($i = 0; $i < strlen($file_fix); $i++) {
-            if ($file_fix[$i] != $origin_file[$i]) {
-                $map[$i] = $file_fix[$i];
-            } elseif ($file_user[$i] != $origin_file[$i]) {
-                $map1[$i] = $file_user[$i];
-                // }elseif ($file1[$i] != $origin_file[$i]) {
-                //     $map2[$i] = $file_user[$i];
-                // }
-            }
-        }
-    //map1 for check conflict between DPF - EGR 
-for($i=0; $i < strlen($file_user); $i++){
-    if(!empty($map[$i]) && empty($map1[$i])){
-        $result .=$map[$i];
-    }elseif(empty($map[$i]) && !empty($map1[$i])){
-        $result .= $map1[$i];
-    }elseif(empty($map[$i]) && empty($map1[$i])){
-        $result .= $origin_file[$i];
-    } elseif(!empty($map[$i]) && !empty($map1[$i])){
-        $result .= $map[$i];
-    }
-}
-    //file_put_contents('DPF_EGR_1.bin', $result);
-    $ready_result=file_get_contents('DPF_EGR_1.bin');
-     if($result == $ready_result){
-      echo 'done';
-     }else {
-      echo 'fail AA';
-     }
-}
-
-
-);
 
 Route::get(
     '/test_psa',
@@ -206,14 +156,14 @@ Route::get('/test4', function (Request $request) {
 });
 
 Route::get('/diff', function (Request $request) {
-    dd(urlencode('https://carfix23.s3-eu-west-1.amazonaws.com/origin/magicSolution (FORD  (TVA) (NoChk) 1671625481.jpg'));
+    dd(urlencode('https://carfix22.s3-eu-west-1.amazonaws.com/origin/magicSolution (FORD  (TVA) (NoChk) 1671625481.jpg'));
     $file = file_get_contents(
-        str_replace(' ', '%20', "https://carfix23.s3-eu-west-1.amazonaws.com/origin/magicSolution (FORD  (TVA) (NoChk) 1671625481.jpg")
+        str_replace(' ', '%20', "https://carfix22.s3-eu-west-1.amazonaws.com/origin/magicSolution (FORD  (TVA) (NoChk) 1671625481.jpg")
     );
     dd(md5($file));
     //    dd(file_get_contents(''.$origin_file));
-    $md5image1 = md5(file_get_contents('https://carfix23.s3-eu-west-1.amazonaws.com/origin/magicSolution%20(brand%201%20%20solution%202)%20(NoChk)%201671622543.jpg'));
-    $md5image2 = md5(file_get_contents('https://carfix23.s3-eu-west-1.amazonaws.com/fixed/magicSolution%20(brand%201%20%20solution%202)%20(NoChk)%201671622574.jpg'));
+    $md5image1 = md5(file_get_contents('https://carfix22.s3-eu-west-1.amazonaws.com/origin/magicSolution%20(brand%201%20%20solution%202)%20(NoChk)%201671622543.jpg'));
+    $md5image2 = md5(file_get_contents('https://carfix22.s3-eu-west-1.amazonaws.com/fixed/magicSolution%20(brand%201%20%20solution%202)%20(NoChk)%201671622574.jpg'));
     dd($md5image1 == $md5image2);
 });
 
@@ -249,18 +199,6 @@ Route::get('/get_module_brand_ecus', function (Request $request) {
 });
 
 Route::view('/', 'landing');
-
-// Route::get('/', function () {
-//     return view('index');
-//     \App\Models\Admin::query()->create([
-//         'name' => 'Admin',
-//         'email' => 'admin@email.com',
-//         'mobile' => '1234567890',
-//         'password' => bcrypt('123456')
-//     ]);
-//     return 'welcome <a href="' . url('admin/files') . '">test</a>';
-// });
-
 
 Auth::routes();
 
@@ -314,6 +252,23 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::delete('/record/{uuid}', [ECUFileRecordsController::class, 'destroy']);
         Route::get('/indexTable/{ecu_file_uuid}', [ECUFileRecordsController::class, 'indexTable']);
     });
+
+    Route::group(['prefix' => 'scripts'], function () {
+        Route::get('/', [ScriptController::class, 'index']);
+        Route::post('/', [ScriptController::class, 'store']);
+        Route::put('/{script}', [ScriptController::class, 'update']);
+        Route::delete('/{script}', [ScriptController::class, 'destroy']);
+        Route::get('/indexTable', [ScriptController::class, 'indexTable']);
+    });
+
+    Route::group(['prefix' => 'script_files'], function () {
+        Route::get('/', [ScriptFileController::class, 'index']);
+        Route::post('/', [ScriptFileController::class, 'store']);
+        Route::put('/{script}', [ScriptFileController::class, 'update']);
+        Route::delete('/{script}', [ScriptFileController::class, 'destroy']);
+        Route::get('/indexTable/{script}', [ScriptFileController::class, 'indexTable']);
+    });
+
     Route::group(['prefix' => 'admins'], function () {
         Route::get('/', [AdminController::class, 'index']);
         Route::post('/', [AdminController::class, 'store']);
@@ -328,14 +283,6 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::delete('/{user}', [UserController::class, 'destroy']);
         Route::get('/indexTable', [UserController::class, 'indexTable']);
     });
-    // Route::group(['prefix' => 'solutions'], function () {
-    //     Route::get('/', [SolutionController::class, 'index']);
-    //     Route::get('/create', [SolutionController::class, 'create']);
-    //     Route::post('/', [SolutionController::class, 'store']);
-    //     Route::put('/{category}', [SolutionController::class, 'update']);
-    //     Route::delete('/{category}', [SolutionController::class, 'destroy']);
-    //     Route::get('/indexTable', [SolutionController::class, 'indexTable']);
-    // });
     Route::group(['prefix' => 'ecu_requests'], function () {
         Route::get('/', [ECURequestController::class, 'index']);
         Route::post('/', [ECURequestController::class, 'store']);
