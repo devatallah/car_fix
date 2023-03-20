@@ -26,16 +26,15 @@ Route::post('/user/auth/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
 
     /************** User Routes **************/
-    Route::get('/user/profile', [AuthController::class, 'profile']);
     Route::post('/user/auth/check', [AuthController::class, 'checkAuth']);
     Route::post('/user/auth/logout', [AuthController::class, 'logout']);
 
-    Route::get('/user/balance/log', [BalanceLogController::class, 'balanceLog']);
+    Route::post('/user/balance/log', [BalanceLogController::class, 'balanceLog']);
     Route::post('/user/balance/update', [BalanceLogController::class, 'updateBalance']);
 
     Route::post('/user/ecu/request', [ECURequestController::class, 'store']);
 
-    Route::get('/brands', [DataController::class, 'brands']);
+    Route::post('/brands', [DataController::class, 'brands']);
 
-    Route::get('/scripts', [DataController::class, 'scripts']);
+    Route::post('/scripts', [DataController::class, 'scripts']);
 });
