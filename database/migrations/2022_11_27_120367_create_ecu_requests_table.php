@@ -17,7 +17,7 @@ class CreateEcuRequestsTable extends Migration
             $table->id();
             $table->string('uuid')->unique();
             $table->string('ecu')->nullable();
-            $table->string('module')->nullable();
+            $table->text('module')->nullable();
             $table->string('brand')->nullable();
             $table->string('user_uuid')->nullable();
             $table->timestamps();

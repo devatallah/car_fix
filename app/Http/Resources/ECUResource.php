@@ -21,7 +21,7 @@ class ECUResource extends JsonResource
             'uuid' => $this->uuid,
             'name' => $this->name,
             'note' => $this->note,
-            'fix_type' => ModuleResource::collection($this->records)
+            'fix_type' => ModuleResource::collection($this->scripts)
         ];
     }
 }
