@@ -88,7 +88,7 @@ class ScriptFileController extends Controller
             'script_uuid' => 'required|exists:scripts,uuid',
             'file' =>  [
                 function ($input, $value) {
-                    return $value->getClientOriginalExtension() == 'txt';
+                    return $value->getClientOriginalExtension() == 'bin';
                 }
             ],
         ];
@@ -102,7 +102,7 @@ class ScriptFileController extends Controller
             $file = Storage::disk('s3')->putFileAs(
                 '',
                 $request->file('file'),
-                'scripts/file/' . $request->script_uuid . '_' . $time_stamp . '.txt',
+                'scripts/file/' . $request->script_uuid . '_' . $time_stamp . '.bin',
                 ['visibility' => 'public']
             );
 
