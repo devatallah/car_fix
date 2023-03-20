@@ -26,10 +26,13 @@ class ECUController extends Controller
         $rules = [
             'brand_uuid' => 'required',
             'name' => 'required|string|max:255',
-            'note' => 'required',
+            'note' => 'nullable',
         ];
         $this->validate($request, $rules);
-        $data = $request->only(['name', 'brand_uuid', 'note']);
+        $data = $request->only(['name', 'brand_uuid']);
+        if ($request->get('note')) {
+            $data['note'] = $request->note;
+        }
         $brand = Brand::query()->find($request->brand_uuid);
         ECU::query()->create($data);
 
@@ -46,10 +49,13 @@ class ECUController extends Controller
         $rules = [
             'brand_uuid' => 'required',
             'name' => 'required|string|max:255',
-            'note' => 'required',
+            'note' => 'nullable',
         ];
         $this->validate($request, $rules);
-        $data = $request->only(['name', 'brand_uuid', 'note']);
+        $data = $request->only(['name', 'brand_uuid']);
+        if ($request->get('note')) {
+            $data['note'] = $request->note;
+        }
         $brand = Brand::query()->find($request->brand_uuid);
         $ecu->update($data);
 

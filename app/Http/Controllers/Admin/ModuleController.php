@@ -22,10 +22,13 @@ class ModuleController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required_if:is_free,0',
             'is_free' => 'required|boolean',
-            'note' => 'required',
+            'note' => 'nullable',
         ];
         $this->validate($request, $rules);
-        $data = $request->only('name', 'price', 'is_free', 'note');
+        $data = $request->only(['name', 'price', 'is_free']);
+        if ($request->get('note')) {
+            $data['note'] = $request->note;
+        }
         $module->update($data);
 
         if ($request->ajax()) {
@@ -42,10 +45,13 @@ class ModuleController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required_if:is_free,0',
             'is_free' => 'required|boolean',
-            'note' => 'required',
+            'note' => 'nullable',
         ];
         $this->validate($request, $rules);
-        $data = $request->only('name', 'price', 'is_free', 'note');
+        $data = $request->only(['name', 'price', 'is_free']);
+        if ($request->get('note')) {
+            $data['note'] = $request->note;
+        }
         Module::query()->create($data);
 
 
