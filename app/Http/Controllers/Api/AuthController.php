@@ -13,16 +13,29 @@ class AuthController extends Controller
     {
         $rules = [
             'email' => 'required|email|exists:users,email',
-            'password' => 'required'
+            'password' => 'required',
+            'login_id' => 'required',
         ];
         $this->validate($request, $rules);
 
         $user = User::where('email', $request->email)->firstOrFail();
 
         if ($user && Hash::check($request->password, $user->password)) {
+
+            $loginID = $request->login_id;
+            $userLoginID = $user->login_id;
+
+            if ($userLoginID == null || $userLoginID == "") {
+                $user->update(['login_id' => $loginID]);
+            } else if ($userLoginID && $userLoginID != $loginID) {
+                return response()->json([
+                    'success' => false,
+                    "message" => "Credentials Error"
+                ]);
+            }
+
             $user->refresh();
             $result = [
-                'uuid' => $user->uuid,
                 'name' => $user->name,
                 'email' => $user->email,
                 'mobile' => $user->mobile,
@@ -43,27 +56,6 @@ class AuthController extends Controller
                 "message" => "Credentials Error"
             ]);
         }
-    }
-
-    public function profile(Request $request)
-    {
-        $user = $request->user('api');
-
-        $result = [
-            'uuid' => $user->uuid,
-            'name' => $user->name,
-            'email' => $user->email,
-            'mobile' => $user->mobile,
-            'license_expire_date' => $user->license_expire_date,
-            'subscription_expire_date' => $user->subscription_expire_date,
-            'balance' => $user->balance,
-        ];
-
-        return response()->json([
-            'success' => true,
-            "message" => "Login Successfully",
-            'data' => $result
-        ]);
     }
 
     public function checkAuth(Request $request)
