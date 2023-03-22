@@ -43,6 +43,7 @@ class BalanceLogController extends Controller
         }else{
         $fix_type=$request->fix_type;
         $module = Module::query()->find($fix_type);
+        logger($module . "module");
         $fix_type_price = $module->price;
         }
         logger($fix_type_price . "fix_type_price");
