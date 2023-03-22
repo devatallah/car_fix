@@ -65,18 +65,13 @@ class LoginController extends Controller
             return $this->sendLockoutResponse($request);
         }
 
-        //$macAddr = exec('getmac');
-
         $macAddr = exec('getmac');
-  
-        // Storing 'getmac' value in $MAC
-        $macAddr = strtok($macAddr, ' ');
         $mac = explode(' ',$macAddr);
         $user = User::where('email', $request->email)->first();
-        if ($user->mac_address != null && $user->mac_address != $mac) {
+        if ($user->mac_address != null && $user->mac_address != $mac[0]) {
             return back()->with('faild', 'Your device does not exist on our system, try another one.');
         } else {
-           // $user->update(['mac_address' => $mac]);
+            $user->update(['mac_address' => $mac[0]]);
         }
 
 

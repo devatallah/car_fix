@@ -66,7 +66,6 @@ class ECU extends Model
         return $this->hasMany(ECUFile::class, 'ecu_uuid', 'uuid');
     }
 
-
     public function scripts()
     {
         return $this->hasMany(Script::class, 'ecu_uuid', 'uuid');
