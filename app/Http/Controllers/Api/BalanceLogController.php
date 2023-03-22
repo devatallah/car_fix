@@ -34,7 +34,7 @@ class BalanceLogController extends Controller
             'fix_type' => 'required',
         ];
         $this->validate($request, $rules);
-
+        logger($request->fix_type . "fix type");
         $fix_type = explode(",", $request->fix_type);
         logger($fix_type . "fix type");
         $fix_type_price = Module::query()->whereIn("uuid", $fix_type)->get()->sum("price");
