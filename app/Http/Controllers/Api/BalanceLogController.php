@@ -36,6 +36,7 @@ class BalanceLogController extends Controller
         $this->validate($request, $rules);
         logger($request->fix_type . "fix type");
         $word = " ";
+        $fix_type_a='';
         if(strpos($request->fix_type,$word) !== false){
             $fix_type_a = explode(" ", $request->fix_type);
         }
