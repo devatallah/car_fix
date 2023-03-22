@@ -46,7 +46,7 @@ return [
         ],
 
         'api' => [
-            'driver' => 'token',
+            'driver' => 'sanctum',
             'provider' => 'users',
             'hash' => false,
         ],
@@ -104,8 +104,8 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => 'password_resets',
-            'expire' => 60,
-            'throttle' => 60,
+            'expire' => 600,
+            'throttle' => 600,
         ],
         'admins' => [
             'provider' => 'admins',

@@ -2,11 +2,10 @@
 <html lang="en">
 
 <head>
-    <link rel="shortcut icon" type="image/x-icon" href="http://magicsol.net/landing/assets/images/landpage/svg/icon.svg">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magic Solution</title>
+    <title>Car Wash</title>
     <link rel="stylesheet" href="{{ asset('landing/assets/css/landing-page.css') }}">
     <link rel="stylesheet" href="{{ asset('landing/assets/css/main.css') }}">
 </head>
@@ -15,19 +14,22 @@
 
     <header>
         <div class="left-navbar">
-            <img class="logo" src="{{ asset('landing/assets/images/landpage/svg/logo3.svg') }}" alt="logo">
+            <img class="logo" src="{{ asset('landing/assets/images/landpage/Logo.svg') }}" alt="logo">
             <ul class="nav-links">
-                <li class="nav-item"><a href="#howItWork"></a></li>
+                <li class="nav-item"><a href="#howItWork">How it work</a></li>
                 <li class="nav-item"><a href="#pricing">Pricing</a></li>
             </ul>
         </div>
-       
+        <div class="right-navbar">
+            <button class="login-link"><a href="#">Login</a></button>
+            <button class="get-started-link"><a href="#">Get Started</a></button>
+        </div>
     </header>
 
     <div class="mobile-menu">
         <div class="head">
             <div class="content">
-                <img class="logo" src="{{ asset('landing/assets/images/landpage/svg/logo3.svg') }}" alt="logo">
+                <img class="logo" src="{{ asset('landing/assets/images/landpage/Logo.svg') }}" alt="logo">
                 <button class="menu-toggle-btn" id="show-menu-btn" onclick="showMenu()">
                     <img src="{{ asset('landing/assets/images/landpage/menu.svg') }}" alt="menu">
                 </button>
@@ -220,19 +222,19 @@
     </div>
 
     <div class="get-started">
-        <h3 class="landscap-title">Set Your Files <span>Unlimited</span></h3>
+        <h3 class="landscap-title">get started with car wash <span>today</span></h3>
         <div class="free-wash">
-            <button><a href="#">Get App </a></button>
-            <p>The Program Only Works On 1 PC</p>
+            <button><a href="#">Get a free wash</a></button>
+            <p>No Credit Card Required</p>
         </div>
     </div>
 
     <footer>
         <div>
             <div class="logo">
-                <img src="{{ asset('landing/assets/images/landpage/svg/logo3.svg') }}" alt="logo">
+                <img src="{{ asset('landing/assets/images/landpage/Logo.svg') }}" alt="logo">
             </div>
-            <h3 class="footer-description">Magic Solution </h3>
+            <h3 class="footer-description">TESHIL GROUP DANIŞMANLIK SAN. VE TİC. LTD. ŞTİ</h3>
         </div>
 
         <div class="contact">

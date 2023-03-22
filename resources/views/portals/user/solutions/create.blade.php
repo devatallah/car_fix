@@ -24,8 +24,8 @@
                 <section>
                     <div class="row">
                         <div class="col-md-12 mb-2 d-flex justify-content-start align-items-center">
-                            <img class="logo" src="{{ asset('landing/assets/images/landpage/svg/logo3.svg') }}" alt="logo"
-                                width="150" height="100">
+                            <img class="logo" src="{{ asset('portals/app-assets/images/logo.svg') }}" alt="logo"
+                                width="100" height="100">
                         </div>
                         <div
                             class="col-md-12 mb-2 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 modules-list">
@@ -36,7 +36,7 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <button class="group-title btn btn-danger" disabled>DTC SOON ...</button>
+                            <button class="group-title btn btn-danger" disabled>DTC Comming Soon</button>
                         </div>
                     </div>
                     <div class="row">
@@ -53,7 +53,7 @@
                                 <p class="text-gray text-left">{{ auth()->user()->name }}</p>
                             </div>
                             <div class="linces d-flex flex-column flex-md-row justify-content-between align-items-center">
-                                <h3 class="text-gray">License Exp.</h3>
+                                <h3 class="text-gray">License EXP.</h3>
                                 <p class="text-gray text-left">{{ auth()->user()->license_expire_date }}</p>
                             </div>
                             <div class="email d-flex flex-column flex-md-row justify-content-between align-items-center">
@@ -61,7 +61,7 @@
                                 <p class="text-gray text-left">{{ auth()->user()->email }}</p>
                             </div>
                             <div class="balance d-flex flex-column flex-md-row justify-content-between align-items-center">
-                                <h3 class="text-gray">Credit:</h3>
+                                <h3 class="text-gray">Balance:</h3>
                                 <p class="text-gray text-left">{{ auth()->user()->balance }}</p>
                             </div>
                         </div>
@@ -81,9 +81,9 @@
                         </div>
                     </div>
                     <div class="btn-groups d-flex justify-content-between gap-3">
-                        <input type="file" id="originalFile" onchange="uploadFile(this)" hidden>
+                        <input type="file" id="originalFile" accept=".bin" onchange="uploadFile(this)" hidden>
                         <button type="button" onclick="fileExplorer()">Open</button>
-                        <button type="submit" style="background-color:#5fdd9a">Solution</button>
+                        <button type="submit">Solution</button>
                     </div>
                     <br>
                     <h3 class="mb-2">Progress</h3>
@@ -92,14 +92,13 @@
                             <div class="progress-bg"></div>
                         </div>
                     </div>
-                    <h3 class="mb-2">File Info:</h3>
+                    <h3 class="mb-2">Messages:</h3>
                     <div class="file-details">
                         <p><b>Selected Module:</b> <span id="selectedModule"></span></p>
                         <p><b>Selected Brand:</b> <span id="selectedBrand"></span></p>
                         <p><b>Selected ECU:</b> <span id="selectedECU"></span></p>
                         <p><b>Selected File:</b> <span id="selectedFile"></span></p>
                         <p><b>File Size:</b> <span id="selectedSize"></span></p>
-
                     </div>
                 </section>
             </form>
