@@ -13,10 +13,12 @@ class BalanceLogController extends Controller
 
     public function balanceLog(Request $request)
     {
-        return "AAAA";
+        logger("aaaa");
         $user = $request->user('api');
+        logger("bbbb");
 
         $balanceLog = $user->balance_log;
+        logger("ccc");
 
         return response()->json([
             'success' => true,
