@@ -15,7 +15,8 @@ class BalanceLogController extends Controller
     public function balanceLog(Request $request)
     {
         $user = $request->user('api');
-
+        $user = User::find($user->uuid);
+        
         $balanceLog = $user->balance_log;
 
         return response()->json([
