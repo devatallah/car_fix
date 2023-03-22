@@ -42,7 +42,8 @@ class BalanceLogController extends Controller
             $fix_type_price = Module::query()->whereIn("uuid", $fix_type_a)->get()->sum("price");
         }else{
         $fix_type=$request->fix_type;
-        $fix_type_price = Module::query()->whereIn("uuid", $fix_type)->get("price");
+        $module = Module::query()->find($fix_type);
+        $fix_type_price = $module->price
         }
         logger($fix_type_price . "fix_type_price");
         $user = $request->user('api');
