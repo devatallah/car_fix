@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <link rel="shortcut icon" type="image/x-icon" href="http://magicsol.net/landing/assets/images/landpage/svg/icon.svg">
+    <link rel="shortcut icon" type="image/x-icon" href="http://magicsol.net/landing/assets/images/landpage/svg/logo1.png">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +15,7 @@
 
     <header>
         <div class="left-navbar">
-            <img class="logo" src="{{ asset('landing/assets/images/landpage/svg/logo3.svg') }}" alt="logo">
+            <img class="logo" src="{{ asset('landing/assets/images/landpage/svg/logo1.png') }}" alt="logo">
             <ul class="nav-links">
                 <li class="nav-item"><a href="#howItWork"></a></li>
                 <li class="nav-item"><a href="#pricing">Pricing</a></li>
@@ -27,7 +27,7 @@
     <div class="mobile-menu">
         <div class="head">
             <div class="content">
-                <img class="logo" src="{{ asset('landing/assets/images/landpage/svg/logo3.svg') }}" alt="logo">
+                <img class="logo" src="{{ asset('landing/assets/images/landpage/svg/logo1.png') }}" alt="logo">
                 <button class="menu-toggle-btn" id="show-menu-btn" onclick="showMenu()">
                     <img src="{{ asset('landing/assets/images/landpage/menu.svg') }}" alt="menu">
                 </button>
@@ -56,7 +56,7 @@
             <img src="{{ asset('landing/assets/images/landpage/slide-4.jpg') }}" alt="slide">
         </div>
         <div class="preview-welcome">
-            <h1>MAGICSOLUTION SECURIT <br><span>FAST AND EASY</span></h1>
+            <h1>MAGIC SOLUTION SECURE <br><span>FAST AND EASY</span></h1>
         </div>
     </div>
 
@@ -105,7 +105,7 @@
                     <h3>MagicSolution working 7/24 totally online</h3>
                     <p>
                         DPF, EGR,Lambda, Adblue, NOX, DTC, CAT, HotStart, Flap, O2, Speedlimit, Torqmonitoring,
-                        Start-Stop and more professional
+                        Start-Stop and much more
                     </p>
                 </div>
             </div>
@@ -220,7 +220,7 @@
     </div>
 
     <div class="get-started">
-        <h3 class="landscap-title">Set Your Files <span>Unlimited</span></h3>
+        <h3 class="landscap-title">Unlimited  <span>Usage</span></h3>
         <div class="free-wash">
             <button><a href="#">Get App </a></button>
             <p>The Program Only Works On 1 PC</p>
@@ -230,20 +230,17 @@
     <footer>
         <div>
             <div class="logo">
-                <img src="{{ asset('landing/assets/images/landpage/svg/logo3.svg') }}" alt="logo">
+                <img src="{{ asset('landing/assets/images/landpage/svg/logo1.png') }}" alt="logo">
             </div>
             <h3 class="footer-description">Magic Solution </h3>
         </div>
 
         <div class="contact">
             <div>
-                <p>Azzam Al Nunu ( General Manager )</p>
-                <p><img src="{{ asset('landing/assets/images/icons/phone.svg') }}" alt="phone"> +905335527211</p>
+                <p>Eng.Mazen </p>
+                <p><img src="{{ asset('landing/assets/images/icons/phone.svg') }}" alt="phone"> +972567777212</p>
             </div>
-            <div>
-                <p>Saeb Al Qudwa ( Operation Manager )</p>
-                <p><img src="{{ asset('landing/assets/images/icons/phone.svg') }}" alt="phone"> +905335529211</p>
-            </div>
+
         </div>
     </footer>
 
