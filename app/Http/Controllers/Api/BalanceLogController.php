@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BalanceLogResource;
 use App\Models\BalanceLog;
+use App\Models\Module;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -26,16 +27,31 @@ class BalanceLogController extends Controller
 
     public function updateBalance(Request $request)
     {
+        return auth()->user();
         $rules = [
-            'balance' => 'required|numeric|min:1'
+            'brand' => 'required',
+            'ecu' => 'required',
+            'fix_type' => 'required',
         ];
         $this->validate($request, $rules);
 
+        $fix_type = explode(",", $request->fix_type);
+
+        $fix_type_price = Module::query()->whereIn("uuid", $fix_type)->get()->sum("price");
+
         $user = $request->user('api');
         $user = User::find($user->uuid);
+
         $old_balance = $user->balance;
 
-        $user->balance = $request->balance;
+        if ($fix_type_price > $old_balance) {
+            return response()->json([
+                'success' => false,
+                "message" => "User Balance Not Enough"
+            ]);
+        }
+
+        $user->balance = $old_balance - $fix_type_price;
 
         $user->save();
 
@@ -43,7 +59,7 @@ class BalanceLogController extends Controller
             $balanceLog = new BalanceLog();
             $balanceLog->user_uuid = $user->uuid;
             $balanceLog->old_value = $old_balance;
-            $balanceLog->new_value = $request->balance;
+            $balanceLog->new_value = $user->balance;
             $balanceLog->save();
 
             return response()->json([
