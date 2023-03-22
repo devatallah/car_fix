@@ -127,11 +127,11 @@ class Handler extends ExceptionHandler
                 }
             }
 
-            return response()->json([
-                "success" => false,
-                "message" => 'Unexpected Exception. Try later.',
-                "code" => 500
-            ]);
+            // return response()->json([
+            //     "success" => false,
+            //     "message" => 'Unexpected Exception. Try later.',
+            //     "code" => 500
+            // ]);
         }
 
         // if we turn on the debugbar
