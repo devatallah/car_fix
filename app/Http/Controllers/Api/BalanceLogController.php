@@ -27,7 +27,7 @@ class BalanceLogController extends Controller
 
     public function updateBalance(Request $request)
     {
-        return auth()->user();
+        //return auth()->user();
         $rules = [
             'brand' => 'required',
             'ecu' => 'required',
