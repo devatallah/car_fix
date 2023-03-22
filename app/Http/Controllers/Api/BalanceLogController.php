@@ -41,7 +41,7 @@ class BalanceLogController extends Controller
         logger($fix_type_price . "fix_type_price");
         $user = $request->user('api');
         $user = User::find($user->uuid);
-
+        logger($user . "user");
         $old_balance = $user->balance;
 
         if ($fix_type_price > $old_balance) {
@@ -52,7 +52,7 @@ class BalanceLogController extends Controller
         }
 
         $user->balance = $old_balance - $fix_type_price;
-
+        logger( $user->balance." user->balance");
         $user->save();
 
         if ($user->wasChanged('balance')) {
