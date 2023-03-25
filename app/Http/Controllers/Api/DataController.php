@@ -52,7 +52,7 @@ class DataController extends Controller
                 if (count($scripts)) {
                     foreach ($scripts as $item) {
                         $row = [
-                            $brand->name . '-' . $ecu->name . '-' . $item->module->name => ScriptFilesResource::collection($item->files),
+                            $brand->name . '-' . $ecu->name . '-' . $item->module->name => ScriptFilesResource::collection($item->file),
                         ];
                         logger($row . 'ASD row');
                         array_push($data, $row);
