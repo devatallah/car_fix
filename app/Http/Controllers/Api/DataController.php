@@ -48,7 +48,6 @@ class DataController extends Controller
             if (count($modules)) {
 
                 $scripts = Script::whereHas("files")->whereIn("module_uuid", $modules)->where('ecu_uuid', $ecu->uuid)->get();
-                logger($scripts . 'ASD scriptis');
                 if (count($scripts)) {
                     foreach ($scripts as $item) {
                         $row = [
@@ -56,8 +55,6 @@ class DataController extends Controller
                         ];
                         array_push($data, $row);
                     }
-                    logger($data . 'ASD data');
-
                     return response()->json([
                         'success' => true,
                         "message" => "Loaded Successfully",
