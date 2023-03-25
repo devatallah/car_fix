@@ -48,13 +48,13 @@ class ScriptFileController extends Controller
 
         $time_stamp = Carbon::now()->timestamp;
         DB::beginTransaction();
-
+        $i=0;
         foreach ($request->file as $key => $value) {
             $item_file = $value;
             $file = Storage::disk('s3')->putFileAs(
                 '',
                 $item_file,
-                'scripts/file/' . $request->script_uuid . '_' . $time_stamp . '.bin',
+                'scripts/file/' . $request->script_uuid . '_' . $i++ . '.bin',
                 ['visibility' => 'public']
             );
             $scriptFile = new ScriptFile();

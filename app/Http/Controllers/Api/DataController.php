@@ -55,6 +55,7 @@ class DataController extends Controller
                         ];
                         array_push($data, $row);
                     }
+                    
                     return response()->json([
                         'success' => true,
                         "message" => "Loaded Successfully",
