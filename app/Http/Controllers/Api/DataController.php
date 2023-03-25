@@ -54,7 +54,6 @@ class DataController extends Controller
                         $row = [
                             $brand->name . '-' . $ecu->name . '-' . $item->module->name => ScriptFilesResource::collection($item->file),
                         ];
-                        logger($row . 'ASD row');
                         array_push($data, $row);
                     }
                     logger($data . 'ASD data');
