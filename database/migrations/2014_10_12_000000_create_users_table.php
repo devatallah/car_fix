@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('mobile')->unique();
-            $table->date('license_expire_date')->unique();
+            $table->date('license_expire_date')->nullable();
             $table->date('subscription_expire_date')->nullable();
             $table->float('balance', 8, 2)->nullable()->default(0.0);
             $table->timestamp('email_verified_at')->nullable();
