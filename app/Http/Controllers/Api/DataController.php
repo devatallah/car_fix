@@ -48,14 +48,16 @@ class DataController extends Controller
             if (count($modules)) {
 
                 $scripts = Script::whereHas("files")->whereIn("module_uuid", $modules)->where('ecu_uuid', $ecu->uuid)->get();
-
+                logger($scripts . 'ASD scriptis');
                 if (count($scripts)) {
                     foreach ($scripts as $item) {
                         $row = [
                             $brand->name . '-' . $ecu->name . '-' . $item->module->name => ScriptFilesResource::collection($item->files),
                         ];
+                        logger($row . 'ASD row');
                         array_push($data, $row);
                     }
+                    logger($data . 'ASD data');
 
                     return response()->json([
                         'success' => true,
