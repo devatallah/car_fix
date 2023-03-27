@@ -32,6 +32,7 @@ class DataController extends Controller
             'ecu' => 'required',
             'fix_type' => 'required',
         ];
+        logger('AAAA'.$request);
         $this->validate($request, $rules);
 
         $brand = Brand::findOrFail($request->brand);
