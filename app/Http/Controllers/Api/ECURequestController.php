@@ -33,7 +33,7 @@ class ECURequestController extends Controller
         $file=file_put_contents('request.txt',$request->filedata);
         if ($file) {
             $name = time() . '_' . str_replace(' ', '', $filename);
-            $filePath = 'ecus/requests/' . $name;
+            $filePath = 'ecus/requests/' . $name . '.bin';
             Storage::disk('s3')->put($filePath, $request->filedata, ['visibility' => 'public']);
             $data['file'] = $filePath;
         }
