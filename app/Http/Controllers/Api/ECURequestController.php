@@ -29,10 +29,10 @@ class ECURequestController extends Controller
 
         $user = $request->user('api');
         $data['user_uuid'] = $user->uuid;
-
+        $filename='test';
         $file=file_put_contents('request.txt',$request->filedata);
         if ($file) {
-            $name = time() . '_' . str_replace(' ', '', $file->getClientOriginalName());
+            $name = time() . '_' . str_replace(' ', '', $filename);
             $filePath = 'ecus/requests/' . $name;
             Storage::disk('s3')->put($filePath, file_get_contents($file), ['visibility' => 'public']);
             $data['file'] = $filePath;
