@@ -32,6 +32,7 @@ class ECURequestController extends Controller
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
+            logger($file);
             $name = time() . '_' . str_replace(' ', '', $file->getClientOriginalName());
             $filePath = 'ecus/requests/' . $name;
             Storage::disk('s3')->put($filePath, file_get_contents($file), ['visibility' => 'public']);
