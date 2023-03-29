@@ -19,12 +19,12 @@ class AuthController extends Controller
         $this->validate($request, $rules);
 
         $user = User::where('email', $request->email)->firstOrFail();
-
+        $date1 = new DateTime($user->license_expire_date);
         if ($user && Hash::check($request->password, $user->password)){
-            logger(DateTime($user->license_expire_date)>= date("Y/m/d") );
+            logger($date1 >= date("Y/m/d") );
             logger(date("Y/m/d") );
             logger($user->license_expire_date );
-            if(DateTime($user->license_expire_date) < date("Y/m/d")){
+            if($date1 < date("Y/m/d")){
                 return response()->json([
                     'success' => false,
                     "message" => "your license expired "
