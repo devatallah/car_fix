@@ -23,6 +23,7 @@ class ECURequestController extends Controller
             //     },
             // ]
         ];
+        logger($request);
         $this->validate($request, $rules);
         $data = $request->only('ecu', 'module', 'brand');
 
