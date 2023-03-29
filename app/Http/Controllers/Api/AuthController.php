@@ -22,7 +22,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->firstOrFail();
         $date1 = strtotime($user->license_expire_date);
         logger($date1);
-        $date1 =date('d/m/Y', $date1)
+        $date1 =date('d/m/Y', $date1);
 
         if ($user && Hash::check($request->password, $user->password)){
             logger($date1->format("Y-m-d") >= date("Y-m-d") );
