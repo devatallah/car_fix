@@ -26,8 +26,11 @@ class AuthController extends Controller
         logger($date1);
         if ($user && Hash::check($request->password, $user->password)){
             //logger($date1->format("Y-m-d") >= date("Y-m-d") );
+            logger(strtotime($date1));
+            logger(strtotime('now'));
+
             logger(strtotime($date1) < strtotime('now'));
-            
+
             if (strtotime($date1) < strtotime('now') ){
                 return response()->json([
                     'success' => false,
