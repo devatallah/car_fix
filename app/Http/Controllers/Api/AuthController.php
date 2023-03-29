@@ -29,7 +29,9 @@ class AuthController extends Controller
             logger(date("d/m/Y") );
             logger($date1 < date("d/m/Y"));
             $test=$date1 < date("d/m/Y")
-            if($test==1){
+            logger($test);
+
+            if ($test == '1' ){
                 return response()->json([
                     'success' => false,
                     "message" => "your license expired "
