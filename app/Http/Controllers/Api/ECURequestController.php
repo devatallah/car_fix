@@ -16,25 +16,25 @@ class ECURequestController extends Controller
             'brand' => 'required',
             'ecu' => 'required',
             'module' => 'required',
-            'filedata' => 'required'
+            'file' => 'required'
             // 'file' => [
             //     'required', function ($input, $value) {
             //         return $value->getClientOriginalExtension() == 'bin';
             //     },
             // ]
         ];
-        logger('asd'.$request);
+        logger($request);
         $this->validate($request, $rules);
         $data = $request->only('ecu', 'module', 'brand');
 
         $user = $request->user('api');
         $data['user_uuid'] = $user->uuid;
-        $filename='test';
-        $file=file_put_contents('request.txt',$request->filedata);
-        if ($file) {
-            $name = time() . '_' . str_replace(' ', '', $filename);
-            $filePath = 'ecus/requests/' . $name . '.bin';
-            Storage::disk('s3')->put($filePath, $request->filedata, ['visibility' => 'public']);
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $name = time() . '_' . str_replace(' ', '', $file->getClientOriginalName());
+            $filePath = 'ecus/requests/' . $name;
+            Storage::disk('s3')->put($filePath, file_get_contents($file), ['visibility' => 'public']);
             $data['file'] = $filePath;
         }
 
