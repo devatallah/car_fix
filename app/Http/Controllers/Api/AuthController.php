@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+
 class AuthController extends Controller
 {
     public function login(Request $request)
@@ -19,12 +20,12 @@ class AuthController extends Controller
         $this->validate($request, $rules);
 
         $user = User::where('email', $request->email)->firstOrFail();
-        $date1 = new DateTime($user->license_expire_date);
+        $date1 = $user->license_expire_date;
         if ($user && Hash::check($request->password, $user->password)){
-            logger($date1 >= date("Y/m/d") );
+            logger($date1->format("Y-m-d") >= date("Y-m-d") );
             logger(date("Y/m/d") );
             logger($user->license_expire_date );
-            if($date1 < date("Y/m/d")){
+            if($date1 < date("Y-m-d")){
                 return response()->json([
                     'success' => false,
                     "message" => "your license expired "
