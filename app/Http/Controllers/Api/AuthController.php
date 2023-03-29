@@ -20,8 +20,16 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->firstOrFail();
 
-        if ($user && Hash::check($request->password, $user->password) && $user->license_expire_date >= date("Y/m/d") ) {
-
+        if ($user && Hash::check($request->password, $user->password)){
+            logger($user->license_expire_date >= date("Y/m/d") );
+            logger(date("Y/m/d") );
+            logger($user->license_expire_date );
+            if($user->license_expire_date < date("Y/m/d")){
+                return response()->json([
+                    'success' => false,
+                    "message" => "your license expired "
+                ]);
+            }
             $loginID = $request->login_id;
             $userLoginID = $user->login_id;
 
