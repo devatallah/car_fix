@@ -26,12 +26,9 @@ class AuthController extends Controller
         logger($date1);
         if ($user && Hash::check($request->password, $user->password)){
             //logger($date1->format("Y-m-d") >= date("Y-m-d") );
-            logger(date("d/m/Y") );
-            logger($date1 < date("d/m/Y"));
-            $test=$date1 < date("d/m/Y")
-            logger($test);
-
-            if ($test == '1' ){
+            logger(strtotime($date1) < strtotime('now'));
+            
+            if (strtotime($date1) < strtotime('now') ){
                 return response()->json([
                     'success' => false,
                     "message" => "your license expired "
