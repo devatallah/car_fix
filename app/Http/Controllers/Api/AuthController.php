@@ -20,7 +20,7 @@ class AuthController extends Controller
         $this->validate($request, $rules);
 
         $user = User::where('email', $request->email)->firstOrFail();
-        $date1 = $user->license_expire_date;
+        $date1 = strtotime($user->license_expire_date);
         if ($user && Hash::check($request->password, $user->password)){
             logger($date1->format("Y-m-d") >= date("Y-m-d") );
             logger(date("Y/m/d") );
