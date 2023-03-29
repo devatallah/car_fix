@@ -21,13 +21,13 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->firstOrFail();
         $date1 = strtotime($user->license_expire_date);
-        logger($date1);
+        //logger($date1);
         $date1 =date('d/m/Y', $date1);
         logger($date1);
         if ($user && Hash::check($request->password, $user->password)){
             //logger($date1->format("Y-m-d") >= date("Y-m-d") );
-            logger(date("Y/m/d") );
-            logger($user->license_expire_date );
+            logger(date("d/m/Y") );
+            logger($date1 < date("d/m/Y"));
             if($date1 < date("d/m/Y")){
                 return response()->json([
                     'success' => false,
