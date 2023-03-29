@@ -20,7 +20,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->firstOrFail();
 
-        if ($user && Hash::check($request->password, $user->password)) {
+        if ($user && Hash::check($request->password, $user->password) && $user->license_expire_date >= date("Y/m/d") ) {
 
             $loginID = $request->login_id;
             $userLoginID = $user->login_id;
