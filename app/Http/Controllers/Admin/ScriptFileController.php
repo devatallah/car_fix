@@ -48,14 +48,14 @@ class ScriptFileController extends Controller
 
         $time_stamp = Carbon::now()->timestamp;
         DB::beginTransaction();
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $charactersLength; $i++) {
-            $randomString .= $characters[random_int(0, $charactersLength - 1)];
-        }
-        $randomString;
         foreach ($request->file as $key => $value) {
+            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $charactersLength = strlen($characters);
+            $randomString = '';
+            for ($i = 0; $i < $charactersLength; $i++) {
+                $randomString .= $characters[random_int(0, $charactersLength - 1)];
+            }
+            $randomString;
             $item_file = $value;
             $file = Storage::disk('s3')->putFileAs(
                 '',
