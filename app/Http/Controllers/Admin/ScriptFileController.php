@@ -48,13 +48,19 @@ class ScriptFileController extends Controller
 
         $time_stamp = Carbon::now()->timestamp;
         DB::beginTransaction();
-        $i=0;
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        $randomString;
         foreach ($request->file as $key => $value) {
             $item_file = $value;
             $file = Storage::disk('s3')->putFileAs(
                 '',
                 $item_file,
-                'scripts/file/' . $request->script_uuid . '_' . $i++ . '.bin',
+                'scripts/file/'.$randomString.'-' . $request->script_uuid . '_' . $randomString .'-'.$time_stamp. '.bin',
                 ['visibility' => 'public']
             );
             $scriptFile = new ScriptFile();
@@ -140,5 +146,14 @@ class ScriptFileController extends Controller
                     '">' . __('delete') . '</button>';
                 return $string;
             })->make(true);
+    }
+    function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 }
