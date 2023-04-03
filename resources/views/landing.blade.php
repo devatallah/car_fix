@@ -96,12 +96,10 @@
             </div>
         </div>
     </div>
-
     <div class="container">
         <img src="landing/assets/images/landpage/app.png" alt="Snow" style="width:100%;">
         <div class="centered">We have the best, fastest, and most reliable system in the world.</div>
     </div>
-
     <div class="frequently-questions">
         <h3 class="landscap-title">frequently asked <span>questions</span></h3>
         <div class="questions">
