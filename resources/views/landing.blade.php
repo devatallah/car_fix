@@ -126,17 +126,7 @@
                     <img src="{{ asset('landing/assets/images/icons/bxs-quote-alt-left.svg') }}" alt="quote">
                 </div>
                 <p class="comment">
-                    Would highly recommend this auto shop! He was very professional, very helpful & had great prices.
-                    Will definitely come back
-                </p>
-            </div>
-            <div class="customer">
-                <div class="quote">
-                    <img src="{{ asset('landing/assets/images/icons/bxs-quote-alt-left.svg') }}" alt="quote">
-                </div>
-                <p class="comment">
-                    Very polite, excellent service; I’m very satisfied on the work done in my car, I highly recommend to
-                    anybody. Thank you.
+                Perfect work and excellent solutions
                 </p>
             </div>
             <div class="customer">
@@ -240,7 +230,7 @@
 
         <div class="contact">
             <div>
-                <p><img src="https://img.icons8.com/external-justicon-flat-justicon/128/external-email-notifications-justicon-flat-justicon.png 2x, https://img.icons8.com/external-justicon-flat-justicon/64/external-email-notifications-justicon-flat-justicon.png" alt="phone"> Email || info@magicsol.net</p>
+                <p><img src="https://img.icons8.com/external-justicon-flat-justicon/64/external-email-notifications-justicon-flat-justicon.png" alt="email"> Email || info@magicsol.net</p>
                 <p><img src="{{ asset('landing/assets/images/icons/phone.svg') }}" alt="phone"> +972567777212</p>
                 <p>MagicSolution Support</p>
 
