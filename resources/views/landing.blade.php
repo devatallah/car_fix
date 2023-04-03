@@ -152,14 +152,6 @@
                 <p class="comment">
                 There are many solutions and immediate support                </p>
             </div>
-            <div class="customer">
-                <div class="quote">
-                    <img src="{{ asset('landing/assets/images/icons/bxs-quote-alt-left.svg') }}" alt="quote">
-                </div>
-                <p class="comment">
-                    Very professional , quick, and took care of my car needs.
-                </p>
-            </div>
         </div>
     </div>
 
@@ -230,8 +222,10 @@
 
         <div class="contact">
             <div>
-                <p><img src="https://img.icons8.com/external-justicon-flat-justicon/64/external-email-notifications-justicon-flat-justicon.png" alt="email"> Email || info@magicsol.net</p>
-                <p><img src="{{ asset('landing/assets/images/icons/phone.svg') }}" alt="phone"> +972567777212</p>
+                <p><img src="https://img.icons8.com/external-justicon-flat-justicon/64/external-email-notifications-justicon-flat-justicon.png" alt="email" style="width: 30px;"> Email || info@magicsol.net</p>
+       
+                <p><img src="{{ asset('landing/assets/images/icons/phone.svg') }}" alt="phone" style="margin-left: 8px;"> +972567777212</p>
+                <br>
                 <p>MagicSolution Support</p>
 
             </div>
