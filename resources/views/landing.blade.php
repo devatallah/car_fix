@@ -15,7 +15,7 @@
 
     <header>
         <div class="left-navbar">
-            <img class="logo" src="{{ asset('landing/assets/images/landpage/svg/ddd.svg') }}" alt="logo">
+            <img class="logo" src="{{ asset('landing/assets/images/landpage/svg/ddd.svg') }}" alt="logo" style="height: 45px;">
             <ul class="nav-links">
                 <li class="nav-item"><a href="#howItWork"></a></li>
                 <li class="nav-item"><a href="#pricing">Pricing</a></li>
@@ -215,7 +215,7 @@
     <footer>
         <div>
             <div class="logo">
-                <img src="{{ asset('landing/assets/images/landpage/svg/logo1.png') }}" alt="logo">
+                <img src="{{ asset('landing/assets/images/landpage/svg/logo1.png') }}" alt="logo" style="height: 45px;">
             </div>
             <h3 class="footer-description">Magic Solution </h3>
         </div>
