@@ -15,7 +15,7 @@
 
     <header>
         <div class="left-navbar">
-            <img class="logo" src="{{ asset('landing/assets/images/landpage/svg/logo1.svg') }}" alt="logo">
+            <img class="logo" src="{{ asset('landing/assets/images/landpage/svg/ddd.svg') }}" alt="logo">
             <ul class="nav-links">
                 <li class="nav-item"><a href="#howItWork"></a></li>
                 <li class="nav-item"><a href="#pricing">Pricing</a></li>
