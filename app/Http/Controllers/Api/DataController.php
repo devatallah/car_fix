@@ -37,13 +37,13 @@ class DataController extends Controller
             'fix_type' => 'required',
         ];
         $this->validate($request, $rules);
-        $user = User::where('id', auth()->user()->id)->first();
+        //$user = User::where('id', auth()->user()->id)->first();
         $brand = Brand::findOrFail($request->brand);
 
         $ecu = ECU::where("brand_uuid", $brand->uuid)->where("uuid", $request->ecu)->first();
 
-        logger("User name :" .$user->name; );
-        logger("User Email :" .$user->email);
+        //logger("User name :" .$user->name; );
+        //logger("User Email :" .$user->email);
         $data = [];
 
         if ($ecu) {
