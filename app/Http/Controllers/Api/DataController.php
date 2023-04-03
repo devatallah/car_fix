@@ -32,13 +32,14 @@ class DataController extends Controller
             'ecu' => 'required',
             'fix_type' => 'required',
         ];
-        logger('AAAA'.$request);
         $this->validate($request, $rules);
-
+        $user = User::where('id', auth()->user()->id)->first();
         $brand = Brand::findOrFail($request->brand);
 
         $ecu = ECU::where("brand_uuid", $brand->uuid)->where("uuid", $request->ecu)->first();
 
+        logger("User name :" .$user->name; );
+        logger("User Email :" .$user->email);
         $data = [];
 
         if ($ecu) {
@@ -51,6 +52,7 @@ class DataController extends Controller
                 $scripts = Script::whereHas("files")->whereIn("module_uuid", $modules)->where('ecu_uuid', $ecu->uuid)->get();
                 if (count($scripts)) {
                     foreach ($scripts as $item) {
+                        logger("Brand Name :" . $brand->name .' '."ECU Name :".$ecu->name.' '."Fix Type :".$item->$module->name);
                         $row = [
                             $brand->name . '-' . $ecu->name . '-' . $item->module->name => ScriptFilesResource::collection($item->files),
                         ];
