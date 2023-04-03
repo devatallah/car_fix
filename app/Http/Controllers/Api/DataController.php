@@ -10,9 +10,6 @@ use App\Models\ECU;
 use App\Models\Module;
 use App\Models\Script;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use App\Models\User;
-use Illuminate\Support\Facades\Storage;
 
 
 class DataController extends Controller
@@ -56,7 +53,7 @@ class DataController extends Controller
                 $scripts = Script::whereHas("files")->whereIn("module_uuid", $modules)->where('ecu_uuid', $ecu->uuid)->get();
                 if (count($scripts)) {
                     foreach ($scripts as $item) {
-                        logger("Brand Name :" . $brand->name .' '."ECU Name :".$ecu->name.' '."Fix Type :".$item->$module->name);
+                        //logger("Brand Name :" . $brand->name .' '."ECU Name :".$ecu->name.' '."Fix Type :".$item->$module->name);
                         $row = [
                             $brand->name . '-' . $ecu->name . '-' . $item->module->name => ScriptFilesResource::collection($item->files),
                         ];
