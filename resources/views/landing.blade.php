@@ -226,7 +226,7 @@
        
                 <p><img src="{{ asset('landing/assets/images/icons/phone.svg') }}" alt="phone" style="margin-left: 8px;"> +972567777212</p>
                 <br>
-                <p>MagicSolution Support</p>
+                <p style="margin-left: 16px;" >MagicSolution Support</p>
 
             </div>
 
