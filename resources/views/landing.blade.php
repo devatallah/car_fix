@@ -144,9 +144,7 @@
                     <img src="{{ asset('landing/assets/images/icons/bxs-quote-alt-left.svg') }}" alt="quote">
                 </div>
                 <p class="comment">
-                    I googled an auto repair near me and chose the place for its good reviews. I am glad I chose them,
-                    quick friendly service. Upfront immediately about the price of the work done on my car and detailed
-                    why. I will recommend this shop to all my family in the area.
+                I recommend buying it, it is easy and has many solutions. There is fast support
                 </p>
             </div>
             <div class="customer">
@@ -154,7 +152,7 @@
                     <img src="{{ asset('landing/assets/images/icons/bxs-quote-alt-left.svg') }}" alt="quote">
                 </div>
                 <p class="comment">
-                    Really awesome place. I had received excellent customer service upon my arrival I loved it.
+                It's great, very fast, different from other programs
                 </p>
             </div>
             <div class="customer">
@@ -162,15 +160,14 @@
                     <img src="{{ asset('landing/assets/images/icons/bxs-quote-alt-left.svg') }}" alt="quote">
                 </div>
                 <p class="comment">
-                    Solid service. These guys are knowledgeable and professional.
-                </p>
+                There are many solutions and immediate support                </p>
             </div>
             <div class="customer">
                 <div class="quote">
                     <img src="{{ asset('landing/assets/images/icons/bxs-quote-alt-left.svg') }}" alt="quote">
                 </div>
                 <p class="comment">
-                    Very professional , quick, and took care of my car needs, prices are also reasonable.
+                    Very professional , quick, and took care of my car needs.
                 </p>
             </div>
         </div>
@@ -243,8 +240,10 @@
 
         <div class="contact">
             <div>
-                <p>Eng.Mazen || info@magicsol.net</p>
+                <p><img src="https://img.icons8.com/external-justicon-flat-justicon/128/external-email-notifications-justicon-flat-justicon.png 2x, https://img.icons8.com/external-justicon-flat-justicon/64/external-email-notifications-justicon-flat-justicon.png" alt="phone"> Email || info@magicsol.net</p>
                 <p><img src="{{ asset('landing/assets/images/icons/phone.svg') }}" alt="phone"> +972567777212</p>
+                <p>MagicSolution Support</p>
+
             </div>
 
         </div>
