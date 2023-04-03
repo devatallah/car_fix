@@ -168,18 +168,18 @@
             <div class="item">
                 <h3 class="period">6 months</h3>
                 <div class="specifications">
-                    <p>$400</p>
+                    <p>$250</p>
                     <br>
-                    <p>Renewal $100</p>
+                    <p>Renewal $70</p>
                 </div>
                 <button><a href="#">Get Started</a></button>
             </div>
             <div class="item">
                 <h3 class="period">One-year</h3>
                 <div class="specifications">
-                    <p>$600</p>
+                    <p>$450</p>
                     <br>
-                    <p>Renewal $150</p>
+                    <p>Renewal $110</p>
                 </div>
                 <button><a href="#">Get Started</a></button>
             </div>
