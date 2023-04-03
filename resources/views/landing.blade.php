@@ -152,14 +152,6 @@
                 <p class="comment">
                 There are many solutions and immediate support                </p>
             </div>
-            <div class="customer">
-                <div class="quote">
-                    <img src="{{ asset('landing/assets/images/icons/bxs-quote-alt-left.svg') }}" alt="quote">
-                </div>
-                <p class="comment">
-                    Very professional , quick, and took care of my car needs.
-                </p>
-            </div>
         </div>
     </div>
 
@@ -176,18 +168,18 @@
             <div class="item">
                 <h3 class="period">6 months</h3>
                 <div class="specifications">
-                    <p>$400</p>
+                    <p>$250</p>
                     <br>
-                    <p>Renewal $100</p>
+                    <p>Renewal $70</p>
                 </div>
                 <button><a href="#">Get Started</a></button>
             </div>
             <div class="item">
                 <h3 class="period">One-year</h3>
                 <div class="specifications">
-                    <p>$600</p>
+                    <p>$450</p>
                     <br>
-                    <p>Renewal $150</p>
+                    <p>Renewal $110</p>
                 </div>
                 <button><a href="#">Get Started</a></button>
             </div>
@@ -230,8 +222,10 @@
 
         <div class="contact">
             <div>
-                <p><img src="https://img.icons8.com/external-justicon-flat-justicon/64/external-email-notifications-justicon-flat-justicon.png" alt="email"> Email || info@magicsol.net</p>
-                <p><img src="{{ asset('landing/assets/images/icons/phone.svg') }}" alt="phone"> +972567777212</p>
+                <p><img src="https://img.icons8.com/external-justicon-flat-justicon/64/external-email-notifications-justicon-flat-justicon.png" alt="email" style="width: 30px;"> Email || info@magicsol.net</p>
+       
+                <p><img src="{{ asset('landing/assets/images/icons/phone.svg') }}" alt="phone" style="margin-left: 8px;"> +972567777212</p>
+                <br>
                 <p>MagicSolution Support</p>
 
             </div>
