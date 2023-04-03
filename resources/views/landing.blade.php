@@ -96,9 +96,12 @@
             </div>
         </div>
     </div>
-    <div class="preview-slide">
+    <div >
+        <div class="preview-welcome" >
+            <h1>We have the best, fastest, and most reliable system in the world.</h1>
+        </div>
         <img src="landing/assets/images/landpage/app.png" alt="Snow" style="width:100%;">
-        <div class="preview-welcome">
+        <div class="preview-welcome" >
             <h1>We have the best, fastest, and most reliable system in the world.</h1>
         </div>
     </div>
