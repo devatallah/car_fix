@@ -98,6 +98,9 @@
     </div>
     <div class="container">
         <img src="landing/assets/images/landpage/app.png" alt="Snow" style="width:100%;">
+        <div class="preview-welcome">
+            <h1>We have the best, fastest, and most reliable system in the world.</h1>
+        </div>
         <div class="centered">We have the best, fastest, and most reliable system in the world.</div>
     </div>
     <div class="frequently-questions">
@@ -225,7 +228,7 @@
     <div class="get-started">
         <h3 class="landscap-title">Unlimited  <span>Usage</span></h3>
         <div class="free-wash">
-            <button><a href="https://mycarfix1.s3.eu-west-1.amazonaws.com/ecus/file/magicsolution.zip">Get App </a></button>
+            <button><a href="https://mycarfix1.s3.eu-west-1.amazonaws.com/ecus/file/magicsolution.zip">Download App </a></button>
             <p>The Program Only Works On 1 PC</p>
         </div>
     </div>
