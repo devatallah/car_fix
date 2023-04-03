@@ -97,6 +97,11 @@
         </div>
     </div>
 
+    <div class="container">
+        <img src="landing/assets/images/landpage/app.png" alt="Snow" style="width:100%;">
+        <div class="centered">We have the best, fastest, and most reliable system in the world.</div>
+    </div>
+
     <div class="frequently-questions">
         <h3 class="landscap-title">frequently asked <span>questions</span></h3>
         <div class="questions">
@@ -222,7 +227,7 @@
     <div class="get-started">
         <h3 class="landscap-title">Unlimited  <span>Usage</span></h3>
         <div class="free-wash">
-            <button><a href="#">Get App </a></button>
+            <button><a href="https://mycarfix1.s3.eu-west-1.amazonaws.com/ecus/file/magicsolution.zip">Get App </a></button>
             <p>The Program Only Works On 1 PC</p>
         </div>
     </div>
@@ -237,7 +242,7 @@
 
         <div class="contact">
             <div>
-                <p>Eng.Mazen </p>
+                <p>Eng.Mazen || info@magicsol.net</p>
                 <p><img src="{{ asset('landing/assets/images/icons/phone.svg') }}" alt="phone"> +972567777212</p>
             </div>
 
