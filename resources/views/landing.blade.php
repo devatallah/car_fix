@@ -112,16 +112,14 @@
             </div>
         </div>
     </div>
+    <br>
     <div class="frequently-questions">
-        
+    <h3 class="landscap-title">Products</h3>
+
         <div class="questions">
             <div class="items">
                 
 <div style="color: white;">
-                    <h3 style="
-    font-size: 35px;
-    color: #45E01F;
-">Products</h3>
                     <p>
                     </p>
 <p></p><p style="
