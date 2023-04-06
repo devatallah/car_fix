@@ -220,10 +220,12 @@
             <h3 class="footer-description">Magic Solution </h3>
         </div>
         <div>
-        <a href="https://www.youtube.com/@magicsolution-ecu"><img src="https://img.icons8.com/color/96/facebook-new.png" alt="HTML tutorial" style="width:42px;height:42px;"></a>
+        <a href="https://www.youtube.com/@magicsolution-ecu"><img src="https://img.icons8.com/color/96/youtube-play.png" alt="HTML tutorial" style="width:42px;height:42px;"></a>
         <a href="https://www.facebook.com/magicsolutionz"><img src="https://img.icons8.com/color/96/facebook-new.png" alt="HTML tutorial" style="width:42px;height:42px;"></a>
-        <a href="default.asp"><img src="https://img.icons8.com/color/96/facebook-new.png" alt="HTML tutorial" style="width:42px;height:42px;"></a>               
-        </div>
+        <a href="https://join.skype.com/invite/D7RebbfIfjFg"><img src="https://img.icons8.com/fluency/96/skype.png" alt="HTML tutorial" style="width:42px;height:42px;"></a>               
+        <a href="https://www.instagram.com/magic.ecu/"><img src="https://img.icons8.com/fluency/96/instagram-new.png" alt="HTML tutorial" style="width:42px;height:42px;"></a>
+    
+    </div>
         <div class="contact">
             <div>
                 <p><img src="https://img.icons8.com/external-justicon-flat-justicon/64/external-email-notifications-justicon-flat-justicon.png" alt="email" style="width: 30px;"> Email || info@magicsol.net</p>
