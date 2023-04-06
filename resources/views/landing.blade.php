@@ -220,10 +220,10 @@
             <h3 class="footer-description">Magic Solution </h3>
         </div>
         <div>
-        <a href="https://www.youtube.com/@magicsolution-ecu"><img src="https://img.icons8.com/color/96/youtube-play.png" alt="HTML tutorial" style="width:42px;height:42px;"></a>
-        <a href="https://www.facebook.com/magicsolutionz"><img src="https://img.icons8.com/color/96/facebook-new.png" alt="HTML tutorial" style="width:42px;height:42px;"></a>
-        <a href="https://join.skype.com/invite/D7RebbfIfjFg"><img src="https://img.icons8.com/fluency/96/skype.png" alt="HTML tutorial" style="width:42px;height:42px;"></a>               
-        <a href="https://www.instagram.com/magic.ecu/"><img src="https://img.icons8.com/fluency/96/instagram-new.png" alt="HTML tutorial" style="width:42px;height:42px;"></a>
+        <a href="https://www.youtube.com/@magicsolution-ecu"><img src="{{ asset('landing/assets/images/landpage/png/youtube.png') }}"alt="youtube" style="width:42px;height:42px;"></a>
+        <a href="https://www.facebook.com/magicsolutionz"><img src="{{ asset('landing/assets/images/landpage/png/facebook.png') }}" alt="Facebook" style="width:42px;height:42px;"></a>
+        <a href="https://join.skype.com/invite/D7RebbfIfjFg"><img src="{{ asset('landing/assets/images/landpage/png/skype.png') }}" alt="Skype" style="width:42px;height:42px;"></a>               
+        <a href="https://www.instagram.com/magic.ecu/"><img src="{{ asset('landing/assets/images/landpage/png/instagram.png') }}" alt="Instagram" style="width:42px;height:42px;"></a>
     
     </div>
         <div class="contact">
