@@ -64,12 +64,7 @@
         <h3 class="landscap-title">how it <span>works</span></h3>
         <div class="tutorial">
             <p>
-                MagicSolution is a software that specializes in solving environmental systems such as (dpf , egr ,
-                adblue
-                off ) and many other solutions. The program works according to guaranteed easy and fast software
-                solutions.
-                There is full support around the clock
-                The user will get a free update over the course of the subscription.
+        MagicSolution is a software that specializes in solving environmental systems such as (dpf , egr , adblue off ) and many other solutions. Tuning ( pops & bangs , stage , launch control)The program works according to guaranteed easy and fast software solutions. There is full support around the clock The user will get a free update over the course of the subscription.
             </p>
         </div>
     </div>
@@ -104,8 +99,8 @@
     </div>
     <br>
     <div class="frequently-questions">
-        <h3 class="landscap-title">frequently asked <span>questions</span></h3>
-        <div class="questions">
+    <h3 class="landscap-title">frequently asked <span>questions</span></h3>
+            <div class="questions">
             <div class="items">
                 <div>
                     <h3>MagicSolution working 7/24 totally online</h3>
@@ -117,7 +112,34 @@
             </div>
         </div>
     </div>
-
+    <div class="frequently-questions">
+        
+        <div class="questions">
+            <div class="items">
+                
+<div style="color: white;">
+                    <h3 style="
+    font-size: 35px;
+    color: #45E01F;
+">Products</h3>
+                    <p>
+                    </p>
+<p></p><p style="
+                    font-size: 30px;
+                     color: red;
+                    ">
+                    Alfa
+                    </p>
+EDC16C39 
+<br>
+EDC16C39
+<br>
+EDC17C49
+<br>
+</div>
+            </div>
+        </div>
+    </div>
     <div class="customers-testimonial">
         <h3 class="landscap-title">what our <span>customers </span> say</h3>
         <div class="testimonials" id="testimonialsAutoRotate">
@@ -156,7 +178,7 @@
     </div>
 
     <div class="wash-packages" id="pricing">
-        <h3 class="landscap-title">wash <span>packages</span></h3>
+        <h3 class="landscap-title">Subscription<span>Prices</span></h3>
         <div class="sedan-plans">
             <div class="item">
                 <h3 class="period">One month</h3>
