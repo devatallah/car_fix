@@ -99,8 +99,8 @@
     </div>
     <br>
     <div class="frequently-questions">
-        <h3 class="landscap-title">What is our Product  <span>Work on </span></h3>
-        <div class="questions">
+    <h3 class="landscap-title">frequently asked <span>questions</span></h3>
+            <div class="questions">
             <div class="items">
                 <div>
                     <h3>MagicSolution working 7/24 totally online</h3>
