@@ -156,14 +156,14 @@ Route::get('/test4', function (Request $request) {
 });
 
 Route::get('/diff', function (Request $request) {
-    dd(urlencode('https://carfixes.s3-eu-west-1.amazonaws.com/origin/magicSolution (FORD  (TVA) (NoChk) 1671625481.jpg'));
+    dd(urlencode('https://newcarfix.s3-eu-west-1.amazonaws.com/origin/magicSolution (FORD  (TVA) (NoChk) 1671625481.jpg'));
     $file = file_get_contents(
-        str_replace(' ', '%20', "https://carfixes.s3-eu-west-1.amazonaws.com/origin/magicSolution (FORD  (TVA) (NoChk) 1671625481.jpg")
+        str_replace(' ', '%20', "https://newcarfix.s3-eu-west-1.amazonaws.com/origin/magicSolution (FORD  (TVA) (NoChk) 1671625481.jpg")
     );
     dd(md5($file));
     //    dd(file_get_contents(''.$origin_file));
-    $md5image1 = md5(file_get_contents('https://carfixes.s3-eu-west-1.amazonaws.com/origin/magicSolution%20(brand%201%20%20solution%202)%20(NoChk)%201671622543.jpg'));
-    $md5image2 = md5(file_get_contents('https://carfixes.s3-eu-west-1.amazonaws.com/fixed/magicSolution%20(brand%201%20%20solution%202)%20(NoChk)%201671622574.jpg'));
+    $md5image1 = md5(file_get_contents('https://newcarfix.s3-eu-west-1.amazonaws.com/origin/magicSolution%20(brand%201%20%20solution%202)%20(NoChk)%201671622543.jpg'));
+    $md5image2 = md5(file_get_contents('https://newcarfix.s3-eu-west-1.amazonaws.com/fixed/magicSolution%20(brand%201%20%20solution%202)%20(NoChk)%201671622574.jpg'));
     dd($md5image1 == $md5image2);
 });
 
