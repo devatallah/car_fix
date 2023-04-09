@@ -144,7 +144,7 @@ class SolutionController extends Controller
                     $file_name = 'MagicSolution--' . $u_f_n_file_uuid . '--(' . $brand->name . '_' . $u_f_n_ecu_name . '_' . $module->name . '(No--CHK)' . '.bin';
                     Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
                     $target_files_content = [];
-                    $path = 'https://mycarfixbucket.s3-eu-west-1.amazonaws.com/fixed/' . $file_name;
+                    $path = 'https://newcarfix.s3-eu-west-1.amazonaws.com/fixed/' . $file_name;
                 } else {
                     return response()->json([
                         'status' => false,
@@ -254,7 +254,7 @@ class SolutionController extends Controller
                     logger("Brand Name :" . $brand->name .' '."ECU Name :".$ecu->name.' '."Fix Type :".$module->name);
                     Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
                     $target_files_content = [];
-                    $path = 'https://mycarfixbucket.s3-eu-west-1.amazonaws.com/fixed/' . $file_name;
+                    $path = 'https://newcarfix.s3-eu-west-1.amazonaws.com/fixed/' . $file_name;
 
                     if ($path) {
 
@@ -312,10 +312,10 @@ class SolutionController extends Controller
         if ($request->hasFile('broken_file')) {
             $broken_file = Storage::disk('s3')->putFile('/broken', $request->file('broken_file'), 'public');
         }
-        $broken_file_md5 = md5(file_get_contents('https://mycarfixbucket.s3-eu-west-1.amazonaws.com/' . $broken_file));
+        $broken_file_md5 = md5(file_get_contents('https://newcarfix.s3-eu-west-1.amazonaws.com/' . $broken_file));
         $ecu_file_uuid = null;
         foreach ($ecu_files as $ecu_file) {
-            $path = 'https://mycarfixbucket.s3-eu-west-1.amazonaws.com/';
+            $path = 'https://newcarfix.s3-eu-west-1.amazonaws.com/';
             $origin_file_md5 = md5(file_get_contents($path . urlencode($ecu_file->getRawOriginal()['origin_file'])));
             if ($broken_file_md5 == $origin_file_md5) {
                 $ecu_file_uuid = $ecu_file->uuid;
