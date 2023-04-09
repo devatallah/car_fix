@@ -81,7 +81,7 @@ class ScriptFile extends Model
 
     public function getFileAttribute($value)
     {
-        $path = 'https://newcarfix.s3-eu-west-1.amazonaws.com/';
+        $path = 'https://mycarfixbucket.s3-eu-west-1.amazonaws.com/';
         return !is_null($value) ? $path . $value : '';
     }
 }

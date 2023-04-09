@@ -21,7 +21,7 @@
                 <li class="nav-item"><a href="#pricing">Pricing</a></li>
             </ul>
         </div>
-       
+
     </header>
 
     <div class="mobile-menu">
@@ -118,10 +118,10 @@
 
         <div class="questions">
             <div class="items">
-                
+
 <div style="color: white;">
     <p style="font-size: 30px;color: red;">Alfa</p>
-    EDC16C39 
+    EDC16C39
     <br>
     EDC16C39
     <br>
@@ -220,7 +220,7 @@
     <div class="get-started">
         <h3 class="landscap-title">Unlimited  <span>Usage</span></h3>
         <div class="free-wash">
-            <button><a href="https://newcarfix.s3.eu-west-1.amazonaws.com/ecus/file/magicsolution.zip">Download App </a></button>
+            <button><a href="https://mycarfixbucket.s3.eu-west-1.amazonaws.com/ecus/file/magicsolution.zip">Download App </a></button>
             <p>The Program Only Works On 1 PC</p>
         </div>
     </div>
@@ -235,9 +235,9 @@
         <div>
         <a href="https://www.youtube.com/@magicsolution-ecu"><img src="{{ asset('landing/assets/images/landpage/png/youtube.png') }}"alt="youtube" style="width:42px;height:42px;"></a>
         <a href="https://www.facebook.com/magicsolutionz"><img src="{{ asset('landing/assets/images/landpage/png/facebook.png') }}" alt="Facebook" style="width:42px;height:42px;"></a>
-        <a href="https://join.skype.com/invite/D7RebbfIfjFg"><img src="{{ asset('landing/assets/images/landpage/png/skype.png') }}" alt="Skype" style="width:42px;height:42px;"></a>               
+        <a href="https://join.skype.com/invite/D7RebbfIfjFg"><img src="{{ asset('landing/assets/images/landpage/png/skype.png') }}" alt="Skype" style="width:42px;height:42px;"></a>
         <a href="https://www.instagram.com/magic.ecu/"><img src="{{ asset('landing/assets/images/landpage/png/instagram.png') }}" alt="Instagram" style="width:42px;height:42px;"></a>
-    
+
     </div>
         <div class="contact">
             <div>
