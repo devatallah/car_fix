@@ -220,7 +220,7 @@
     <div class="get-started">
         <h3 class="landscap-title">Unlimited  <span>Usage</span></h3>
         <div class="free-wash">
-            <button><a href="https://newcarfix.s3.eu-west-1.amazonaws.com/ecus/file/magicsolution.zip">Download App </a></button>
+            <button><a href="https://mycarfixbucket.s3.eu-west-1.amazonaws.com/ecus/file/magicsolution.zip">Download App </a></button>
             <p>The Program Only Works On 1 PC</p>
         </div>
     </div>
