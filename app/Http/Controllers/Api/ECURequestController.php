@@ -30,13 +30,13 @@ class ECURequestController extends Controller
         $user = $request->user('api');
         $data['user_uuid'] = $user->uuid;
         $filename='test';
-        $file=file_put_contents('request.txt',base64_decode($request->filedata));
-        if ($file) {
+       // $file=file_put_contents('request.txt',base64_decode($request->filedata));
+        //if ($file) {
             $name = time() . '_' . str_replace(' ', '', $filename);
             $filePath = 'ecus/requests/' . $name . '.bin';
             Storage::disk('s3')->put($filePath, base64_decode($request->filedata), ['visibility' => 'public']);
             $data['file'] = $filePath;
-        }
+        //}
 
         if ($data['file'] != '') {
             ECURequest::query()->create($data);
