@@ -207,7 +207,7 @@
         
  <button style="
     margin-left: 16px;
-"><a href="paypal.me/magicsol" target="_blank">Pay Now </a></button>
+"><a href="paypal.me/magicsol" target="_blank">Pay Here </a></button>
 </div>
     </div>
 
