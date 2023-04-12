@@ -21,7 +21,7 @@
                 <li class="nav-item"><a href="#pricing">Pricing</a></li>
             </ul>
         </div>
-
+       
     </header>
 
     <div class="mobile-menu">
@@ -113,24 +113,6 @@
         </div>
     </div>
     <br>
-    <div class="frequently-questions">
-    <h3 class="landscap-title">Our <span>Products</span></h3>
-
-        <div class="questions">
-            <div class="items">
-
-<div style="color: white;">
-    <p style="font-size: 30px;color: red;">Alfa</p>
-    EDC16C39
-    <br>
-    EDC16C39
-    <br>
-    EDC17C49
-    <br>
-</div>
-            </div>
-        </div>
-    </div>
     <div class="customers-testimonial">
         <h3 class="landscap-title">what our <span>customers </span> say</h3>
         <div class="testimonials" id="testimonialsAutoRotate">
@@ -220,9 +202,13 @@
     <div class="get-started">
         <h3 class="landscap-title">Unlimited  <span>Usage</span></h3>
         <div class="free-wash">
-            <button><a href="https://mycarfixbucket.s3.eu-west-1.amazonaws.com/ecus/file/magicsolution.zip">Download App </a></button>
+            <button><a href="https://mycarfixbucket.s3-eu-west-1.amazonaws.com/ecus/file/Magic%20Solution%20Doctor%20ECU.exe" target="_blank">Download App </a></button>
             <p>The Program Only Works On 1 PC</p>
-        </div>
+        
+ <button style="
+    margin-left: 16px;
+"><a href="paypal.me/magicsol" target="_blank">Pay Here </a></button>
+</div>
     </div>
 
     <footer>
@@ -233,11 +219,11 @@
             <h3 class="footer-description">Magic Solution </h3>
         </div>
         <div>
-        <a href="https://www.youtube.com/@magicsolution-ecu"><img src="{{ asset('landing/assets/images/landpage/png/youtube.png') }}"alt="youtube" style="width:42px;height:42px;"></a>
-        <a href="https://www.facebook.com/magicsolutionz"><img src="{{ asset('landing/assets/images/landpage/png/facebook.png') }}" alt="Facebook" style="width:42px;height:42px;"></a>
-        <a href="https://join.skype.com/invite/D7RebbfIfjFg"><img src="{{ asset('landing/assets/images/landpage/png/skype.png') }}" alt="Skype" style="width:42px;height:42px;"></a>
-        <a href="https://www.instagram.com/magic.ecu/"><img src="{{ asset('landing/assets/images/landpage/png/instagram.png') }}" alt="Instagram" style="width:42px;height:42px;"></a>
-
+        <a href="https://www.youtube.com/@magicsolution-ecu" target="_blank"><img src="{{ asset('landing/assets/images/landpage/png/youtube.png') }}"alt="youtube" style="width:42px;height:42px;"></a>
+        <a href="https://www.facebook.com/magicsolutionz" target="_blank"><img src="{{ asset('landing/assets/images/landpage/png/facebook.png') }}" alt="Facebook" style="width:42px;height:42px;"></a>
+        <a href="https://join.skype.com/invite/D7RebbfIfjFg" target="_blank"><img src="{{ asset('landing/assets/images/landpage/png/skype.png') }}" alt="Skype" style="width:42px;height:42px;"></a>               
+        <a href="https://www.instagram.com/magic.ecu/" target="_blank"><img src="{{ asset('landing/assets/images/landpage/png/instagram.png') }}" alt="Instagram" style="width:42px;height:42px;"></a>
+    
     </div>
         <div class="contact">
             <div>
