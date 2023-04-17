@@ -23,11 +23,11 @@ class ECURequestController extends Controller
             //     },
             // ]
         ];
-        logger('asd'.$request);
         $this->validate($request, $rules);
         $data = $request->only('ecu', 'module', 'brand');
 
         $user = $request->user('api');
+        logger('user email '.$user->email);
         $data['user_uuid'] = $user->uuid;
         $filename='test';
        // $file=file_put_contents('request.txt',base64_decode($request->filedata));
