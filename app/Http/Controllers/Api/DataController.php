@@ -84,4 +84,43 @@ class DataController extends Controller
             "message" => "ECU Not Found",
         ]);
     }
+    public function dtc_brands()
+    {
+        $brands_uuid = DTC::get()->pluck('brand_uuid')->toArray();
+        $ecus_uuid = DTC::get()->pluck('ecu_uuid')->toArray();
+
+        $brands = Brand::query()->with('ecus', function($q) use ($ecus_uuid) {
+            $q->whereIn('uuid', $ecus_uuid);
+        })->whereIn('uuid', $brands_uuid)->get();
+
+
+        $data = DTCBrandResource::collection($brands);
+
+
+        return response()->json([
+            'success' => true,
+            "message" => "Loaded Successfully",
+            "data" => $data
+        ]);
+    }
+
+    public function dtc(Request $request)
+    {
+        $rules = [
+            'brand' => 'required|exists:dtcs,brand_uuid',
+            'ecu' => 'required|exists:dtcs,ecu_uuid',
+        ];
+        $this->validate($request, $rules);
+
+        $dtc = DTC::where('brand_uuid', $request->brand)->where('ecu_uuid', $request->ecu)->first();
+
+        $data = new DTCResource($dtc);
+
+        return response()->json([
+            'success' => true,
+            "message" => "Loaded Successfully",
+            "data" => $data
+        ]);
+    }
+
 }

@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use PhpParser\Node\Stmt\Echo_;
 use Webpatser\Uuid\Uuid;
 
-class Brand extends Model
+class DTCFile extends Model
 {
     use HasFactory, SoftDeletes;
+
 
     /*
     |--------------------------------------------------------------------------
@@ -19,11 +19,11 @@ class Brand extends Model
     */
 
     public $incrementing = false;
+    protected $table = 'dtc_files';
     protected $guarded = [];
     protected $appends = [];
     protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
     protected $primaryKey = 'uuid';
-
 
     /*
     |--------------------------------------------------------------------------
@@ -37,7 +37,6 @@ class Brand extends Model
         self::creating(function ($model) {
             $model->uuid = (string)Uuid::generate(4);
         });
-
     }
 
     /*
@@ -56,20 +55,12 @@ class Brand extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    // public function modules()
-    // {
-    //     return $this->belongsToMany(Module::class, 'ecus', 'brand_uuid', 'module_uuid', 'uuid', 'uuid')->distinct();
-    // }
-    public function ecus()
+
+    public function dtc()
     {
-        return $this->hasMany(ECU::class, 'brand_uuid', 'uuid');
+        return $this->belongsTo(DTC::class)->withTrashed();
     }
 
-    public function dtcs()
-    {
-        return $this->hasMany(DTC::class, 'brand_uuid', 'uuid');
-    }
-    
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -82,11 +73,15 @@ class Brand extends Model
     |--------------------------------------------------------------------------
     */
 
-
     /*
     |--------------------------------------------------------------------------
     | MUTATORS
     |--------------------------------------------------------------------------
     */
 
+    public function getFileAttribute($value)
+    {
+        $path = 'https://carfix23.s3-eu-west-1.amazonaws.com/';
+        return !is_null($value) ? $path . $value : '';
+    }
 }

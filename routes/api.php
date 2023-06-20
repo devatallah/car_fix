@@ -37,4 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/brands', [DataController::class, 'brands']);
 
     Route::post('/scripts', [DataController::class, 'scripts']);
+    Route::post('/dtc', [DataController::class, 'dtc']);
+    Route::post('/dtc/brands', [DataController::class, 'dtc_brands']);
+    
 });

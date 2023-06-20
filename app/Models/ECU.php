@@ -72,6 +72,11 @@ class ECU extends Model
         return $this->hasMany(Script::class, 'ecu_uuid', 'uuid');
     }
 
+    public function dtcs()
+    {
+        return $this->hasMany(DTC::class, 'ecu_uuid', 'uuid');
+    }
+    
     /*
     |--------------------------------------------------------------------------
     | SCOPES

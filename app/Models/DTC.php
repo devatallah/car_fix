@@ -5,10 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use PhpParser\Node\Stmt\Echo_;
 use Webpatser\Uuid\Uuid;
 
-class Brand extends Model
+class DTC extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -19,8 +18,9 @@ class Brand extends Model
     */
 
     public $incrementing = false;
+    protected $table = 'dtcs';
     protected $guarded = [];
-    protected $appends = [];
+    protected $appends = ['ecu_name', 'brand_name'];
     protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
     protected $primaryKey = 'uuid';
 
@@ -37,7 +37,6 @@ class Brand extends Model
         self::creating(function ($model) {
             $model->uuid = (string)Uuid::generate(4);
         });
-
     }
 
     /*
@@ -50,26 +49,27 @@ class Brand extends Model
         return 'uuid';
     }
 
-
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    // public function modules()
-    // {
-    //     return $this->belongsToMany(Module::class, 'ecus', 'brand_uuid', 'module_uuid', 'uuid', 'uuid')->distinct();
-    // }
-    public function ecus()
+
+    public function ecu()
     {
-        return $this->hasMany(ECU::class, 'brand_uuid', 'uuid');
+        return $this->belongsTo(ECU::class)->withTrashed();
     }
 
-    public function dtcs()
+    public function brand()
     {
-        return $this->hasMany(DTC::class, 'brand_uuid', 'uuid');
+        return $this->belongsTo(Brand::class)->withTrashed();
     }
-    
+
+    public function files()
+    {
+        return $this->hasMany(DTCFile::class, 'dtc_uuid', 'uuid');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -82,11 +82,19 @@ class Brand extends Model
     |--------------------------------------------------------------------------
     */
 
-
     /*
     |--------------------------------------------------------------------------
     | MUTATORS
     |--------------------------------------------------------------------------
     */
 
+    public function getEcuNameAttribute()
+    {
+        return $this->ecu->name;
+    }
+
+    public function getBrandNameAttribute()
+    {
+        return $this->brand->name;
+    }
 }
