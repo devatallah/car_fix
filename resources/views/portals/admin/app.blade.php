@@ -286,6 +286,10 @@
                             data-feather="grid"></i><span class="menu-title text-truncate"
                             data-i18n="ECURequests">@lang('ecu_requests')</span></a>
                 </li>
+                <li class=" nav-item"><a class="d-flex align-items-center" href="{{ url('admin/dtcs') }}"><i
+                            data-feather="grid"></i><span class="menu-title text-truncate"
+                            data-i18n="dtcs">@lang('dtc')</span></a>
+                </li>
                 <li class=" nav-item"><a class="d-flex align-items-center" href="{{ url('admin/scripts') }}"><i
                             data-feather="grid"></i><span class="menu-title text-truncate"
                             data-i18n="Scripts">@lang('scripts')</span></a>

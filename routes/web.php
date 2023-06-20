@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\DTCController;
+use App\Http\Controllers\Admin\DTCFileController;
 use App\Http\Controllers\Admin\ECUController;
 use App\Http\Controllers\Admin\ECUFileController;
 use App\Http\Controllers\Admin\ECUFileRecordsController;
@@ -255,6 +257,24 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::delete('/record/{uuid}', [ECUFileRecordsController::class, 'destroy']);
         Route::get('/indexTable/{ecu_file_uuid}', [ECUFileRecordsController::class, 'indexTable']);
     });
+    Route::group(['prefix' => 'dtcs'], function () {
+        Route::get('/', [DTCController::class, 'index']);
+        Route::post('/', [DTCController::class, 'store']);
+        Route::put('/{script}', [DTCController::class, 'update']);
+        Route::delete('/{script}', [DTCController::class, 'destroy']);
+        Route::get('/indexTable', [DTCController::class, 'indexTable']);
+    });
+
+    Route::get('ecus-by-brand', [DTCController::class, 'getBrands']);
+
+    Route::group(['prefix' => 'dtc_files'], function () {
+        Route::get('/', [DTCFileController::class, 'index']);
+        Route::post('/', [DTCFileController::class, 'store']);
+        Route::put('/{dtc}', [DTCFileController::class, 'update']);
+        Route::delete('/{dtc}', [DTCFileController::class, 'destroy']);
+        Route::get('/indexTable/{dtc}', [DTCFileController::class, 'indexTable']);
+    });
+    
 
     Route::group(['prefix' => 'scripts'], function () {
         Route::get('/', [ScriptController::class, 'index']);

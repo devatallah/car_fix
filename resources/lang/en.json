@@ -319,6 +319,8 @@
     "scripts": "Scripts",
     "script_type" : "Script Type",
     "script_files" : "Script Files",
-
+    "dtc": "DTC",
+    "dtc_files": "DTC Files",
     "": ""
+    
 }
