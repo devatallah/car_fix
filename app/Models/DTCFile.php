@@ -21,8 +21,8 @@ class DTCFile extends Model
     public $incrementing = false;
     protected $table = 'dtc_files';
     protected $guarded = [];
-    protected $appends = [];
-    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
+    protected $appends = ['file'];
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
     protected $primaryKey = 'uuid';
 
     /*
