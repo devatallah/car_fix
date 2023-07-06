@@ -18,8 +18,11 @@ class DataController extends Controller
 {
     public function brands()
     {
-        $brands = Brand::query()->whereHas('ecus')->get();
-
+        $brands = Brand::query()->with('ecus', function($q) {
+            $q->whereHas('scripts', function($query) {
+                $query->whereHas('files');
+            });
+        })->get();
         return response()->json([
             'success' => true,
             "message" => "Loaded Successfully",
@@ -59,7 +62,7 @@ class DataController extends Controller
                         ];
                         array_push($data, $row);
                     }
-
+                
                     return response()->json([
                         'success' => true,
                         "message" => "Loaded Successfully",
@@ -90,8 +93,8 @@ class DataController extends Controller
         $brands_uuid = DTC::get()->pluck('brand_uuid')->toArray();
         $ecus_uuid = DTC::get()->pluck('ecu_uuid')->toArray();
 
-        $brands = Brand::query()->with('ecus', function($q) use ($ecus_uuid) {
-            $q->whereIn('uuid', $ecus_uuid);
+        $brands = Brand::query()->with('ecus', function ($q) use ($ecus_uuid) {
+                        $q->whereIn('uuid', $ecus_uuid);
         })->whereIn('uuid', $brands_uuid)->get();
 
 
