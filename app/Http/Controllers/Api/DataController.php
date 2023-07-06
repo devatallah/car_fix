@@ -23,6 +23,13 @@ class DataController extends Controller
                 $query->whereHas('files');
             });
         })->get();
+        foreach ($brands as $key => $brand) {
+            // Check if the brand doesn't have associated ECUs
+            if ($brand->ecus->isEmpty()) {
+                // Remove the brand from the list
+                unset($brands[$key]);
+            }
+            // Access ECU data for the b
         return response()->json([
             'success' => true,
             "message" => "Loaded Successfully",
