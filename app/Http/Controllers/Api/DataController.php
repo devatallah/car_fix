@@ -23,6 +23,7 @@ class DataController extends Controller
                 $query->whereHas('files');
             });
         })->get();
+        logger($brands);
         return response()->json([
             'success' => true,
             "message" => "Loaded Successfully",
