@@ -99,19 +99,20 @@ class DataController extends Controller
     {
         $brands_uuid = DTC::get()->pluck('brand_uuid')->toArray();
         $ecus_uuid = DTC::get()->pluck('ecu_uuid')->toArray();
-
-        $brands = Brand::query()->with('ecus', function ($q) use ($ecus_uuid) {
-                        $q->whereIn('uuid', $ecus_uuid);
-        })->whereIn('uuid', $brands_uuid)->get();
-
-
+    
+        $brands = Brand::query()
+            ->whereIn('uuid', $brands_uuid)
+            ->with(['ecus' => function ($q) use ($ecus_uuid) {
+                $q->whereIn('uuid', $ecus_uuid);
+            }])
+            ->get();
+    
         $data = DTCBrandResource::collection($brands);
-
-
+    
         return response()->json([
             'success' => true,
-            "message" => "Loaded Successfully",
-            "data" => $data
+            'message' => 'Loaded Successfully',
+            'data' => $data
         ]);
     }
 
