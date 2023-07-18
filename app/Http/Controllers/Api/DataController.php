@@ -24,11 +24,11 @@ class DataController extends Controller
             });
         })->get();
         logger($brands);
-        foreach($brands as $key => $brand){
-            if ($brand->ecus->isEmpty()) {
-                unset($brands[$key]);
-            }
-        }
+        // foreach($brands as $key => $brand){
+        //     if ($brand->ecus->isEmpty()) {
+        //         unset($brands[$key]);
+        //     }
+        // }
 
         return response()->json([
             'success' => true,
