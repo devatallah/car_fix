@@ -48,15 +48,30 @@ class DTCFileController extends Controller
 
         $time_stamp = Carbon::now()->timestamp;
         DB::beginTransaction();
-
+        
         foreach ($request->file as $key => $value) {
+            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $charactersLength = strlen($characters);
+            $randomString = '';
+            for ($i = 0; $i < $charactersLength; $i++) {
+                $randomString .= $characters[random_int(0, $charactersLength - 1)];
+            }
+            $randomString;
             $item_file = $value;
             $file = Storage::disk('s3')->putFileAs(
                 '',
                 $item_file,
-                'dtcs/file/' . $request->dtc_uuid . '_' . $time_stamp . '.bin',
+                'dtcs/file/'.$randomString.'-' . $request->dtc_uuid . '_' . $randomString .'-'.$time_stamp. '.bin',
                 ['visibility' => 'public']
             );
+            ###3
+            // $item_file = $value;
+            // $file = Storage::disk('s3')->putFileAs(
+            //     '',
+            //     $item_file,
+            //     'dtcs/file/' . $request->dtc_uuid . '_' . $time_stamp . '.bin',
+            //     ['visibility' => 'public']
+            // );
             $dtcFile = new DTCFile();
             $dtcFile->dtc_uuid = $request->dtc_uuid;
             $dtcFile->file = $file;
@@ -140,5 +155,14 @@ class DTCFileController extends Controller
                     '">' . __('delete') . '</button>';
                 return $string;
             })->make(true);
+    }
+    function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 }
