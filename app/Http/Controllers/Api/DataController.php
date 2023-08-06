@@ -124,7 +124,7 @@ class DataController extends Controller
         ];
         $this->validate($request, $rules);
 
-        $dtc = DTC::where('brand_uuid', $request->brand)->where('ecu_uuid', $request->ecu)->get();
+        $dtc = DTC::where('brand_uuid', $request->brand)->where('ecu_uuid', $request->ecu)->first();
 
         $data = new DTCResource($dtc);
 
