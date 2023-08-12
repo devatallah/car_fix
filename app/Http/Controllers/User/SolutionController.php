@@ -248,10 +248,10 @@ class SolutionController extends Controller
                             }
                         }
                     }
-                    $file_name = 'MagicSolution--' . $target_record_uuid . '--(' . $brand->name . '_' . $ecu->name . '_' . $module->name . '(NoCHK)' . '.bin';
-                    logger("User name :" .$user_name );
-                    logger("User Email :" .$user_email);
-                    logger("Brand Name :" . $brand->name .' '."ECU Name :".$ecu->name.' '."Fix Type :".$module->name);
+                    // $file_name = 'MagicSolution--' . $target_record_uuid . '--(' . $brand->name . '_' . $ecu->name . '_' . $module->name . '(NoCHK)' . '.bin';
+                    // logger("User name :" .$user_name );
+                    // logger("User Email :" .$user_email);
+                    // logger("Brand Name :" . $brand->name .' '."ECU Name :".$ecu->name.' '."Fix Type :".$module->name);
                     Storage::disk('s3')->put('/fixed/' . $file_name, $result, 'public');
                     $target_files_content = [];
                     $path = 'https://mycarfixbucket.s3-eu-west-1.amazonaws.com/fixed/' . $file_name;

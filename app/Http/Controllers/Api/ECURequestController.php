@@ -27,10 +27,10 @@ class ECURequestController extends Controller
         $data = $request->only('ecu', 'module', 'brand');
 
         $user = $request->user('api');
-        logger('user email :'.$user->email);
-        logger('user ecu :'.$request->ecu);
-        logger('user module :'.$request->module);
-        logger('user brand :'.$request->brand);
+        // logger('user email :'.$user->email);
+        // logger('user ecu :'.$request->ecu);
+        // logger('user module :'.$request->module);
+        // logger('user brand :'.$request->brand);
 
         $data['user_uuid'] = $user->uuid;
         $filename='test';

@@ -23,7 +23,7 @@ class DataController extends Controller
                 $query->whereHas('files');
             });
         })->get();
-        logger($brands);
+        //logger($brands);
         foreach($brands as $key => $brand){
             if ($brand->ecus->isEmpty()) {
                 unset($brands[$key]);
