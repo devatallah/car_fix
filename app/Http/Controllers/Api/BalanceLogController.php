@@ -34,7 +34,7 @@ class BalanceLogController extends Controller
             'fix_type' => 'required',
         ];
         $this->validate($request, $rules);
-        logger($request->fix_type . "fix type");
+        //logger($request->fix_type . "fix type");
         $word = " ";
         $fix_type_a='';
         if(strpos($request->fix_type,$word) !== false){
@@ -45,10 +45,10 @@ class BalanceLogController extends Controller
         $module = Module::query()->find($request->fix_type);
         $fix_type_price = $module->price;
         }
-        logger($fix_type_price . "fix_type_price");
+        //logger($fix_type_price . "fix_type_price");
         $user = $request->user('api');
         $user = User::find($user->uuid);
-        logger($user . "user");
+        //logger($user . "user");
         $old_balance = $user->balance;
 
         if ($fix_type_price > $old_balance) {
@@ -59,7 +59,7 @@ class BalanceLogController extends Controller
         }
 
         $user->balance = $old_balance - $fix_type_price;
-        logger( $user->balance." user->balance");
+        //logger( $user->balance." user->balance");
         $user->save();
 
         if ($user->wasChanged('balance')) {
