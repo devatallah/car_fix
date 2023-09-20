@@ -12,8 +12,8 @@ use App\Http\Controllers\Admin\ModuleController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ScriptController;
 use App\Http\Controllers\Admin\ScriptFileController;
-use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -159,14 +159,14 @@ Route::get('/test4', function (Request $request) {
 });
 
 Route::get('/diff', function (Request $request) {
-    dd(urlencode('https://mycarfixbucket.s3-eu-west-1.amazonaws.com/origin/magicSolution (FORD  (TVA) (NoChk) 1671625481.jpg'));
+    dd(urlencode('https://carfix22.s3-eu-west-1.amazonaws.com/origin/magicSolution (FORD  (TVA) (NoChk) 1671625481.jpg'));
     $file = file_get_contents(
-        str_replace(' ', '%20', "https://mycarfixbucket.s3-eu-west-1.amazonaws.com/origin/magicSolution (FORD  (TVA) (NoChk) 1671625481.jpg")
+        str_replace(' ', '%20', "https://carfix22.s3-eu-west-1.amazonaws.com/origin/magicSolution (FORD  (TVA) (NoChk) 1671625481.jpg")
     );
     dd(md5($file));
     //    dd(file_get_contents(''.$origin_file));
-    $md5image1 = md5(file_get_contents('https://mycarfixbucket.s3-eu-west-1.amazonaws.com/origin/magicSolution%20(brand%201%20%20solution%202)%20(NoChk)%201671622543.jpg'));
-    $md5image2 = md5(file_get_contents('https://mycarfixbucket.s3-eu-west-1.amazonaws.com/fixed/magicSolution%20(brand%201%20%20solution%202)%20(NoChk)%201671622574.jpg'));
+    $md5image1 = md5(file_get_contents('https://carfix22.s3-eu-west-1.amazonaws.com/origin/magicSolution%20(brand%201%20%20solution%202)%20(NoChk)%201671622543.jpg'));
+    $md5image2 = md5(file_get_contents('https://carfix22.s3-eu-west-1.amazonaws.com/fixed/magicSolution%20(brand%201%20%20solution%202)%20(NoChk)%201671622574.jpg'));
     dd($md5image1 == $md5image2);
 });
 
@@ -201,10 +201,7 @@ Route::get('/get_module_brand_ecus', function (Request $request) {
     return response()->json($json);
 });
 
-#Route::view('/', 'landing');
-Route::get('/', function () {
-    return Redirect::to('https://www.magic-ecu.com/en');
-});
+Route::view('/', 'landing');
 
 Auth::routes();
 
@@ -258,6 +255,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::delete('/record/{uuid}', [ECUFileRecordsController::class, 'destroy']);
         Route::get('/indexTable/{ecu_file_uuid}', [ECUFileRecordsController::class, 'indexTable']);
     });
+
     Route::group(['prefix' => 'dtcs'], function () {
         Route::get('/', [DTCController::class, 'index']);
         Route::post('/', [DTCController::class, 'store']);
@@ -275,7 +273,6 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::delete('/{dtc}', [DTCFileController::class, 'destroy']);
         Route::get('/indexTable/{dtc}', [DTCFileController::class, 'indexTable']);
     });
-    
 
     Route::group(['prefix' => 'scripts'], function () {
         Route::get('/', [ScriptController::class, 'index']);
@@ -313,9 +310,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::put('/{ecu_request}', [ECURequestController::class, 'update']);
         Route::delete('/{ecu_request}', [ECURequestController::class, 'destroy']);
         Route::get('/indexTable', [ECURequestController::class, 'indexTable']);
-        Route::get('/settings', [SettingController::class, 'index']);
-        Route::post('/settings', [SettingController::class, 'update']);
     });
+    Route::get('/settings', [SettingController::class, 'index']);
+    Route::post('/settings', [SettingController::class, 'update']);
 });
 
 Route::get('user/login', [App\Http\Controllers\User\Auth\LoginController::class, 'showLoginForm'])->name('login');
