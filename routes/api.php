@@ -40,10 +40,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/scripts', [DataController::class, 'scripts']);
     Route::post('/dtc', [DataController::class, 'dtc']);
     Route::post('/dtc/brands', [DataController::class, 'dtc_brands']);
-    Route::middleware('checkApiToken')->group(function() {
+});
+Route::middleware('checkApiToken')->group(function() {
     Route::post('/create/user', [UserController::class, 'create']);
     Route::post('/update/user/balance', [UserController::class, 'updateBalance']);
     });
-
     
-});
