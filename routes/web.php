@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ScriptController;
 use App\Http\Controllers\Admin\ScriptFileController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\SettingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -312,6 +313,8 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::put('/{ecu_request}', [ECURequestController::class, 'update']);
         Route::delete('/{ecu_request}', [ECURequestController::class, 'destroy']);
         Route::get('/indexTable', [ECURequestController::class, 'indexTable']);
+        Route::get('/settings', [SettingController::class, 'index']);
+        Route::post('/settings', [SettingController::class, 'update']);
     });
 });
 
