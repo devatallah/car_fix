@@ -302,6 +302,10 @@
                             data-feather="grid"></i><span class="menu-title text-truncate"
                             data-i18n="User">@lang('users')</span></a>
                 </li>
+                <li class=" nav-item"><a class="d-flex align-items-center" href="{{ url('admin/settings') }}"><i
+                            data-feather="grid"></i><span class="menu-title text-truncate"
+                            data-i18n="Setting">@lang('settings')</span></a>
+                </li>
                 {{--            <li class=" navigation-header"><span data-i18n="User Interface">User Interface</span><i data-feather="more-horizontal"></i> --}}
                 {{--            </li> --}}
                 {{--            <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="layout"></i><span class="menu-title text-truncate" data-i18n="Page Layouts">Page Layouts</span></a> --}}

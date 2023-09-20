@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BalanceLogController;
 use App\Http\Controllers\Api\DataController;
 use App\Http\Controllers\Api\ECURequestController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,5 +40,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/scripts', [DataController::class, 'scripts']);
     Route::post('/dtc', [DataController::class, 'dtc']);
     Route::post('/dtc/brands', [DataController::class, 'dtc_brands']);
+    Route::middleware('checkApiToken')->group(function() {
+    Route::post('/create/user', [UserController::class, 'create']);
+    Route::post('/update/user/balance', [UserController::class, 'updateBalance']);
+    });
+
     
 });
