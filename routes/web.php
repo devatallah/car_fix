@@ -201,7 +201,10 @@ Route::get('/get_module_brand_ecus', function (Request $request) {
     return response()->json($json);
 });
 
-Route::view('/', 'landing');
+#Route::view('/', 'landing');
+Route::get('/', function () {
+    return Redirect::to('https://www.magic-ecu.com/en');
+});
 
 Auth::routes();
 
