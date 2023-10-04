@@ -15,7 +15,7 @@ class UserController extends Controller
         $rules = [
             'name' => 'required|string|max:255',
             'email' => 'string|email|max:255|unique:users',
-            'mobile' => 'string|digits_between:8,14|unique:users',
+            'mobile' => 'string|unique:users',
             'password' => 'required|string|min:6',
             'license_expire_date' => 'required|date',
             'subscription_expire_date' => 'required|date',
