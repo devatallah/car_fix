@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CAR.FIX PRO – Dashboard Preview</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    /* ─── CSS Variables ─── */
+    :root {
+      --bg-primary:    #0d0f14;
+      --bg-secondary:  #141820;
+      --bg-card:       rgba(255,255,255,0.04);
+      --bg-card-hover: rgba(255,255,255,0.07);
+      --accent:        #00e5b0;
+      --accent-glow:   rgba(0,229,176,0.35);
+      --accent-dim:    rgba(0,229,176,0.12);
+      --accent2:       #00c9f5;
+      --text-primary:  #e8eaf0;
+      --text-secondary:#8a90a2;
+      --text-muted:    #4a5068;
+      --border:        rgba(0,229,176,0.15);
+      --border-strong: rgba(0,229,176,0.45);
+      --danger:        #ff4d6d;
+      --warning:       #ffb830;
+      --radius-sm:     8px;
+      --radius-md:     14px;
+      --radius-lg:     20px;
+      --shadow-glow:   0 0 24px rgba(0,229,176,0.18), 0 4px 32px rgba(0,0,0,0.6);
+      --transition:    all 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 20% -10%, rgba(0,229,176,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 85% 90%, rgba(0,201,245,0.05) 0%, transparent 60%);
+    }
+
+    /* ─── Scrollbar ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+
+    /* ─── TOP NAVBAR ─── */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 68px;
+      background: rgba(13,15,20,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 30px rgba(0,0,0,0.5);
+    }
+
+    /* Logo */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px var(--accent-glow);
+      flex-shrink: 0;
+    }
+    .logo-icon svg { width: 22px; height: 22px; }
+    .logo-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: var(--text-primary);
+    }
+    .logo-text span { color: var(--accent); }
+
+    /* Nav Center - Steps */
+    .nav-steps {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-step {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .nav-step.active {
+      background: var(--accent-dim);
+      color: var(--accent);
+      border: 1px solid var(--border-strong);
+    }
+    .nav-step-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      color: var(--bg-primary);
+      font-size: 10px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-step.active .nav-step-num {
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+    .nav-step-divider {
+      width: 24px;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* User Section */
+    .user-section {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .credits-badge {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 14px;
+      background: var(--accent-dim);
+      border: 1px solid var(--border-strong);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .credits-badge .credit-icon {
+      width: 16px;
+      height: 16px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: var(--bg-primary);
+      font-weight: 900;
+    }
+    .credits-badge .credit-value { color: var(--accent); }
+    .credits-badge .credit-label { color: var(--text-secondary); }
+
+    .expiry-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+    .expiry-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 6px var(--accent);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .user-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1e2535, #2a3045);
+      border: 2px solid var(--border-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    .user-avatar:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--accent-glow); }
+
+    /* ─── MAIN CONTAINER ─── */
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 36px 24px 60px;
+    }
+
+    /* Page Title */
+    .page-header {
+      margin-bottom: 32px;
+      text-align: center;
+    }
+    .page-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .page-title span { color: var(--accent); }
+    .page-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* ─── UPLOAD ZONE ─── */
+    .upload-section { margin-bottom: 28px; }
+
+    .upload-zone {
+      position: relative;
+      border: 2px dashed var(--border-strong);
+      border-radius: var(--radius-lg);
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      padding: 44px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: var(--transition);
+      overflow: hidden;
+    }
+    .upload-zone::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(0,229,176,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .upload-zone:hover,
+    .upload-zone.drag-over {
+      border-color: var(--accent);
+      background: var(--bg-card-hover);
+      box-shadow: 0 0 40px var(--accent-glow), inset 0 0 30px rgba(0,229,176,0.04);
+    }
+    .upload-zone:hover .upload-icon-wrap,
+    .upload-zone.drag-over .upload-icon-wrap {
+      transform: translateY(-4px);
+      box-shadow: 0 0 30px var(--accent-glow);
+    }
+
+    .upload-icon-wrap {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      background: var(--accent-dim);
+      border: 1px solid var(--border-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+    .upload-icon-wrap svg { width: 36px; height: 36px; color: var(--accent); }
+
+    .upload-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .upload-subtitle {
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-align: center;
+    }
+    .upload-types {
+      display: flex;
+      gap: 8px;
+    }
+    .upload-type-tag {
+      padding: 3px 10px;
+      background: rgba(0,229,176,0.08);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 11px;
+      color: var(--accent);
+      font-weight: 600;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .upload-btn {
+      padding: 10px 24px;
+      background: transparent;
+      border: 1px solid var(--accent);
+      border-radius: var(--radius-sm);
+      color: var(--accent);
+      font-family: 'Cairo', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .upload-btn:hover {
+      background: var(--accent);
+      color: var(--bg-primary);
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    /* Progress Bar */
+    .upload-progress { width: 100%; max-width: 380px; }
+    .progress-bar-wrap {
+      height: 4px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      border-radius: 2px;
+      transition: width 0.4s ease;
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+    .progress-filename { color: var(--accent); font-weight: 600; }
+
+    /* File Input Hidden */
+    #fileInput { display: none; }
+
+    /* ─── TWO-COLUMN GRID ─── */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 820px) {
+      .content-grid { grid-template-columns: 1fr; }
+      .nav-steps { display: none; }
+      .expiry-badge { display: none; }
+    }
+
+    /* ─── GLASS CARD ─── */
+    .glass-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 120px; height: 120px;
+      background: radial-gradient(circle, rgba(0,229,176,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .glass-card:hover {
+      border-color: var(--border-strong);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .card-header-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .card-header-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-sm);
+      background: var(--accent-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-header-icon svg { width: 18px; height: 18px; color: var(--accent); }
+    .card-header-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .card-header-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 1px;
+    }
+    .card-header-badge {
+      margin-right: auto;
+      padding: 3px 10px;
+      background: rgba(0,229,176,0.1);
+      border: 1px solid var(--border-strong);
+      border-radius: 20px;
+      font-size: 10px;
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    /* ─── CAR INFO CARD ─── */
+    .car-info-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .info-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.025);
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      transition: var(--transition);
+    }
+    .info-row:hover {
+      background: rgba(0,229,176,0.05);
+      border-color: var(--border);
+    }
+    .info-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .info-label-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.6;
+      flex-shrink: 0;
+    }
+    .info-value {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+    }
+    .info-value.highlight { color: var(--accent); }
+    .info-value.warning  { color: var(--warning); }
+
+    .ecu-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      background: rgba(0,201,245,0.1);
+      border: 1px solid rgba(0,201,245,0.3);
+      border-radius: 20px;
+      font-size: 10px;
+      color: var(--accent2);
+      font-weight: 700;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    /* Confidence meter */
+    .confidence-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px 14px;
+      background: rgba(0,229,176,0.04);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-top: 4px;
+    }
+    .confidence-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+    .confidence-header span:last-child { color: var(--accent); font-weight: 700; }
+    .confidence-bar {
+      height: 5px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .confidence-fill {
+      height: 100%;
+      width: 94%;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      border-radius: 3px;
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    /* ─── SOLUTIONS CARD ─── */
+    .solutions-list { display: flex; flex-direction: column; gap: 9px; margin-bottom: 20px; }
+
+    .solution-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.025);
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .solution-item::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 0; bottom: 0;
+      width: 0;
+      background: linear-gradient(90deg, transparent, rgba(0,229,176,0.06));
+      transition: width 0.3s ease;
+    }
+    .solution-item:hover { background: rgba(0,229,176,0.05); border-color: var(--border); }
+    .solution-item:hover::after { width: 60px; }
+    .solution-item.checked {
+      background: rgba(0,229,176,0.07);
+      border-color: rgba(0,229,176,0.3);
+      box-shadow: 0 0 14px rgba(0,229,176,0.08);
+    }
+
+    /* Custom Checkbox */
+    .custom-checkbox {
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      border: 2px solid var(--text-muted);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .solution-item.checked .custom-checkbox {
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+    .custom-checkbox svg {
+      width: 11px; height: 11px;
+      color: var(--bg-primary);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .solution-item.checked .custom-checkbox svg { opacity: 1; }
+
+    .solution-info { flex: 1; }
+    .solution-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+    .solution-desc {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .solution-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+    .solution-credits {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .solution-credits span { font-size: 9px; color: var(--text-secondary); font-family: 'Cairo', sans-serif; }
+    .solution-tag {
+      font-size: 9px;
+      padding: 2px 7px;
+      border-radius: 10px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .solution-tag.popular {
+      background: rgba(255,184,48,0.12);
+      color: var(--warning);
+      border: 1px solid rgba(255,184,48,0.25);
+    }
+    .solution-tag.new {
+      background: rgba(0,229,176,0.1);
+      color: var(--accent);
+      border: 1px solid var(--border-strong);
+    }
+    .solution-tag.hot {
+      background: rgba(255,77,109,0.1);
+      color: var(--danger);
+      border: 1px solid rgba(255,77,109,0.25);
+    }
+
+    /* Cost Summary */
+    .cost-summary {
+      padding: 14px;
+      background: rgba(0,229,176,0.05);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+    }
+    .cost-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .cost-row:last-child { margin-bottom: 0; }
+    .cost-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 8px 0;
+    }
+    .cost-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cost-total-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .cost-total-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--accent);
+      text-shadow: 0 0 20px var(--accent-glow);
+    }
+    .cost-total-value span { font-size: 11px; color: var(--text-secondary); font-family: 'Cairo', sans-serif; }
+
+    /* Action Button */
+    .fix-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      border-radius: var(--radius-md);
+      color: var(--bg-primary);
+      font-family: 'Cairo', sans-serif;
+      font-size: 15px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 30px var(--accent-glow), 0 4px 20px rgba(0,0,0,0.4);
+      letter-spacing: 0.5px;
+    }
+    .fix-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .fix-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 50px var(--accent-glow), 0 8px 30px rgba(0,0,0,0.5);
+    }
+    .fix-btn:hover::before { opacity: 1; }
+    .fix-btn:active { transform: translateY(0); }
+    .fix-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .fix-btn-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .fix-btn-divider {
+      width: 1px;
+      height: 18px;
+      background: rgba(0,0,0,0.25);
+    }
+    .fix-btn-ar { font-size: 14px; opacity: 0.85; }
+
+    /* Warning note */
+    .warning-note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: rgba(255,184,48,0.06);
+      border: 1px solid rgba(255,184,48,0.2);
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 12px;
+    }
+    .warning-note svg { width: 14px; height: 14px; color: var(--warning); flex-shrink: 0; }
+
+    /* ─── TOAST ─── */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(20,24,32,0.95);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      padding: 12px 20px;
+      font-size: 13px;
+      color: var(--accent);
+      font-weight: 600;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 0 30px var(--accent-glow);
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+      pointer-events: none;
+      z-index: 999;
+      white-space: nowrap;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════ NAVBAR ═══════════════ -->
+  <nav class="navbar">
+    <a href="#" class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#0d0f14">
+          <path d="M3 18v-6a9 9 0 0118 0v6"/>
+          <path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/>
+        </svg>
+      </div>
+      <span class="logo-text">CAR.<span>FIX</span> PRO</span>
+    </a>
+
+    <div class="nav-steps">
+      <div class="nav-step active">
+        <div class="nav-step-num">١</div>
+        رفع الملف
+      </div>
+      <div class="nav-step-divider"></div>
+      <div class="nav-step">
+        <div class="nav-step-num">٢</div>
+        الحلول
+      </div>
+      <div class="nav-step-divider"></div>
+      <div class="nav-step">
+        <div class="nav-step-num">٣</div>
+        التحميل
+      </div>
+    </div>
+
+    <div class="user-section">
+      <div class="credits-badge">
+        <div class="credit-icon">C</div>
+        <span class="credit-value" id="navCredits">24</span>
+        <span class="credit-label">كريدت</span>
+      </div>
+      <div class="expiry-badge">
+        <div class="expiry-dot"></div>
+        <span>نشط حتى ديسمبر 2026</span>
+      </div>
+      <div class="user-avatar" title="الملف الشخصي">أح</div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════ MAIN ═══════════════ -->
+  <main class="main-container">
+
+    <div class="page-header">
+      <h1 class="page-title">معالج ملفات <span>ECU</span></h1>
+      <p class="page-subtitle">ارفع ملف الـ ECU الخاص بك للكشف التلقائي عن الحلول المناسبة</p>
+    </div>
+
+    <!-- ═══════ UPLOAD ZONE ═══════ -->
+    <div class="upload-section">
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" id="fileInput" accept=".bin,.hex,.ori,.mod,.tuned"/>
+
+        <div class="upload-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 16 12 12 8 16"/>
+            <line x1="12" y1="12" x2="12" y2="21"/>
+            <path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/>
+          </svg>
+        </div>
+
+        <p class="upload-title">اسحب وأفلت الـ ECU هنا</p>
+        <p class="upload-subtitle">أو اضغط لاختيار الملف من جهازك</p>
+
+        <div class="upload-types">
+          <span class="upload-type-tag">.BIN</span>
+          <span class="upload-type-tag">.HEX</span>
+          <span class="upload-type-tag">.ORI</span>
+          <span class="upload-type-tag">.MOD</span>
+        </div>
+
+        <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+          اختر ملف ECU
+        </button>
+
+        <div class="upload-progress" id="uploadProgress" style="display:none">
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-text">
+            <span class="progress-filename" id="progressFilename">—</span>
+            <span id="progressPercent">0%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ TWO-COLUMN GRID ═══════ -->
+    <div class="content-grid">
+
+      <!-- ── RIGHT: Car Info Card ── -->
+      <div class="glass-card">
+        <div class="card-header-row">
+          <div class="card-header-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13" rx="2"/>
+              <path d="M16 8h4l3 3v5h-7V8z"/>
+              <circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+            </svg>
+          </div>
+          <div>
+            <div class="card-header-title">بيانات السيارة</div>
+            <div class="card-header-sub">مستخرجة تلقائيًا من الملف</div>
+          </div>
+          <div class="card-header-badge">✓ تم التعرف</div>
+        </div>
+
+        <div class="car-info-list">
+          <div class="info-row">
+            <span class="info-label"><span class="info-label-dot"></span>الماركة</span>
+            <span class="info-value highlight">BMW</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label"><span class="info-label-dot"></span>الموديل</span>
+            <span class="info-value">320i</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label"><span class="info-label-dot"></span>السنة</span>
+            <span class="info-value">2018</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label"><span class="info-label-dot"></span>المحرك</span>
+            <span class="info-value">B48 – 2.0T</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label"><span class="info-label-dot"></span>وحدة التحكم ECU</span>
+            <span class="ecu-chip">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg>
+              Bosch MED17.2
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-label"><span class="info-label-dot"></span>حجم الملف</span>
+            <span class="info-value">512 KB</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label"><span class="info-label-dot"></span>الوقود</span>
+            <span class="info-value">بنزين</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label"><span class="info-label-dot"></span>VIN</span>
+            <span class="info-value" style="font-size:10px; letter-spacing:1px;">WBA3X5C50ED****</span>
+          </div>
+          <div class="confidence-wrap">
+            <div class="confidence-header">
+              <span>مستوى الثقة بالتعرف</span>
+              <span>94%</span>
+            </div>
+            <div class="confidence-bar">
+              <div class="confidence-fill"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── LEFT: Solutions Card ── -->
+      <div class="glass-card">
+        <div class="card-header-row">
+          <div class="card-header-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="card-header-title">الحلول المتاحة</div>
+            <div class="card-header-sub">اختر ما تريد تطبيقه على الملف</div>
+          </div>
+          <div class="card-header-badge" id="selectedCount">0 محدد</div>
+        </div>
+
+        <div class="solutions-list" id="solutionsList">
+
+          <div class="solution-item" data-cost="1" onclick="toggleSolution(this)">
+            <div class="custom-checkbox">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </div>
+            <div class="solution-info">
+              <div class="solution-name">EGR Off</div>
+              <div class="solution-desc">إيقاف نظام إعادة الغاز – تحسين أداء المحرك</div>
+            </div>
+            <div class="solution-meta">
+              <div class="solution-credits">1 <span>كريدت</span></div>
+              <span class="solution-tag popular">⭐ شائع</span>
+            </div>
+          </div>
+
+          <div class="solution-item" data-cost="2" onclick="toggleSolution(this)">
+            <div class="custom-checkbox">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </div>
+            <div class="solution-info">
+              <div class="solution-name">Stage 1</div>
+              <div class="solution-desc">ضبط أداء المرحلة الأولى – زيادة عزم وقدرة</div>
+            </div>
+            <div class="solution-meta">
+              <div class="solution-credits">2 <span>كريدت</span></div>
+              <span class="solution-tag hot">🔥 الأعلى طلبًا</span>
+            </div>
+          </div>
+
+          <div class="solution-item" data-cost="3" onclick="toggleSolution(this)">
+            <div class="custom-checkbox">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </div>
+            <div class="solution-info">
+              <div class="solution-name">Stage 2</div>
+              <div class="solution-desc">ضبط أداء المرحلة الثانية – للأنظمة المعدلة</div>
+            </div>
+            <div class="solution-meta">
+              <div class="solution-credits">3 <span>كريدت</span></div>
+              <span class="solution-tag new">✨ جديد</span>
+            </div>
+          </div>
+
+          <div class="solution-item" data-cost="1" onclick="toggleSolution(this)">
+            <div class="custom-checkbox">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </div>
+            <div class="solution-info">
+              <div class="solution-name">DPF Off</div>
+              <div class="solution-desc">إيقاف فلتر الجسيمات – للاستخدام الميداني</div>
+            </div>
+            <div class="solution-meta">
+              <div class="solution-credits">1 <span>كريدت</span></div>
+            </div>
+          </div>
+
+          <div class="solution-item" data-cost="2" onclick="toggleSolution(this)">
+            <div class="custom-checkbox">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </div>
+            <div class="solution-info">
+              <div class="solution-name">AdBlue Off</div>
+              <div class="solution-desc">تعطيل نظام AdBlue بشكل كامل</div>
+            </div>
+            <div class="solution-meta">
+              <div class="solution-credits">2 <span>كريدت</span></div>
+              <span class="solution-tag popular">⭐ شائع</span>
+            </div>
+          </div>
+
+          <div class="solution-item" data-cost="1" onclick="toggleSolution(this)">
+            <div class="custom-checkbox">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </div>
+            <div class="solution-info">
+              <div class="solution-name">Speed Limiter Off</div>
+              <div class="solution-desc">إزالة محدد السرعة الإلكتروني</div>
+            </div>
+            <div class="solution-meta">
+              <div class="solution-credits">1 <span>كريدت</span></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Cost Summary -->
+        <div class="cost-summary">
+          <div class="cost-row">
+            <span>الحلول المختارة</span>
+            <span id="selectedSolutionsCount">—</span>
+          </div>
+          <div class="cost-row">
+            <span>رصيدك الحالي</span>
+            <span style="color: var(--accent);" id="currentCredits">24 كريدت</span>
+          </div>
+          <div class="cost-divider"></div>
+          <div class="cost-total-row">
+            <span class="cost-total-label">إجمالي التكلفة</span>
+            <span class="cost-total-value"><span id="totalCost">0</span> <span>كريدت</span></span>
+          </div>
+        </div>
+
+        <!-- FIX Button -->
+        <button class="fix-btn" id="fixBtn" disabled onclick="handleFix()">
+          <div class="fix-btn-inner">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+            </svg>
+            FIX FILE
+            <div class="fix-btn-divider"></div>
+            <span class="fix-btn-ar">إصلاح الملف</span>
+          </div>
+        </button>
+
+        <div class="warning-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          سيتم خصم الكريدتات عند الضغط على إصلاح الملف. العملية غير قابلة للاسترداد.
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ═══════════════ JAVASCRIPT ═══════════════ -->
+  <script>
+    let userCredits = 24;
+
+    /* ── Toggle Solution ── */
+    function toggleSolution(el) {
+      el.classList.toggle('checked');
+      updateCostSummary();
+    }
+
+    /* ── Update Cost Summary ── */
+    function updateCostSummary() {
+      const checked = document.querySelectorAll('.solution-item.checked');
+      let total = 0;
+      checked.forEach(item => { total += parseInt(item.dataset.cost); });
+
+      document.getElementById('totalCost').textContent = total;
+      document.getElementById('selectedCount').textContent = checked.length + ' محدد';
+      document.getElementById('selectedSolutionsCount').textContent =
+        checked.length > 0 ? checked.length + ' حل' : '—';
+
+      const btn = document.getElementById('fixBtn');
+      btn.disabled = (checked.length === 0 || total > userCredits);
+    }
+
+    /* ── Handle Fix ── */
+    function handleFix() {
+      const checked = document.querySelectorAll('.solution-item.checked');
+      if (checked.length === 0) return;
+      const total = parseInt(document.getElementById('totalCost').textContent);
+      userCredits -= total;
+      document.getElementById('navCredits').textContent = userCredits;
+      document.getElementById('currentCredits').textContent = userCredits + ' كريدت';
+      showToast('✅ تم إرسال الملف للمعالجة! سيتم إشعارك عند الانتهاء.');
+      checked.forEach(el => el.classList.remove('checked'));
+      updateCostSummary();
+    }
+
+    /* ── Toast ── */
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    /* ── Upload Zone: Drag & Drop ── */
+    const zone = document.getElementById('uploadZone');
+    const input = document.getElementById('fileInput');
+
+    zone.addEventListener('click', e => {
+      if (e.target.classList.contains('upload-btn') || e.target === input) return;
+      input.click();
+    });
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (file) handleFile(file);
+    });
+    input.addEventListener('change', () => { if (input.files[0]) handleFile(input.files[0]); });
+
+    function handleFile(file) {
+      const progress = document.getElementById('uploadProgress');
+      const fill = document.getElementById('progressFill');
+      const name = document.getElementById('progressFilename');
+      const pct  = document.getElementById('progressPercent');
+
+      progress.style.display = 'block';
+      name.textContent = file.name;
+
+      let p = 0;
+      const iv = setInterval(() => {
+        p += Math.random() * 18;
+        if (p >= 100) { p = 100; clearInterval(iv); showToast('✅ تم رفع ' + file.name + ' بنجاح!'); }
+        fill.style.width = p + '%';
+        pct.textContent = Math.round(p) + '%';
+      }, 180);
+    }
+
+    /* Init */
+    updateCostSummary();
+  </script>
+</body>
+</html>

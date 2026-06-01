@@ -12,6 +12,7 @@ use App\Models\DTC;
 use App\Models\ECU;
 use App\Models\Module;
 use App\Models\Script;
+use App\Models\SolutionTemplate;
 use Illuminate\Http\Request;
 
 class DataController extends Controller
@@ -80,6 +81,68 @@ class DataController extends Controller
                 return response()->json([
                     'success' => false,
                     "message" => "Scripts Not Found",
+                ]);
+            }
+
+            return response()->json([
+                'success' => false,
+                "message" => "Fix Type Not Found",
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            "message" => "ECU Not Found",
+        ]);
+    }
+
+    public function solutionTemplates(Request $request)
+    {
+        $rules = [
+            'brand' => 'required',
+            'ecu' => 'required',
+            'fix_type' => 'required',
+        ];
+        $this->validate($request, $rules);
+
+        $brand = Brand::findOrFail($request->brand);
+
+        $ecu = ECU::where("brand_uuid", $brand->uuid)->where("uuid", $request->ecu)->first();
+
+        $data = [];
+
+        if ($ecu) {
+            $fix_type = explode(",", $request->fix_type);
+
+            $modules = Module::query()->whereIn("uuid", $fix_type)->get()->pluck("uuid")->toArray();
+
+            if (count($modules)) {
+                // جلب solution templates بدلاً من scripts مباشرة
+                $solutionTemplates = SolutionTemplate::whereHas('script', function($q) use ($modules, $ecu) {
+                    $q->whereIn("module_uuid", $modules)->where('ecu_uuid', $ecu->uuid);
+                })->get();
+
+                if (count($solutionTemplates)) {
+                    foreach ($solutionTemplates as $template) {
+                        $row = [
+                            $brand->name . '-' . $ecu->name . '-' . $template->script->module->name => [
+                                'template' => $template,
+                                'files' => ScriptFilesResource::collection($template->script->files),
+                            ],
+                        ];
+                        array_push($data, $row);
+                    }
+
+                    return response()->json([
+                        'success' => true,
+                        "message" => "Loaded Successfully",
+                        "data" => $data
+                    ]);
+                }
+
+                return response()->json([
+                    'success' => false,
+                    "message" => "Solution Templates Not Found",
                 ]);
             }
 

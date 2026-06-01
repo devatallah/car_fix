@@ -20,14 +20,14 @@ class ProfileController extends Controller
             'mobile' => 'string|max:255|unique:users,mobile,' . $user_id.',uuid',
         ];
         $this->validate($request, $rules);
-        $data = $request->only('name', 'email');
+        $data = $request->only('name', 'email', 'mobile');
         $user->update($data);
 
         if ($request->ajax()) {
             return response()->json(['status' => true]);
         }
         Session::flash('success_message', 'تم التعديل');
-        return redirect('mealy_panel/profile');
+        return redirect('/user/profile');
 
     }
 
@@ -47,7 +47,7 @@ class ProfileController extends Controller
         }
         Session::flash('success_message', 'تم التعديل');
 
-        return redirect('mealy_panel/profile#change_password');
+        return redirect('/user/profile#change_password');
     }
 
 }

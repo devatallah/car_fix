@@ -323,14 +323,18 @@ Route::post('user/login', [App\Http\Controllers\User\Auth\LoginController::class
 Route::post('user/logout', [App\Http\Controllers\User\Auth\LoginController::class, 'logout'])->name('user_logout');
 Route::group(['namespace' => 'User', 'prefix' => 'user', 'middleware' => ['auth:web']], function () {
     Route::get('/', function () {
-        return redirect('user/solutions');
+        return redirect('user/detect');
     });
+    Route::get('/detect', [App\Http\Controllers\User\EcuDetectionController::class, 'index'])->name('user.detect.index');
     Route::get('/profile', function () {
         return view('portals.user.profile');
     });
     Route::put('/profile', [App\Http\Controllers\User\ProfileController::class, 'update']);
     Route::put('/password', [App\Http\Controllers\User\ProfileController::class, 'changePassword']);
 
+    Route::get('/file-processor', function () {
+        return view('portals.user.file-processor-new');
+    })->name('user.file-processor');
 
     Route::group(['prefix' => 'solutions'], function () {
         Route::get('/', [App\Http\Controllers\User\SolutionController::class, 'index']);
@@ -341,6 +345,12 @@ Route::group(['namespace' => 'User', 'prefix' => 'user', 'middleware' => ['auth:
         Route::get('/brands/list', [App\Http\Controllers\User\SolutionController::class, 'get_brands']);
         Route::post('/find/solution', [App\Http\Controllers\User\SolutionController::class, 'find_solution']);
     });
+
+    // ECU Detection Routes
+    Route::post('/detect', [App\Http\Controllers\User\EcuDetectionController::class, 'detect'])->name('user.detect.process');
+    Route::get('/detect/{session}', [App\Http\Controllers\User\EcuDetectionController::class, 'show'])->name('user.detect.show');
+    Route::post('/detect/{session}/apply', [App\Http\Controllers\User\EcuDetectionController::class, 'applyMods'])->name('user.detect.apply');
+
     Route::group(['prefix' => 'ecu_requests'], function () {
         Route::get('/', [App\Http\Controllers\User\ECURequestController::class, 'index']);
         Route::post('/', [App\Http\Controllers\User\ECURequestController::class, 'store']);

@@ -28,7 +28,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/user';
+    protected $redirectTo = '/user/detect';
 
     /**
      * Create a new controller instance.
@@ -73,12 +73,9 @@ class LoginController extends Controller
         $macAddr = strtok($macAddr, ' ');
         $mac = explode(' ',$macAddr);
         $user = User::where('email', $request->email)->first();
-        if ($user->mac_address != null && $user->mac_address != $mac) {
+        if ($user && $user->mac_address != null && $user->mac_address != $mac) {
             return back()->with('faild', 'Your device does not exist on our system, try another one.');
-        } else {
-           // $user->update(['mac_address' => $mac]);
         }
-
 
         if ($this->attemptLogin($request)) {
             return $this->sendLoginResponse($request);

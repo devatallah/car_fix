@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: carfix_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - carfix_net
+    environment:
+      - PHP_MEMORY_LIMIT=512M
+
+  db:
+    image: mysql:8.0
+    container_name: carfix_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: carfix
+      MYSQL_USER: carfix
+      MYSQL_PASSWORD: secret
+    ports:
+      - "3307:3306"
+    volumes:
+      - carfix_db_data:/var/lib/mysql
+    networks:
+      - carfix_net
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: carfix_phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: carfix
+      PMA_PASSWORD: secret
+    depends_on:
+      - db
+    networks:
+      - carfix_net
+
+volumes:
+  carfix_db_data:
+
+networks:
+  carfix_net:
+    driver: bridge

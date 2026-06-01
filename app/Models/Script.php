@@ -71,11 +71,10 @@ class Script extends Model
         return $this->hasMany(ScriptFile::class, 'script_uuid', 'uuid');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | SCOPES
-    |--------------------------------------------------------------------------
-    */
+    public function solutionTemplates()
+    {
+        return $this->hasMany(SolutionTemplate::class, 'script_uuid', 'uuid');
+    }
 
     /*
     |--------------------------------------------------------------------------
