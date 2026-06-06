@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Models\Script;
 use App\Services\MagicsScriptParser;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 
 class BackfillScriptFileSize extends Command
 {
@@ -48,11 +47,15 @@ class BackfillScriptFileSize extends Command
                 continue;
             }
 
-            $rawPath = $scriptFile->getRawOriginal('file');
+            $rawPath   = $scriptFile->getRawOriginal('file');
+            $publicUrl = 'https://mycarfixbucket.s3.eu-west-1.amazonaws.com/' . $rawPath;
 
-            // جلب الملف من S3
+            // جلب الملف من S3 عبر الـ public URL (الملفات public — لا تحتاج credentials)
             try {
-                $content = Storage::disk('s3')->get($rawPath);
+                $content = file_get_contents($publicUrl);
+                if ($content === false) {
+                    throw new \RuntimeException("Could not fetch: {$publicUrl}");
+                }
             } catch (\Exception $e) {
                 $this->warn("  [{$script->uuid}] ⚠️  Not found on S3: {$rawPath} — skipped.");
                 $skipped++;
