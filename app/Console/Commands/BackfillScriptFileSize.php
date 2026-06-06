@@ -50,15 +50,17 @@ class BackfillScriptFileSize extends Command
 
             $rawPath = $scriptFile->getRawOriginal('file');
 
+            // جلب الملف من S3
             try {
                 $content = Storage::disk('s3')->get($rawPath);
+            } catch (\Exception $e) {
+                $this->warn("  [{$script->uuid}] ⚠️  Not found on S3: {$rawPath} — skipped.");
+                $skipped++;
+                continue;
+            }
 
-                if ($content === null) {
-                    $this->warn("  [{$script->uuid}] File not found on S3: {$rawPath} — skipped.");
-                    $skipped++;
-                    continue;
-                }
-
+            // تحليل المحتوى — بغض النظر عن الامتداد
+            try {
                 $parsed       = $parser->parse($content);
                 $expectedSize = $parsed['expected_size'];
 
