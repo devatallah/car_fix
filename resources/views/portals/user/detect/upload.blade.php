@@ -483,9 +483,10 @@
 /* ─────────────────────────────────
    State
 ───────────────────────────────── */
-var userBalance  = {{ auth()->user()->balance ?? 0 }};
-var sessionKey   = null;
-var uploadedFile = null;
+var userBalance      = {{ auth()->user()->balance ?? 0 }};
+var sessionKey       = null;
+var uploadedFile     = null;
+var solutionUuidsMap = {}; // module_name → [uuid1, uuid2, ...]
 
 /* ─────────────────────────────────
    Upload Zone
@@ -617,14 +618,25 @@ function populateSolutions(mods){
   }
   document.getElementById('manualSelectPanel').style.display = 'none';
 
-  list.innerHTML = mods.map(function(m){
-    var cost     = m.is_free ? 0 : (parseFloat(m.price) || 0);
-    var costHtml = m.is_free
+  // تجميع الحلول حسب الاسم وتخزين UUIDs في solutionUuidsMap بعيداً عن الـ DOM
+  solutionUuidsMap = {};
+  var groups = {};
+  mods.forEach(function(m){
+    if (!groups[m.module_name]) {
+      groups[m.module_name] = { module_name: m.module_name, is_free: m.is_free, price: m.price };
+      solutionUuidsMap[m.module_name] = [];
+    }
+    solutionUuidsMap[m.module_name].push(m.uuid);
+  });
+
+  list.innerHTML = Object.values(groups).map(function(g){
+    var cost     = g.is_free ? 0 : (parseFloat(g.price) || 0);
+    var costHtml = g.is_free
       ? '<div class="solution-credits" style="color:var(--accent)">مجاني</div>'
       : '<div class="solution-credits">' + cost + ' <span>كريدت</span></div>';
-    return '<div class="solution-item" data-uuid="' + m.uuid + '" data-cost="' + cost + '" onclick="toggleSolution(this)">' +
+    return '<div class="solution-item" data-key="' + escHtml(g.module_name) + '" data-cost="' + cost + '" onclick="toggleSolution(this)">' +
       '<div class="custom-checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></div>' +
-      '<div class="solution-info"><div class="solution-name">' + escHtml(m.module_name) + '</div><div class="solution-desc">تعديل تلقائي على ملف الـ ECU</div></div>' +
+      '<div class="solution-info"><div class="solution-name">' + escHtml(g.module_name) + '</div><div class="solution-desc">تعديل تلقائي على ملف الـ ECU</div></div>' +
       '<div class="solution-meta">' + costHtml + '</div>' +
     '</div>';
   }).join('');
@@ -745,7 +757,10 @@ document.getElementById('fixBtn').addEventListener('click', function(){
   if(!sessionKey || checked.length === 0) return;
 
   var uuids = [];
-  checked.forEach(function(el){ uuids.push(el.dataset.uuid); });
+  checked.forEach(function(el){
+    var key = el.dataset.key;
+    (solutionUuidsMap[key] || []).forEach(function(u){ uuids.push(u); });
+  });
   var total = parseInt(document.getElementById('totalCost').textContent);
 
   var btn = document.getElementById('fixBtn');
@@ -755,31 +770,52 @@ document.getElementById('fixBtn').addEventListener('click', function(){
 
   setStep(3);
 
-  // Build form and submit to trigger file download
-  var form = document.createElement('form');
-  form.method = 'POST';
-  form.action = '{{ url("/user/detect") }}/' + sessionKey + '/apply';
+  // Build FormData and use fetch to handle both file download and JSON errors
+  var formData = new FormData();
+  formData.append('_token', '{{ csrf_token() }}');
+  uuids.forEach(function(uuid){ formData.append('record_uuids[]', uuid); });
 
-  var tokenInput = document.createElement('input');
-  tokenInput.type = 'hidden'; tokenInput.name = '_token'; tokenInput.value = '{{ csrf_token() }}';
-  form.appendChild(tokenInput);
+  fetch('{{ url("/user/detect") }}/' + sessionKey + '/apply', {
+    method: 'POST',
+    body: formData,
+    credentials: 'same-origin',
+    headers: { 'Accept': 'application/json' },
+  })
+  .then(function(response){
+    var contentType = response.headers.get('Content-Type') || '';
 
-  uuids.forEach(function(uuid){
-    var inp = document.createElement('input');
-    inp.type = 'hidden'; inp.name = 'record_uuids[]'; inp.value = uuid;
-    form.appendChild(inp);
-  });
+    if (contentType.includes('octet-stream') || contentType.includes('application/bin')) {
+      // ← ملف باينري — نحمّله
+      var disposition = response.headers.get('Content-Disposition') || '';
+      var fileNameMatch = disposition.match(/filename[^;=\n]*=([^;\n]*)/);
+      var fileName = fileNameMatch ? fileNameMatch[1].replace(/['"]/g,'').trim() : 'patched_ecu.bin';
 
-  document.body.appendChild(form);
-  form.submit();
+      return response.blob().then(function(blob){
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url; a.download = fileName;
+        document.body.appendChild(a); a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
 
-  setTimeout(function(){
-    userBalance -= total;
-    document.getElementById('currentCreditsDisplay').textContent = userBalance + ' كريدت';
-    document.querySelector('.cf-credit-value').textContent = userBalance;
-    cfShowToast('✅ تم تطبيق التعديلات! جاري التحميل...');
+        userBalance -= total;
+        document.getElementById('currentCreditsDisplay').textContent = userBalance + ' كريدت';
+        document.querySelector('.cf-credit-value').textContent = userBalance;
+        cfShowToast('✅ تم تطبيق التعديلات! جاري التحميل...');
+        resetFixBtn();
+      });
+    } else {
+      // ← JSON (خطأ أو رسالة) — نعرضه كـ toast
+      return response.json().then(function(data){
+        cfShowToast('❌ ' + (data.message || 'حدث خطأ غير متوقع'), 'error');
+        resetFixBtn();
+      });
+    }
+  })
+  .catch(function(){
+    cfShowToast('❌ خطأ في الاتصال بالخادم', 'error');
     resetFixBtn();
-  }, 1500);
+  });
 });
 
 function resetFixBtn(){

@@ -10,6 +10,7 @@ use App\Models\Script;
 use App\Services\EcuBinAnalyzerService;
 use App\Services\MagicsScriptApplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -110,7 +111,7 @@ class EcuDetectionController extends Controller
             $tempPath   = 'ecu_temp/' . $sessionKey . '.bin';
             Storage::disk('local')->put($tempPath, $binaryContent);
 
-            session()->put('ecu_detect_' . $sessionKey, [
+            Cache::put('ecu_detect_' . $sessionKey, [
                 'car_info'       => $carInfo,
                 'temp_path'      => $tempPath,
                 'file_name'      => $request->file('file')->getClientOriginalName(),
@@ -120,7 +121,7 @@ class EcuDetectionController extends Controller
                 'calibration_id' => $calibrationId,
                 'sw_version'     => $swVersion,
                 'hw_version'     => $hwVersion,
-            ]);
+            ], now()->addHours(2));
 
             if ($request->ajax()) {
                 return response()->json([
@@ -159,7 +160,7 @@ class EcuDetectionController extends Controller
             'record_uuids.*' => 'string',
         ]);
 
-        $sessionData = session()->get('ecu_detect_' . $sessionKey);
+        $sessionData = Cache::get('ecu_detect_' . $sessionKey);
 
         if (!$sessionData) {
             return response()->json(['status' => false, 'message' => 'Session expired. Please upload the file again.'], 422);
@@ -175,15 +176,17 @@ class EcuDetectionController extends Controller
             // تحميل الـ Scripts المطلوبة مع ملفاتها
             $scripts = Script::whereIn('uuid', $request->record_uuids)
                 ->whereNull('deleted_at')
-                ->with(['files', 'module'])
+                ->with(['files', 'module', 'ecu'])
                 ->get();
 
             if ($scripts->isEmpty()) {
                 return response()->json(['status' => false, 'message' => 'No valid modifications found.'], 422);
             }
 
-            // حساب التكلفة الإجمالية
-            $totalCost = $scripts->sum(fn($s) => optional($s->module)->is_free ? 0 : (float) optional($s->module)->price);
+            // حساب التكلفة بحسب المجموعات الفريدة (module فريد = تكلفة واحدة)
+            $totalCost = $scripts
+                ->unique(fn($s) => optional($s->module)->uuid)
+                ->sum(fn($s) => optional($s->module)->is_free ? 0 : (float) optional($s->module)->price);
 
             // التحقق من رصيد المستخدم
             $user = auth()->user();
@@ -191,24 +194,58 @@ class EcuDetectionController extends Controller
                 return response()->json(['status' => false, 'message' => 'رصيدك غير كافٍ لتطبيق هذه الحلول.'], 422);
             }
 
-            // تحميل محتوى الـ Scripts من S3
-            $scriptContents = [];
-            foreach ($scripts as $script) {
-                $scriptFile = $script->files->first();
-                if ($scriptFile) {
-                    $content = Storage::disk('s3')->get($scriptFile->getRawOriginal('file'));
-                    if ($content !== null) {
-                        $scriptContents[] = $content;
+            // تجميع الـ Scripts حسب module_name
+            // كل مجموعة تمثل نوع fix واحد (DPF, EGR, ...)
+            $groups = $scripts->groupBy(fn($s) => optional($s->module)->name ?? 'unknown');
+
+            // تطبيق كل مجموعة على الملف الناتج من المجموعة السابقة
+            $currentBinary  = $binaryContent;
+            $totalApplied   = 0;
+            $totalSkipped   = 0;
+            $appliedModules = []; // أسماء الـ modules التي تطبّقت فعلاً
+            $ecuName        = null;
+
+            foreach ($groups as $moduleName => $groupScripts) {
+                $groupApplied = false;
+
+                foreach ($groupScripts as $script) {
+                    $scriptFile = $script->files->first();
+                    if (!$scriptFile) continue;
+
+                    $rawPath   = $scriptFile->getRawOriginal('file');
+                    $publicUrl = 'https://mycarfixbucket.s3.eu-west-1.amazonaws.com/' . $rawPath;
+                    $content   = @file_get_contents($publicUrl);
+                    if ($content === false || $content === null) continue;
+
+                    try {
+                        $result        = $this->applier->parseAndApply($currentBinary, $content);
+                        $currentBinary = $result['content'];  // الناتج يصير مدخل المجموعة التالية
+                        $totalApplied += $result['applied'];
+                        $totalSkipped += $result['skipped'];
+                        $appliedModules[] = $moduleName;
+                        $ecuName          = $ecuName ?? optional($script->ecu)->name;
+                        $groupApplied = true;
+                        break; // ✅ نجح — انتقل للمجموعة التالية
+                    } catch (\Exception $e) {
+                        continue; // ⏭ هذا السكريبت غير متوافق، جرّب التالي
                     }
+                }
+
+                // لو كل سكريبتات المجموعة فشلت
+                if (!$groupApplied) {
+                    \Log::warning("applyMods: no compatible script found for module [{$moduleName}]");
                 }
             }
 
-            if (empty($scriptContents)) {
-                return response()->json(['status' => false, 'message' => 'No script content found on storage.'], 422);
+            if (empty($appliedModules)) {
+                return response()->json([
+                    'status'  => false,
+                    'message' => 'لم يتم العثور على سكريبت متوافق مع ملفك. تأكد من صحة الملف أو تواصل مع الدعم.',
+                ], 422);
             }
 
-            // تطبيق الـ Scripts على الملف
-            $result = $this->applier->applyMultiple($binaryContent, $scriptContents);
+            // نتيجة نهائية
+            $result = ['content' => $currentBinary, 'total_applied' => $totalApplied, 'total_skipped' => $totalSkipped];
 
             // خصم الرصيد وتسجيل العملية
             DB::transaction(function () use ($user, $totalCost) {
@@ -222,12 +259,12 @@ class EcuDetectionController extends Controller
                 ]);
             });
 
-            // تنظيف الملف المؤقت
-            Storage::disk('local')->delete($sessionData['temp_path']);
-            session()->forget('ecu_detect_' . $sessionKey);
+            // لا نحذف الملف المؤقت ولا الـ cache — المستخدم قد يطبّق fix إضافي على نفس الملف
+            // يتنظّفون تلقائياً بعد انتهاء مدة الـ cache (ساعتان)
 
-            $baseName   = pathinfo($sessionData['file_name'], PATHINFO_FILENAME);
-            $outputName = 'patched_' . $baseName . '.bin';
+            $ecuName    = $ecuName ?? 'ECU';
+            $fixNames   = implode(', ', array_unique($appliedModules));
+            $outputName = 'magic_solution_(' . $ecuName . ' - ' . $fixNames . ').bin';
 
             return response()->stream(function () use ($result) {
                 echo $result['content'];

@@ -351,8 +351,8 @@ Route::group(['namespace' => 'User', 'prefix' => 'user', 'middleware' => ['auth:
     Route::get('/detect/brands', [App\Http\Controllers\User\EcuDetectionController::class, 'getBrands'])->name('user.detect.brands');
     Route::get('/detect/ecus', [App\Http\Controllers\User\EcuDetectionController::class, 'getEcus'])->name('user.detect.ecus');
     Route::get('/detect/manual-solutions', [App\Http\Controllers\User\EcuDetectionController::class, 'getManualSolutions'])->name('user.detect.manual-solutions');
-    Route::get('/detect/{session}', [App\Http\Controllers\User\EcuDetectionController::class, 'show'])->name('user.detect.show');
-    Route::post('/detect/{session}/apply', [App\Http\Controllers\User\EcuDetectionController::class, 'applyMods'])->name('user.detect.apply');
+    Route::get('/detect/{sessionKey}', [App\Http\Controllers\User\EcuDetectionController::class, 'show'])->name('user.detect.show');
+    Route::post('/detect/{sessionKey}/apply', [App\Http\Controllers\User\EcuDetectionController::class, 'applyMods'])->name('user.detect.apply');
 
     Route::group(['prefix' => 'ecu_requests'], function () {
         Route::get('/', [App\Http\Controllers\User\ECURequestController::class, 'index']);
