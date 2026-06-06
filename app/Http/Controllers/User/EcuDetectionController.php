@@ -3,21 +3,26 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Services\EcuDetectionService;
+use App\Models\BalanceLog;
+use App\Models\Brand;
+use App\Models\ECU;
+use App\Models\Script;
+use App\Services\EcuBinAnalyzerService;
 use App\Services\MagicsScriptApplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class EcuDetectionController extends Controller
 {
-    protected EcuDetectionService $detectionService;
     protected MagicsScriptApplier $applier;
+    protected EcuBinAnalyzerService $analyzer;
 
-    public function __construct(EcuDetectionService $detectionService, MagicsScriptApplier $applier)
+    public function __construct(MagicsScriptApplier $applier, EcuBinAnalyzerService $analyzer)
     {
-        $this->detectionService = $detectionService;
-        $this->applier = $applier;
+        $this->applier  = $applier;
+        $this->analyzer = $analyzer;
     }
 
     /**
@@ -30,7 +35,7 @@ class EcuDetectionController extends Controller
     }
 
     /**
-     * Detect ECU from uploaded file.
+     * Detect ECU from uploaded file via file size matching on scripts table.
      * POST /user/detect
      */
     public function detect(Request $request)
@@ -41,95 +46,93 @@ class EcuDetectionController extends Controller
 
         try {
             $binaryContent = file_get_contents($request->file('file')->getRealPath());
-            $fileSize = strlen($binaryContent);
-            
-            // Try detection by signature
-            $detection = $this->detectionService->detect($binaryContent);
+            $fileSize      = strlen($binaryContent);
 
-            // Fallback: try matching by script expected_size if no signatures in DB
-            if (!$detection) {
-                $detection = $this->detectionService->detectFromScripts($binaryContent);
+            // تحليل الملف لاستخراج بيانات السيارة والـ ECU
+            $originalFilename = $request->file('file')->getClientOriginalName();
+            $aiAnalysis       = $this->analyzer->analyze($binaryContent, $originalFilename);
+
+            $carMake  = $aiAnalysis['car_make']  ?? null;
+            $ecuType  = $aiAnalysis['ecu_type']  ?? null;
+
+            // استخراج الـ keyword الأساسي من اسم الـ ECU (مثل "MED17" من "MED17 / Tricore (2MB)")
+            $ecuKeyword = null;
+            if ($ecuType) {
+                preg_match('/\b(MED?[0-9]+(?:\.[0-9]+)?|EDC[0-9]+(?:\.[0-9]+)?|SID[0-9]*|ME[0-9]+(?:\.[0-9]+)?|Marelli|Delphi|Denso|Valeo|Tricore)\b/i', $ecuType, $km);
+                $ecuKeyword = $km[1] ?? null;
             }
 
-            // Development fallback: if still no detection, try to find matching ECU by file size
-            if (!$detection) {
-                // Try to find any ECU file with similar size (within 10%)
-                $tolerance = $fileSize * 0.1;
-                $matchingEcu = \App\Models\ECUFile::where('file_size', '>=', $fileSize - $tolerance)
-                    ->where('file_size', '<=', $fileSize + $tolerance)
-                    ->with('ecu', 'ecu.brand')
+            // البحث عن الـ ECU في الـ DB
+            // المستوى 1: brand + ECU keyword معاً
+            $matchedEcu = null;
+            if ($carMake && $ecuKeyword) {
+                $matchedEcu = ECU::whereHas('brand', fn($q) => $q->where('name', 'like', "%{$carMake}%"))
+                    ->where('name', 'like', "%{$ecuKeyword}%")
+                    ->whereNull('deleted_at')
                     ->first();
-                
-                if ($matchingEcu) {
-                    $detection = [
-                        'ecu_uuid'      => $matchingEcu->ecu_uuid,
-                        'ecu_file_uuid' => $matchingEcu->uuid,
-                        'car_make'      => $matchingEcu->ecu->brand->brand_name ?? 'Unknown Brand',
-                        'car_model'     => $matchingEcu->ecu->ecu_name ?? 'Unknown Model',
-                        'year_range'    => null,
-                        'ecu_type'      => $matchingEcu->ecu->ecu_type ?? 'ECU',
-                        'hw_sw_number'  => null,
-                        'confidence'    => 'size_proximity',
-                        'file_size'     => $fileSize,
-                    ];
-                } else {
-                    // Last resort: generic detection by file size
-                    $detection = [
-                        'ecu_uuid'      => null,
-                        'ecu_file_uuid' => null,
-                        'car_make'      => 'Unknown Brand',
-                        'car_model'     => 'Unknown Model',
-                        'year_range'    => null,
-                        'ecu_type'      => 'File Size: ' . number_format($fileSize / 1024 / 1024, 2) . ' MB',
-                        'hw_sw_number'  => null,
-                        'confidence'    => 'low',
-                        'file_size'     => $fileSize,
-                    ];
-                }
+            }
+            // المستوى 2: ECU keyword بدون قيد على الـ brand
+            if (!$matchedEcu && $ecuKeyword) {
+                $matchedEcu = ECU::where('name', 'like', "%{$ecuKeyword}%")
+                    ->whereNull('deleted_at')
+                    ->first();
             }
 
-            // Store file temporarily for later use
+            // بيانات التحقق المستخرجة من الملف
+            $partNumber    = $aiAnalysis['part_number']    ?? null;
+            $calibrationId = $aiAnalysis['calibration_id'] ?? null;
+            $swVersion     = $aiAnalysis['sw_version']     ?? null;
+            $hwVersion     = $aiAnalysis['hw_version']     ?? null;
+
+            // جلب الـ Scripts — فلترة ذكية متعددة المستويات
+            $scripts = $this->findMatchingScripts($matchedEcu, $fileSize, $partNumber, $calibrationId, $swVersion);
+
+            // بيانات السيارة — تجي من تحليل الملف مباشرة
+            $carInfo = [
+                'car_make'        => $aiAnalysis['car_make']       ?? null,
+                'car_model'       => $aiAnalysis['car_model']      ?? null,
+                'file_size'       => $fileSize,
+                'found'           => $scripts->isNotEmpty(),
+                'ecu_type'        => $aiAnalysis['ecu_type']       ?? null,
+                'ecu_db_match'    => $matchedEcu ? $matchedEcu->name : null,
+                'vin'             => $aiAnalysis['vin']             ?? null,
+                'vin_offset'      => $aiAnalysis['vin_offset']      ?? null,
+                'part_number'     => $partNumber,
+                'calibration_id'  => $calibrationId,
+                'sw_version'      => $swVersion,
+                'hw_version'      => $hwVersion,
+                'checksum_16bit'  => $aiAnalysis['checksum_16bit']  ?? null,
+                'ai_status'       => $aiAnalysis['analysis_status'] ?? 'partial',
+            ];
+
+            // حفظ الملف مؤقتاً
             $sessionKey = Str::uuid()->toString();
-            $tempPath = 'ecu_temp/' . $sessionKey . '.bin';
+            $tempPath   = 'ecu_temp/' . $sessionKey . '.bin';
             Storage::disk('local')->put($tempPath, $binaryContent);
 
-            // Remove non-serializable objects before storing in session
-            $detectionData = $detection;
-            unset($detectionData['signature']);
-
-            // Store detection result in session
             session()->put('ecu_detect_' . $sessionKey, [
-                'detection' => $detectionData,
-                'temp_path' => $tempPath,
-                'file_name' => $request->file('file')->getClientOriginalName(),
-                'file_size' => strlen($binaryContent),
+                'car_info'       => $carInfo,
+                'temp_path'      => $tempPath,
+                'file_name'      => $request->file('file')->getClientOriginalName(),
+                'file_size'      => $fileSize,
+                'ecu_uuid'       => $matchedEcu?->uuid,
+                'part_number'    => $partNumber,
+                'calibration_id' => $calibrationId,
+                'sw_version'     => $swVersion,
+                'hw_version'     => $hwVersion,
             ]);
-
-            // Load available script-based modifications for this ECU
-            $modifications = \App\Models\Script::where('ecu_uuid', $detection['ecu_uuid'])
-                ->whereNull('deleted_at')
-                ->with('module')
-                ->get();
 
             if ($request->ajax()) {
                 return response()->json([
                     'status'  => true,
                     'session' => $sessionKey,
-                    'data'    => [
-                        'car_make'      => $detection['car_make'],
-                        'car_model'     => $detection['car_model'],
-                        'year_range'    => $detection['year_range'] ?? null,
-                        'ecu_type'      => $detection['ecu_type'],
-                        'hw_sw_number'  => $detection['hw_sw_number'] ?? null,
-                        'confidence'    => $detection['confidence'],
-                        'ecu_uuid'      => $detection['ecu_uuid'],
-                        'brand_uuid'    => $detection['ecu_uuid'] ? (\App\Models\ECU::find($detection['ecu_uuid'])?->brand_uuid ?? null) : null,
-                        'file_size'     => strlen($binaryContent),
-                    ],
-                    'modifications' => $modifications->map(fn($script) => [
+                    'data'    => $carInfo,
+                    'modifications' => $scripts->map(fn($script) => [
                         'uuid'        => $script->uuid,
-                        'module_name' => $script->module->name ?? 'Unknown Module',
+                        'module_name' => optional($script->module)->name ?? 'Unknown Module',
                         'module_uuid' => $script->module_uuid,
+                        'is_free'     => (bool) optional($script->module)->is_free,
+                        'price'       => (float) (optional($script->module)->price ?? 0),
                     ]),
                 ]);
             }
@@ -143,29 +146,6 @@ class EcuDetectionController extends Controller
             }
             return back()->with('error', $e->getMessage());
         }
-    }
-
-    /**
-     * Show results page with modification options.
-     * GET /user/detect/{session}
-     */
-    public function show(string $sessionKey)
-    {
-        $sessionData = session()->get('ecu_detect_' . $sessionKey);
-
-        if (!$sessionData) {
-            return redirect()->route('user.detect.index')
-                ->with('error', 'Session expired or not found. Please upload the file again.');
-        }
-
-        $detection = $sessionData['detection'];
-
-        $modifications = \App\Models\Script::where('ecu_uuid', $detection['ecu_uuid'])
-            ->whereNull('deleted_at')
-            ->with('module')
-            ->get();
-
-        return view('portals.user.detect.results', compact('detection', 'modifications', 'sessionKey', 'sessionData'));
     }
 
     /**
@@ -186,29 +166,37 @@ class EcuDetectionController extends Controller
         }
 
         try {
-            // Load binary from temp storage
             $binaryContent = Storage::disk('local')->get($sessionData['temp_path']);
 
             if (!$binaryContent) {
                 return response()->json(['status' => false, 'message' => 'Temporary file not found. Please upload again.'], 422);
             }
 
-            // Load all requested scripts with their files
-            $scripts = \App\Models\Script::whereIn('uuid', $request->record_uuids)
+            // تحميل الـ Scripts المطلوبة مع ملفاتها
+            $scripts = Script::whereIn('uuid', $request->record_uuids)
                 ->whereNull('deleted_at')
-                ->with('files')
+                ->with(['files', 'module'])
                 ->get();
 
             if ($scripts->isEmpty()) {
                 return response()->json(['status' => false, 'message' => 'No valid modifications found.'], 422);
             }
 
+            // حساب التكلفة الإجمالية
+            $totalCost = $scripts->sum(fn($s) => optional($s->module)->is_free ? 0 : (float) optional($s->module)->price);
+
+            // التحقق من رصيد المستخدم
+            $user = auth()->user();
+            if ($user->balance < $totalCost) {
+                return response()->json(['status' => false, 'message' => 'رصيدك غير كافٍ لتطبيق هذه الحلول.'], 422);
+            }
+
+            // تحميل محتوى الـ Scripts من S3
             $scriptContents = [];
             foreach ($scripts as $script) {
                 $scriptFile = $script->files->first();
                 if ($scriptFile) {
-                    $s3Path = $scriptFile->getRawOriginal('file');
-                    $content = Storage::disk('s3')->get($s3Path);
+                    $content = Storage::disk('s3')->get($scriptFile->getRawOriginal('file'));
                     if ($content !== null) {
                         $scriptContents[] = $content;
                     }
@@ -219,16 +207,27 @@ class EcuDetectionController extends Controller
                 return response()->json(['status' => false, 'message' => 'No script content found on storage.'], 422);
             }
 
-            // Apply scripts sequentially
+            // تطبيق الـ Scripts على الملف
             $result = $this->applier->applyMultiple($binaryContent, $scriptContents);
 
-            // Build filename
-            $baseName   = pathinfo($sessionData['file_name'], PATHINFO_FILENAME);
-            $outputName = 'patched_' . $baseName . '.bin';
+            // خصم الرصيد وتسجيل العملية
+            DB::transaction(function () use ($user, $totalCost) {
+                $oldBalance = $user->balance;
+                $newBalance = $oldBalance - $totalCost;
+                $user->update(['balance' => $newBalance]);
+                BalanceLog::create([
+                    'user_uuid' => $user->uuid,
+                    'old_value' => $oldBalance,
+                    'new_value' => $newBalance,
+                ]);
+            });
 
-            // Clean up temp file
+            // تنظيف الملف المؤقت
             Storage::disk('local')->delete($sessionData['temp_path']);
             session()->forget('ecu_detect_' . $sessionKey);
+
+            $baseName   = pathinfo($sessionData['file_name'], PATHINFO_FILENAME);
+            $outputName = 'patched_' . $baseName . '.bin';
 
             return response()->stream(function () use ($result) {
                 echo $result['content'];
@@ -237,6 +236,7 @@ class EcuDetectionController extends Controller
                 'Content-Disposition' => 'attachment; filename="' . $outputName . '"',
                 'X-Patches-Applied'   => $result['total_applied'],
                 'X-Patches-Skipped'   => $result['total_skipped'],
+                'X-New-Balance'       => auth()->user()->fresh()->balance,
             ]);
 
         } catch (\InvalidArgumentException $e) {
@@ -244,5 +244,108 @@ class EcuDetectionController extends Controller
         } catch (\Exception $e) {
             return response()->json(['status' => false, 'message' => 'Processing error: ' . $e->getMessage()], 500);
         }
+    }
+
+    /**
+     * GET /user/detect/brands
+     * All brands that have at least one ECU with scripts.
+     */
+    public function getBrands()
+    {
+        $brands = Brand::whereHas('ecus', fn($q) => $q->whereHas('scripts'))
+            ->orderBy('name')
+            ->get(['uuid', 'name']);
+
+        return response()->json(['status' => true, 'data' => $brands]);
+    }
+
+    /**
+     * GET /user/detect/ecus?brand_uuid=X
+     * ECUs for a specific brand that have scripts.
+     */
+    public function getEcus(Request $request)
+    {
+        $this->validate($request, ['brand_uuid' => 'required|exists:brands,uuid']);
+
+        $ecus = ECU::where('brand_uuid', $request->brand_uuid)
+            ->whereHas('scripts')
+            ->orderBy('name')
+            ->get(['uuid', 'name']);
+
+        return response()->json(['status' => true, 'data' => $ecus]);
+    }
+
+    /**
+     * GET /user/detect/manual-solutions?ecu_uuid=X
+     * Available solutions (modules) for a specific ECU.
+     */
+    public function getManualSolutions(Request $request)
+    {
+        $this->validate($request, ['ecu_uuid' => 'required|exists:ecus,uuid']);
+
+        $scripts = Script::where('ecu_uuid', $request->ecu_uuid)
+            ->whereNull('deleted_at')
+            ->with(['module'])
+            ->get();
+
+        $solutions = $scripts->map(fn($script) => [
+            'uuid'        => $script->uuid,
+            'module_name' => optional($script->module)->name ?? 'Unknown Module',
+            'module_uuid' => $script->module_uuid,
+            'is_free'     => (bool) optional($script->module)->is_free,
+            'price'       => (float) (optional($script->module)->price ?? 0),
+        ]);
+
+        return response()->json(['status' => true, 'data' => $solutions]);
+    }
+
+    /**
+     * Smart multi-layer script matching.
+     *
+     * Layer 1 (best): ECU + file_size + at least one verification field matches
+     * Layer 2: ECU + file_size (no verification constraint)
+     * Layer 3: file_size only (fallback when no ECU match)
+     */
+    protected function findMatchingScripts(?ECU $ecu, int $fileSize, ?string $partNumber, ?string $calibrationId, ?string $swVersion)
+    {
+        $with = ['module', 'ecu', 'ecu.brand'];
+
+        if ($ecu) {
+            $baseQuery = Script::where('ecu_uuid', $ecu->uuid)
+                ->where('expected_file_size', $fileSize)
+                ->whereNull('deleted_at');
+
+            // Layer 1: تحقق من حقول التحقق — على الأقل واحدة تنطبق
+            $hasVerificationData = $partNumber || $calibrationId || $swVersion;
+
+            if ($hasVerificationData) {
+                $precise = (clone $baseQuery)->where(function ($q) use ($partNumber, $calibrationId, $swVersion) {
+                    $q->where(function ($inner) use ($partNumber, $calibrationId, $swVersion) {
+                        // سكريبتات مقيدة بحقول التحقق وتطابق الملف
+                        if ($partNumber)    $inner->orWhere('part_number',    $partNumber);
+                        if ($calibrationId) $inner->orWhere('calibration_id', $calibrationId);
+                        if ($swVersion)     $inner->orWhere('sw_version',     $swVersion);
+                    })
+                    // أو سكريبتات غير مقيدة (ما فيها حقول تحقق) تُعرض دائماً
+                    ->orWhereNull('part_number');
+                })->with($with)->get();
+
+                if ($precise->isNotEmpty()) {
+                    return $precise;
+                }
+            }
+
+            // Layer 2: ECU + file_size بدون قيد على حقول التحقق
+            $byEcu = $baseQuery->with($with)->get();
+            if ($byEcu->isNotEmpty()) {
+                return $byEcu;
+            }
+        }
+
+        // Layer 3: file_size فقط (آخر fallback)
+        return Script::where('expected_file_size', $fileSize)
+            ->whereNull('deleted_at')
+            ->with($with)
+            ->get();
     }
 }

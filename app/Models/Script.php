@@ -22,6 +22,7 @@ class Script extends Model
     protected $guarded = [];
     protected $appends = ['ecu_name', 'brand_name', 'module_name'];
     protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
+    protected $casts = ['expected_file_size' => 'integer'];
     protected $primaryKey = 'uuid';
 
 

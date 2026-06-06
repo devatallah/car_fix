@@ -147,6 +147,34 @@
   .confidence-bar{height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
   .confidence-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:3px;box-shadow:0 0 8px var(--accent-glow);transition:width 1.2s ease;width:0}
 
+  /* ── Manual Select Panel ── */
+  .manual-panel{
+    display:none;margin-top:16px;padding:16px;
+    background:rgba(0,229,176,.04);border:1px solid var(--border);
+    border-radius:var(--radius-md);
+  }
+  .manual-panel-title{font-size:12px;color:var(--text-secondary);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+  .manual-panel-title svg{width:14px;height:14px;color:var(--accent)}
+  .manual-selects{display:flex;flex-direction:column;gap:10px}
+  .manual-select{
+    width:100%;padding:9px 12px;background:rgba(255,255,255,.04);
+    border:1px solid rgba(0,229,176,.2);border-radius:var(--radius-sm);
+    color:var(--text-primary);font-size:13px;outline:none;cursor:pointer;
+    appearance:none;-webkit-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2300e5b0' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:left 12px center;
+  }
+  .manual-select:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-dim)}
+  .manual-select:disabled{opacity:.4;cursor:not-allowed}
+  .manual-fetch-btn{
+    width:100%;padding:10px;margin-top:4px;
+    background:linear-gradient(135deg,var(--accent2),var(--accent));
+    border:none;border-radius:var(--radius-sm);color:#0a0e1a;
+    font-size:13px;font-weight:700;cursor:pointer;transition:var(--transition);
+  }
+  .manual-fetch-btn:hover{opacity:.88;box-shadow:0 0 16px var(--accent-glow)}
+  .manual-fetch-btn:disabled{opacity:.4;cursor:not-allowed}
+
   /* ── Solutions ── */
   .solutions-list{display:flex;flex-direction:column;gap:9px;margin-bottom:20px}
   .solution-item{
@@ -309,15 +337,11 @@
           <span class="info-value highlight" id="info-make">—</span>
         </div>
         <div class="info-row">
-          <span class="info-label"><span class="info-label-dot"></span>الموديل</span>
+          <span class="info-label"><span class="info-label-dot"></span>الموديل / ECU</span>
           <span class="info-value" id="info-model">—</span>
         </div>
         <div class="info-row">
-          <span class="info-label"><span class="info-label-dot"></span>نوع المحرك</span>
-          <span class="info-value" id="info-ecu-type">—</span>
-        </div>
-        <div class="info-row">
-          <span class="info-label"><span class="info-label-dot"></span>وحدة التحكم ECU</span>
+          <span class="info-label"><span class="info-label-dot"></span>نوع وحدة التحكم</span>
           <span class="ecu-chip" id="info-hw">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/>
@@ -329,6 +353,26 @@
             <span id="info-hw-text">—</span>
           </span>
         </div>
+        <div class="info-row" id="row-vin" style="display:none">
+          <span class="info-label"><span class="info-label-dot"></span>رقم الهيكل VIN</span>
+          <span class="info-value" id="info-vin" style="font-size:10px;letter-spacing:.5px;color:var(--accent)">—</span>
+        </div>
+        <div class="info-row" id="row-part" style="display:none">
+          <span class="info-label"><span class="info-label-dot"></span>رقم القطعة</span>
+          <span class="info-value" id="info-part" style="font-size:11px;letter-spacing:0">—</span>
+        </div>
+        <div class="info-row" id="row-sw" style="display:none">
+          <span class="info-label"><span class="info-label-dot"></span>إصدار البرنامج SW</span>
+          <span class="info-value" id="info-sw" style="font-size:11px">—</span>
+        </div>
+        <div class="info-row" id="row-hw" style="display:none">
+          <span class="info-label"><span class="info-label-dot"></span>إصدار الهاردوير HW</span>
+          <span class="info-value" id="info-hwv" style="font-size:11px">—</span>
+        </div>
+        <div class="info-row" id="row-checksum" style="display:none">
+          <span class="info-label"><span class="info-label-dot"></span>Checksum</span>
+          <span class="info-value" id="info-checksum" style="font-family:'Orbitron',sans-serif;font-size:11px;color:var(--accent2)">—</span>
+        </div>
         <div class="info-row">
           <span class="info-label"><span class="info-label-dot"></span>حجم الملف</span>
           <span class="info-value" id="info-size">—</span>
@@ -339,7 +383,7 @@
         </div>
         <div class="confidence-wrap">
           <div class="confidence-header">
-            <span>مستوى الثقة بالتطابق</span>
+            <span>مستوى دقة التحليل</span>
             <span id="confidenceVal">—</span>
           </div>
           <div class="confidence-bar">
@@ -370,6 +414,27 @@
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01z"/>
           </svg>
           <p>ارفع ملف ECU أولًا<br/>لتظهر الحلول المتاحة</p>
+        </div>
+      </div>
+
+      {{-- ── Manual Brand/ECU Selector (shows when no solutions auto-detected) ── --}}
+      <div class="manual-panel" id="manualSelectPanel">
+        <div class="manual-panel-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          لم يتم التعرف على السيارة تلقائياً — اختر يدوياً لعرض الحلول
+        </div>
+        <div class="manual-selects">
+          <select class="manual-select" id="manualBrandSelect" onchange="onBrandChange()">
+            <option value="">جاري تحميل الماركات...</option>
+          </select>
+          <select class="manual-select" id="manualEcuSelect" disabled>
+            <option value="">اختر الماركة أولاً</option>
+          </select>
+          <button class="manual-fetch-btn" id="manualFetchBtn" onclick="fetchManualSolutions()" disabled>
+            🔍 جلب الحلول المتاحة
+          </button>
         </div>
       </div>
 
@@ -504,26 +569,37 @@ function sendToServer(file, fill, pct){
 function showDetectionResult(data, modifications, file){
   document.getElementById('emptyCarInfo').style.display = 'none';
   document.getElementById('carInfoList').style.display  = 'flex';
-  document.getElementById('detectionBadge').textContent  = '✓ تم التعرف';
 
-  document.getElementById('info-make').textContent     = data.car_make   || '—';
-  document.getElementById('info-model').textContent    = data.car_model  || '—';
-  document.getElementById('info-ecu-type').textContent = data.ecu_type   || '—';
-  document.getElementById('info-hw-text').textContent  = data.hw_sw_number || data.ecu_type || 'ECU';
-  document.getElementById('info-size').textContent     = formatBytes(data.file_size || file.size);
+  // --- Basic fields ---
+  document.getElementById('info-make').textContent    = data.car_make  || '—';
+  document.getElementById('info-model').textContent   = data.car_model || '—';
+  document.getElementById('info-size').textContent    = formatBytes(data.file_size || file.size);
+  document.getElementById('info-hw-text').textContent = data.ecu_type  || data.car_model || 'ECU';
 
-  // Confidence
-  var confMap = { exact_signature: 95, size_proximity: 65, low: 30 };
-  var confVal = confMap[data.confidence] || 50;
+  // --- AI-extracted fields (show row only if value exists) ---
+  function showAiField(rowId, elId, value){
+    if(value){ document.getElementById(rowId).style.display = 'flex'; document.getElementById(elId).textContent = value; }
+  }
+  showAiField('row-vin',      'info-vin',      data.vin);
+  showAiField('row-part',     'info-part',     data.part_number);
+  showAiField('row-sw',       'info-sw',       data.sw_version);
+  showAiField('row-hw',       'info-hwv',      data.hw_version);
+  showAiField('row-checksum', 'info-checksum', data.checksum_16bit);
+
+  // --- Badge & Confidence ---
+  var confMap = { success: 95, partial: 60, failed: 30 };
+  var confVal = confMap[data.ai_status] || (data.found ? 70 : 30);
+  document.getElementById('detectionBadge').textContent = data.ai_status === 'success' ? '✓ تحليل دقيق' : (data.found ? '✓ تم التطابق' : '⚠ جزئي');
   setTimeout(function(){
     document.getElementById('confidenceFill').style.width = confVal + '%';
     document.getElementById('confidenceVal').textContent  = confVal + '%';
   }, 300);
 
-  // Populate solutions
+  // --- Solutions ---
   populateSolutions(modifications);
 
-  cfShowToast('✅ تم التعرف على الملف بنجاح!');
+  var toastMsg = data.vin ? '✅ تم تحليل الملف — تم العثور على VIN!' : '✅ تم التعرف على الملف بنجاح!';
+  cfShowToast(toastMsg);
   setStep(2);
 }
 
@@ -535,15 +611,21 @@ function populateSolutions(mods){
 
   if(!mods || mods.length === 0){
     list.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:44px;height:44px;color:var(--text-muted)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01z"/></svg><p>لا توجد حلول متاحة لهذا الـ ECU حاليًا</p></div>';
+    showManualPanel();
     updateCostSummary();
     return;
   }
+  document.getElementById('manualSelectPanel').style.display = 'none';
 
   list.innerHTML = mods.map(function(m){
-    return '<div class="solution-item" data-uuid="' + m.uuid + '" data-cost="1" onclick="toggleSolution(this)">' +
+    var cost     = m.is_free ? 0 : (parseFloat(m.price) || 0);
+    var costHtml = m.is_free
+      ? '<div class="solution-credits" style="color:var(--accent)">مجاني</div>'
+      : '<div class="solution-credits">' + cost + ' <span>كريدت</span></div>';
+    return '<div class="solution-item" data-uuid="' + m.uuid + '" data-cost="' + cost + '" onclick="toggleSolution(this)">' +
       '<div class="custom-checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></div>' +
       '<div class="solution-info"><div class="solution-name">' + escHtml(m.module_name) + '</div><div class="solution-desc">تعديل تلقائي على ملف الـ ECU</div></div>' +
-      '<div class="solution-meta"><div class="solution-credits">1 <span>كريدت</span></div></div>' +
+      '<div class="solution-meta">' + costHtml + '</div>' +
     '</div>';
   }).join('');
 
@@ -561,13 +643,98 @@ function toggleSolution(el){
 function updateCostSummary(){
   var checked = document.querySelectorAll('.solution-item.checked');
   var total = 0;
-  checked.forEach(function(item){ total += parseInt(item.dataset.cost || 1); });
+  checked.forEach(function(item){ total += parseFloat(item.dataset.cost || 0); });
 
-  document.getElementById('totalCost').textContent = total;
+  document.getElementById('totalCost').textContent = total % 1 === 0 ? total : total.toFixed(2);
   document.getElementById('selectedCount').textContent = checked.length + ' محدد';
   document.getElementById('selectedSolutionsCount').textContent = checked.length > 0 ? checked.length + ' حل' : '—';
 
   document.getElementById('fixBtn').disabled = (checked.length === 0 || total > userBalance || !sessionKey);
+}
+
+/* ─────────────────────────────────
+   Manual Brand / ECU Selector
+───────────────────────────────── */
+var manualPanelLoaded = false;
+
+function showManualPanel(){
+  var panel = document.getElementById('manualSelectPanel');
+  panel.style.display = 'block';
+  if(!manualPanelLoaded){
+    manualPanelLoaded = true;
+    loadBrands();
+  }
+}
+
+function loadBrands(){
+  var sel = document.getElementById('manualBrandSelect');
+  sel.innerHTML = '<option value="">جاري التحميل...</option>';
+  fetch('{{ route("user.detect.brands") }}')
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      if(res.status && res.data.length){
+        sel.innerHTML = '<option value="">— اختر الماركة —</option>' +
+          res.data.map(function(b){ return '<option value="'+b.uuid+'">'+escHtml(b.name)+'</option>'; }).join('');
+      } else {
+        sel.innerHTML = '<option value="">لا توجد ماركات مضافة</option>';
+      }
+    })
+    .catch(function(){ sel.innerHTML = '<option value="">خطأ في التحميل</option>'; });
+}
+
+function onBrandChange(){
+  var brandUuid = document.getElementById('manualBrandSelect').value;
+  var ecuSel    = document.getElementById('manualEcuSelect');
+  var fetchBtn  = document.getElementById('manualFetchBtn');
+  ecuSel.innerHTML = '<option value="">جاري التحميل...</option>';
+  ecuSel.disabled  = true;
+  fetchBtn.disabled = true;
+
+  if(!brandUuid){ ecuSel.innerHTML = '<option value="">اختر الماركة أولاً</option>'; return; }
+
+  fetch('{{ route("user.detect.ecus") }}?brand_uuid=' + brandUuid)
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      if(res.status && res.data.length){
+        ecuSel.innerHTML = '<option value="">— اختر الـ ECU —</option>' +
+          res.data.map(function(e){ return '<option value="'+e.uuid+'">'+escHtml(e.name)+'</option>'; }).join('');
+        ecuSel.disabled = false;
+        ecuSel.onchange = function(){ fetchBtn.disabled = !ecuSel.value; };
+      } else {
+        ecuSel.innerHTML = '<option value="">لا توجد ECUs لهذه الماركة</option>';
+      }
+    })
+    .catch(function(){ ecuSel.innerHTML = '<option value="">خطأ في التحميل</option>'; });
+}
+
+function fetchManualSolutions(){
+  var ecuUuid = document.getElementById('manualEcuSelect').value;
+  if(!ecuUuid){ cfShowToast('اختر الـ ECU أولاً', 'error'); return; }
+
+  var btn = document.getElementById('manualFetchBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ جاري الجلب...';
+
+  fetch('{{ route("user.detect.manual-solutions") }}?ecu_uuid=' + ecuUuid)
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      btn.disabled = false;
+      btn.textContent = '🔍 جلب الحلول المتاحة';
+      if(res.status){
+        if(!res.data.length){
+          cfShowToast('لا توجد حلول لهذا الـ ECU حالياً', 'error');
+          return;
+        }
+        document.getElementById('manualSelectPanel').style.display = 'none';
+        populateSolutions(res.data);
+        cfShowToast('✅ تم تحميل ' + res.data.length + ' حل متاح');
+      }
+    })
+    .catch(function(){
+      btn.disabled = false;
+      btn.textContent = '🔍 جلب الحلول المتاحة';
+      cfShowToast('❌ خطأ في الاتصال بالخادم', 'error');
+    });
 }
 
 /* ─────────────────────────────────

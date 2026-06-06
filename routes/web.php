@@ -348,6 +348,9 @@ Route::group(['namespace' => 'User', 'prefix' => 'user', 'middleware' => ['auth:
 
     // ECU Detection Routes
     Route::post('/detect', [App\Http\Controllers\User\EcuDetectionController::class, 'detect'])->name('user.detect.process');
+    Route::get('/detect/brands', [App\Http\Controllers\User\EcuDetectionController::class, 'getBrands'])->name('user.detect.brands');
+    Route::get('/detect/ecus', [App\Http\Controllers\User\EcuDetectionController::class, 'getEcus'])->name('user.detect.ecus');
+    Route::get('/detect/manual-solutions', [App\Http\Controllers\User\EcuDetectionController::class, 'getManualSolutions'])->name('user.detect.manual-solutions');
     Route::get('/detect/{session}', [App\Http\Controllers\User\EcuDetectionController::class, 'show'])->name('user.detect.show');
     Route::post('/detect/{session}/apply', [App\Http\Controllers\User\EcuDetectionController::class, 'applyMods'])->name('user.detect.apply');
 

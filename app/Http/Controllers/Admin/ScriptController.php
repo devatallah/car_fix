@@ -33,14 +33,18 @@ class ScriptController extends Controller
      */
     public function store(Request $request)
     {
-
         $rules = [
-            'ecu_uuid' => 'required|exists:ecus,uuid',
-            'module_uuid' => 'required|exists:modules,uuid',
+            'ecu_uuid'           => 'required|exists:ecus,uuid',
+            'module_uuid'        => 'required|exists:modules,uuid',
+            'expected_file_size' => 'required|integer|min:1',
+            'part_number'        => 'nullable|string|max:100',
+            'calibration_id'     => 'nullable|string|max:100',
+            'sw_version'         => 'nullable|string|max:100',
+            'hw_version'         => 'nullable|string|max:100',
         ];
         $this->validate($request, $rules);
 
-        $data = $request->only(['ecu_uuid', 'module_uuid']);
+        $data = $request->only(['ecu_uuid', 'module_uuid', 'expected_file_size', 'part_number', 'calibration_id', 'sw_version', 'hw_version']);
 
         Script::query()->create($data);
 
@@ -62,12 +66,17 @@ class ScriptController extends Controller
     public function update(Request $request, Script $script)
     {
         $rules = [
-            'ecu_uuid' => 'required|exists:ecus,uuid',
-            'module_uuid' => 'required|exists:modules,uuid',
+            'ecu_uuid'       => 'required|exists:ecus,uuid',
+            'module_uuid'    => 'required|exists:modules,uuid',
+            'expected_file_size' => 'nullable|integer|min:1',
+            'part_number'    => 'nullable|string|max:100',
+            'calibration_id' => 'nullable|string|max:100',
+            'sw_version'     => 'nullable|string|max:100',
+            'hw_version'     => 'nullable|string|max:100',
         ];
         $this->validate($request, $rules);
 
-        $data = $request->only(['ecu_uuid', 'module_uuid']);
+        $data = $request->only(['ecu_uuid', 'module_uuid', 'expected_file_size', 'part_number', 'calibration_id', 'sw_version', 'hw_version']);
 
         $script->update($data);
 
@@ -103,6 +112,11 @@ class ScriptController extends Controller
                 $data_attr .= 'data-uuid="' . $script->uuid . '" ';
                 $data_attr .= 'data-ecu_uuid="' . $script->ecu_uuid . '" ';
                 $data_attr .= 'data-module_uuid="' . $script->module_uuid . '" ';
+                $data_attr .= 'data-expected_file_size="' . $script->expected_file_size . '" ';
+                $data_attr .= 'data-part_number="' . e($script->part_number) . '" ';
+                $data_attr .= 'data-calibration_id="' . e($script->calibration_id) . '" ';
+                $data_attr .= 'data-sw_version="' . e($script->sw_version) . '" ';
+                $data_attr .= 'data-hw_version="' . e($script->hw_version) . '" ';
                 $string = '';
                 $string .= '<button class="edit_btn btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                     data-bs-target="#edit_modal" ' . $data_attr . '>' . __('edit') . '</button>';

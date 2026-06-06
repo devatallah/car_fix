@@ -108,6 +108,7 @@
                                             <th>@lang('ecu')</th>
                                             <th>@lang('brand')</th>
                                             <th>@lang('script_type')</th>
+                                            <th>File Size (bytes)</th>
                                             <th style="width: 225px;">@lang('actions')</th>
                                         </tr>
                                     </thead>
@@ -159,6 +160,44 @@
                                             <option value="{{ $module->uuid }}">{{ $module->name }}</option>
                                         @endforeach
                                     </select>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="expected_file_size">حجم الملف المتوقع (bytes)</label>
+                                    <input type="number" class="form-control" id="expected_file_size"
+                                        name="expected_file_size" placeholder="مثال: 2097152" min="1" required>
+                                    <small class="text-muted">حجم ملف الـ ECU بالـ bytes — يُستخدم لمطابقة الملفات المرفوعة من المستخدمين</small>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-12"><hr><p class="text-muted small mb-1">حقول التحقق الدقيق — اختيارية، تُستخدم لتمييز هذا السكريبت عن غيره لنفس الـ ECU</p></div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="part_number">Part Number</label>
+                                    <input type="text" class="form-control" id="part_number" name="part_number" placeholder="مثال: 0261S12345">
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="calibration_id">Calibration ID</label>
+                                    <input type="text" class="form-control" id="calibration_id" name="calibration_id" placeholder="مثال: 8V0906259B">
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="sw_version">SW Version</label>
+                                    <input type="text" class="form-control" id="sw_version" name="sw_version" placeholder="مثال: 1.0.4">
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="hw_version">HW Version</label>
+                                    <input type="text" class="form-control" id="hw_version" name="hw_version" placeholder="مثال: H05">
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
@@ -217,6 +256,44 @@
                                             <option value="{{ $module->uuid }}">{{ $module->name }}</option>
                                         @endforeach
                                     </select>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="edit_expected_file_size">حجم الملف المتوقع (bytes)</label>
+                                    <input type="number" class="form-control" id="edit_expected_file_size"
+                                        name="expected_file_size" placeholder="مثال: 2097152" min="1">
+                                    <small class="text-muted">حجم ملف الـ ECU بالـ bytes</small>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-12"><hr><p class="text-muted small mb-1">حقول التحقق الدقيق — اختيارية</p></div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="edit_part_number">Part Number</label>
+                                    <input type="text" class="form-control" id="edit_part_number" name="part_number" placeholder="مثال: 0261S12345">
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="edit_calibration_id">Calibration ID</label>
+                                    <input type="text" class="form-control" id="edit_calibration_id" name="calibration_id" placeholder="مثال: 8V0906259B">
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="edit_sw_version">SW Version</label>
+                                    <input type="text" class="form-control" id="edit_sw_version" name="sw_version" placeholder="مثال: 1.0.4">
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="edit_hw_version">HW Version</label>
+                                    <input type="text" class="form-control" id="edit_hw_version" name="hw_version" placeholder="مثال: H05">
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
@@ -316,6 +393,13 @@
                     name: 'module_name'
                 },
                 {
+                    data: 'expected_file_size',
+                    name: 'expected_file_size',
+                    render: function(data) {
+                        return data ? data.toLocaleString() + ' B' : '—';
+                    }
+                },
+                {
                     data: 'action',
                     name: 'action',
                     orderable: false,
@@ -332,6 +416,11 @@
                 $('#edit_form').attr('action', url + uuid)
                 $('#edit_ecu_uuid').val(button.data('ecu_uuid')).trigger('change')
                 $('#edit_module_uuid').val(button.data('module_uuid')).trigger('change')
+                $('#edit_expected_file_size').val(button.data('expected_file_size'))
+                $('#edit_part_number').val(button.data('part_number'))
+                $('#edit_calibration_id').val(button.data('calibration_id'))
+                $('#edit_sw_version').val(button.data('sw_version'))
+                $('#edit_hw_version').val(button.data('hw_version'))
             });
             $(document).on('click', '#create_btn', function(event) {
                 $('#create_form').attr('action', url);
