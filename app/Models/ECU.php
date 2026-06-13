@@ -76,6 +76,11 @@ class ECU extends Model
     {
         return $this->hasMany(DTC::class, 'ecu_uuid', 'uuid');
     }
+
+    public function smartPatches()
+    {
+        return $this->hasMany(SmartPatch::class, 'ecu_uuid', 'uuid');
+    }
     
     /*
     |--------------------------------------------------------------------------

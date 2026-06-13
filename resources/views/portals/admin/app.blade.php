@@ -294,6 +294,10 @@
                             data-feather="grid"></i><span class="menu-title text-truncate"
                             data-i18n="Scripts">@lang('scripts')</span></a>
                 </li>
+                <li class=" nav-item"><a class="d-flex align-items-center" href="{{ url('admin/smart_patches') }}"><i
+                            data-feather="cpu"></i><span class="menu-title text-truncate"
+                            data-i18n="SmartPatches">Smart Patches</span></a>
+                </li>
                 <li class=" nav-item"><a class="d-flex align-items-center" href="{{ url('admin/admins') }}"><i
                             data-feather="grid"></i><span class="menu-title text-truncate"
                             data-i18n="Admin">@lang('admins')</span></a>

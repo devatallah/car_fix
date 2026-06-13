@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\SmartPatchController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\DTCController;
 use App\Http\Controllers\Admin\DTCFileController;
@@ -316,6 +317,14 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
     });
     Route::get('/settings', [SettingController::class, 'index']);
     Route::post('/settings', [SettingController::class, 'update']);
+
+    Route::group(['prefix' => 'smart_patches'], function () {
+        Route::get('/', [SmartPatchController::class, 'index']);
+        Route::post('/', [SmartPatchController::class, 'store']);
+        Route::delete('/{uuid}', [SmartPatchController::class, 'destroy']);
+        Route::get('/indexTable', [SmartPatchController::class, 'indexTable']);
+        Route::get('/ecus-by-brand', [SmartPatchController::class, 'getEcusByBrand']);
+    });
 });
 
 Route::get('user/login', [App\Http\Controllers\User\Auth\LoginController::class, 'showLoginForm'])->name('login');
