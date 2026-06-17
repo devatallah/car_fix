@@ -415,24 +415,11 @@ class EcuDetectionController extends Controller
     protected function findMatchingSmartPatches(?ECU $ecu, int $fileSize)
     {
         if (!$ecu) {
-            return SmartPatch::where('file_size', $fileSize)
-                ->whereNull('deleted_at')
-                ->with(['module', 'ecu'])
-                ->get();
+            return collect();
         }
 
-        $byEcu = SmartPatch::where('ecu_uuid', $ecu->uuid)
+        return SmartPatch::where('ecu_uuid', $ecu->uuid)
             ->where('file_size', $fileSize)
-            ->whereNull('deleted_at')
-            ->with(['module', 'ecu'])
-            ->get();
-
-        if ($byEcu->isNotEmpty()) {
-            return $byEcu;
-        }
-
-        // Fallback: file_size only
-        return SmartPatch::where('file_size', $fileSize)
             ->whereNull('deleted_at')
             ->with(['module', 'ecu'])
             ->get();
