@@ -41,32 +41,32 @@ class SmartPatchExtractor
             );
         }
 
-        // Step 1 — variable offsets (bytes that differ between two stock files)
-        $variableOffsets = $this->findVariableOffsets($ori1, $ori2);
+        // Step 1 — build a compact bitset: bit N is set when ori1[N] !== ori2[N]
+        // Uses ceil(size/8) bytes instead of a PHP hash-map (~50 bytes per entry).
+        $variableBitset = $this->buildVariableBitset($ori1, $ori2);
 
-        // Step 2 — changed offsets (actual fix: ori1 → mod)
-        $changedOffsets = $this->findChangedOffsets($ori1, $mod);
-
-        if (empty($changedOffsets)) {
-            throw new \InvalidArgumentException('ori1 and mod are identical — no patch to extract.');
-        }
-
-        // Step 3 — cluster nearby changed offsets together
-        $clusters = $this->clusterOffsets($changedOffsets);
-
-        // Step 4 — build search/replace masks with context + wildcards
+        // Step 2 — collect changed offsets and cluster them in a single pass
+        // to avoid allocating a second large intermediate array.
         $patchClusters  = [];
         $totalWildcards = 0;
+        $changedTotal   = 0;
+        $currentCluster = null;   // ['start', 'end']
 
-        foreach ($clusters as $cluster) {
-            $start = max(0, $cluster['start'] - $this->contextSize);
-            $end   = min($size - 1, $cluster['end'] + $this->contextSize);
+        $flushCluster = function () use (
+            &$currentCluster, &$patchClusters, &$totalWildcards,
+            $ori1, $mod, $variableBitset, $size
+        ) {
+            if ($currentCluster === null) {
+                return;
+            }
 
+            $start   = max(0, $currentCluster['start'] - $this->contextSize);
+            $end     = min($size - 1, $currentCluster['end'] + $this->contextSize);
             $search  = [];
             $replace = [];
 
             for ($i = $start; $i <= $end; $i++) {
-                $isWildcard = isset($variableOffsets[$i]);
+                $isWildcard = (bool) (ord($variableBitset[$i >> 3]) & (1 << ($i & 7)));
 
                 if ($isWildcard) {
                     $search[]  = '??';
@@ -84,12 +84,37 @@ class SmartPatchExtractor
                 'search'       => $search,
                 'replace'      => $replace,
             ];
+
+            $currentCluster = null;
+        };
+
+        for ($i = 0; $i < $size; $i++) {
+            if ($ori1[$i] === $mod[$i]) {
+                continue;
+            }
+
+            $changedTotal++;
+
+            if ($currentCluster === null) {
+                $currentCluster = ['start' => $i, 'end' => $i];
+            } elseif ($i - $currentCluster['end'] <= $this->gapTolerance) {
+                $currentCluster['end'] = $i;
+            } else {
+                $flushCluster();
+                $currentCluster = ['start' => $i, 'end' => $i];
+            }
+        }
+
+        $flushCluster();
+
+        if ($changedTotal === 0) {
+            throw new \InvalidArgumentException('ori1 and mod are identical — no patch to extract.');
         }
 
         return [
             'file_size'            => $size,
             'ecu_software_number'  => $this->extractEcuSoftwareNumber($ori1),
-            'patches_count'        => count($changedOffsets),
+            'patches_count'        => $changedTotal,
             'wildcard_count'       => $totalWildcards,
             'clusters'             => $patchClusters,
         ];
@@ -129,53 +154,24 @@ class SmartPatchExtractor
         return strlen($trimmed) >= 10 ? $trimmed : null;
     }
 
-    /** Returns map of offset => true for bytes that differ between ori1 and ori2 */
-    private function findVariableOffsets(string $ori1, string $ori2): array
+    /**
+     * Build a compact bitset for variable offsets.
+     *
+     * Each bit N is 1 when ori1[N] !== ori2[N].
+     * Memory: ceil(fileSize / 8) bytes  →  512 KB for a 4 MB file
+     * vs. PHP associative array:         →  ~200 MB for the same file.
+     */
+    private function buildVariableBitset(string $ori1, string $ori2): string
     {
-        $result = [];
         $len    = strlen($ori1);
+        $bitset = str_repeat("\0", (int) ceil($len / 8));
 
         for ($i = 0; $i < $len; $i++) {
             if ($ori1[$i] !== $ori2[$i]) {
-                $result[$i] = true;
+                $bitset[$i >> 3] = chr(ord($bitset[$i >> 3]) | (1 << ($i & 7)));
             }
         }
 
-        return $result;
-    }
-
-    /** Returns list of offsets where ori1 and mod differ */
-    private function findChangedOffsets(string $ori1, string $mod): array
-    {
-        $result = [];
-        $len    = strlen($ori1);
-
-        for ($i = 0; $i < $len; $i++) {
-            if ($ori1[$i] !== $mod[$i]) {
-                $result[] = $i;
-            }
-        }
-
-        return $result;
-    }
-
-    /** Groups nearby offsets into clusters using gap tolerance */
-    private function clusterOffsets(array $offsets): array
-    {
-        $clusters = [];
-        $current  = ['start' => $offsets[0], 'end' => $offsets[0]];
-
-        for ($i = 1; $i < count($offsets); $i++) {
-            if ($offsets[$i] - $current['end'] <= $this->gapTolerance) {
-                $current['end'] = $offsets[$i];
-            } else {
-                $clusters[] = $current;
-                $current    = ['start' => $offsets[$i], 'end' => $offsets[$i]];
-            }
-        }
-
-        $clusters[] = $current;
-
-        return $clusters;
+        return $bitset;
     }
 }

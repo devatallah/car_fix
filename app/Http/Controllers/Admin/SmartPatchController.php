@@ -43,6 +43,8 @@ class SmartPatchController extends Controller
         ]);
 
         try {
+            ini_set('memory_limit', '512M');
+
             $ori1Content = file_get_contents($request->file('ori1')->getRealPath());
             $modContent  = file_get_contents($request->file('mod')->getRealPath());
             $ori2Content = file_get_contents($request->file('ori2')->getRealPath());
