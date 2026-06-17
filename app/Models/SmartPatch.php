@@ -23,6 +23,7 @@ class SmartPatch extends Model
         'wildcard_count' => 'integer',
         'context_size'   => 'integer',
         'gap_tolerance'  => 'integer',
+        'ecu_software_number' => 'string',
     ];
 
     public static function boot()

@@ -87,15 +87,47 @@ class SmartPatchExtractor
         }
 
         return [
-            'file_size'      => $size,
-            'patches_count'  => count($changedOffsets),
-            'wildcard_count' => $totalWildcards,
-            'clusters'       => $patchClusters,
+            'file_size'            => $size,
+            'ecu_software_number'  => $this->extractEcuSoftwareNumber($ori1),
+            'patches_count'        => count($changedOffsets),
+            'wildcard_count'       => $totalWildcards,
+            'clusters'             => $patchClusters,
         ];
     }
 
     public function getContextSize(): int  { return $this->contextSize; }
     public function getGapTolerance(): int { return $this->gapTolerance; }
+
+    /**
+     * Extract the ECU Software Number from a binary file.
+     *
+     * Scans the first 512 bytes for the first contiguous printable ASCII string
+     * that is ≥ 10 characters long — this is the ECU calibration identifier
+     * (e.g. "10375575171200E00I" for Bosch EDC17C57).
+     *
+     * The identifier sits at offset 0x1a in Bosch files but scanning makes the
+     * method work across ECU families without hard-coding offsets.
+     */
+    public function extractEcuSoftwareNumber(string $binary): ?string
+    {
+        $header = substr($binary, 0, 512);
+        $result = '';
+
+        for ($i = 0; $i < strlen($header); $i++) {
+            $byte = ord($header[$i]);
+            if ($byte >= 0x20 && $byte <= 0x7E) {
+                $result .= $header[$i];
+            } else {
+                if (strlen(trim($result)) >= 10) {
+                    return trim($result);
+                }
+                $result = '';
+            }
+        }
+
+        $trimmed = trim($result);
+        return strlen($trimmed) >= 10 ? $trimmed : null;
+    }
 
     /** Returns map of offset => true for bytes that differ between ori1 and ori2 */
     private function findVariableOffsets(string $ori1, string $ori2): array

@@ -11,6 +11,7 @@ use App\Models\SmartPatch;
 use App\Services\EcuBinAnalyzerService;
 use App\Services\MagicsScriptApplier;
 use App\Services\SmartPatchApplier;
+use App\Services\SmartPatchExtractor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -22,15 +23,18 @@ class EcuDetectionController extends Controller
     protected MagicsScriptApplier $applier;
     protected SmartPatchApplier   $smartApplier;
     protected EcuBinAnalyzerService $analyzer;
+    protected SmartPatchExtractor   $extractor;
 
     public function __construct(
         MagicsScriptApplier   $applier,
         SmartPatchApplier     $smartApplier,
-        EcuBinAnalyzerService $analyzer
+        EcuBinAnalyzerService $analyzer,
+        SmartPatchExtractor   $extractor
     ) {
         $this->applier      = $applier;
         $this->smartApplier = $smartApplier;
         $this->analyzer     = $analyzer;
+        $this->extractor    = $extractor;
     }
 
     /**
@@ -87,13 +91,14 @@ class EcuDetectionController extends Controller
             }
 
             // بيانات التحقق المستخرجة من الملف
-            $partNumber    = $aiAnalysis['part_number']    ?? null;
-            $calibrationId = $aiAnalysis['calibration_id'] ?? null;
-            $swVersion     = $aiAnalysis['sw_version']     ?? null;
-            $hwVersion     = $aiAnalysis['hw_version']     ?? null;
+            $partNumber          = $aiAnalysis['part_number']    ?? null;
+            $calibrationId       = $aiAnalysis['calibration_id'] ?? null;
+            $swVersion           = $aiAnalysis['sw_version']     ?? null;
+            $hwVersion           = $aiAnalysis['hw_version']     ?? null;
+            $ecuSoftwareNumber   = $this->extractor->extractEcuSoftwareNumber($binaryContent);
 
-            // جلب الـ Smart Patches المطابقة فقط (ECU + file_size)
-            $smartPatches = $this->findMatchingSmartPatches($matchedEcu, $fileSize);
+            // جلب الـ Smart Patches المطابقة بالـ ECU Software Number أولاً
+            $smartPatches = $this->findMatchingSmartPatches($ecuSoftwareNumber, $matchedEcu, $fileSize);
 
             $modifications = $smartPatches->map(fn($sp) => [
                 'uuid'        => 'sp:' . $sp->uuid,
@@ -106,20 +111,21 @@ class EcuDetectionController extends Controller
 
             // بيانات السيارة — تجي من تحليل الملف مباشرة
             $carInfo = [
-                'car_make'        => $aiAnalysis['car_make']       ?? null,
-                'car_model'       => $aiAnalysis['car_model']      ?? null,
-                'file_size'       => $fileSize,
-                'found'           => $modifications->isNotEmpty(),
-                'ecu_type'        => $aiAnalysis['ecu_type']       ?? null,
-                'ecu_db_match'    => $matchedEcu ? $matchedEcu->name : null,
-                'vin'             => $aiAnalysis['vin']             ?? null,
-                'vin_offset'      => $aiAnalysis['vin_offset']      ?? null,
-                'part_number'     => $partNumber,
-                'calibration_id'  => $calibrationId,
-                'sw_version'      => $swVersion,
-                'hw_version'      => $hwVersion,
-                'checksum_16bit'  => $aiAnalysis['checksum_16bit']  ?? null,
-                'ai_status'       => $aiAnalysis['analysis_status'] ?? 'partial',
+                'car_make'             => $aiAnalysis['car_make']       ?? null,
+                'car_model'            => $aiAnalysis['car_model']      ?? null,
+                'file_size'            => $fileSize,
+                'found'                => $modifications->isNotEmpty(),
+                'ecu_type'             => $aiAnalysis['ecu_type']       ?? null,
+                'ecu_db_match'         => $matchedEcu ? $matchedEcu->name : null,
+                'ecu_software_number'  => $ecuSoftwareNumber,
+                'vin'                  => $aiAnalysis['vin']             ?? null,
+                'vin_offset'           => $aiAnalysis['vin_offset']      ?? null,
+                'part_number'          => $partNumber,
+                'calibration_id'       => $calibrationId,
+                'sw_version'           => $swVersion,
+                'hw_version'           => $hwVersion,
+                'checksum_16bit'       => $aiAnalysis['checksum_16bit']  ?? null,
+                'ai_status'            => $aiAnalysis['analysis_status'] ?? 'partial',
             ];
 
             // حفظ الملف مؤقتاً
@@ -128,15 +134,16 @@ class EcuDetectionController extends Controller
             Storage::disk('local')->put($tempPath, $binaryContent);
 
             Cache::put('ecu_detect_' . $sessionKey, [
-                'car_info'       => $carInfo,
-                'temp_path'      => $tempPath,
-                'file_name'      => $request->file('file')->getClientOriginalName(),
-                'file_size'      => $fileSize,
-                'ecu_uuid'       => $matchedEcu?->uuid,
-                'part_number'    => $partNumber,
-                'calibration_id' => $calibrationId,
-                'sw_version'     => $swVersion,
-                'hw_version'     => $hwVersion,
+                'car_info'            => $carInfo,
+                'temp_path'           => $tempPath,
+                'file_name'           => $request->file('file')->getClientOriginalName(),
+                'file_size'           => $fileSize,
+                'ecu_uuid'            => $matchedEcu?->uuid,
+                'ecu_software_number' => $ecuSoftwareNumber,
+                'part_number'         => $partNumber,
+                'calibration_id'      => $calibrationId,
+                'sw_version'          => $swVersion,
+                'hw_version'          => $hwVersion,
             ], now()->addHours(2));
 
             if ($request->ajax()) {
@@ -410,19 +417,35 @@ class EcuDetectionController extends Controller
     }
 
     /**
-     * Find smart patches matching the detected ECU and file size.
+     * Find smart patches matching the uploaded file.
+     *
+     * Priority 1: ecu_software_number (exact calibration match — 100% accurate)
+     * Priority 2: ecu_uuid + file_size (fallback for patches uploaded before this feature)
      */
-    protected function findMatchingSmartPatches(?ECU $ecu, int $fileSize)
+    protected function findMatchingSmartPatches(?string $ecuSoftwareNumber, ?ECU $ecu, int $fileSize)
     {
-        if (!$ecu) {
-            return collect();
+        // Priority 1 — exact ECU software number match
+        if ($ecuSoftwareNumber) {
+            $bySwNumber = SmartPatch::where('ecu_software_number', $ecuSoftwareNumber)
+                ->whereNull('deleted_at')
+                ->with(['module', 'ecu'])
+                ->get();
+
+            if ($bySwNumber->isNotEmpty()) {
+                return $bySwNumber;
+            }
         }
 
-        return SmartPatch::where('ecu_uuid', $ecu->uuid)
-            ->where('file_size', $fileSize)
-            ->whereNull('deleted_at')
-            ->with(['module', 'ecu'])
-            ->get();
+        // Priority 2 — fallback: ECU UUID + file_size (for older patches without software number)
+        if ($ecu) {
+            return SmartPatch::where('ecu_uuid', $ecu->uuid)
+                ->where('file_size', $fileSize)
+                ->whereNull('deleted_at')
+                ->with(['module', 'ecu'])
+                ->get();
+        }
+
+        return collect();
     }
 
     /**

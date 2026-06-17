@@ -50,24 +50,26 @@ class SmartPatchController extends Controller
             $result = $this->extractor->extract($ori1Content, $modContent, $ori2Content);
 
             $patch = SmartPatch::create([
-                'ecu_uuid'       => $request->ecu_uuid,
-                'module_uuid'    => $request->module_uuid,
-                'file_size'      => $result['file_size'],
-                'patch_map'      => json_encode($result),
-                'patches_count'  => $result['patches_count'],
-                'wildcard_count' => $result['wildcard_count'],
-                'context_size'   => $this->extractor->getContextSize(),
-                'gap_tolerance'  => $this->extractor->getGapTolerance(),
+                'ecu_uuid'             => $request->ecu_uuid,
+                'module_uuid'          => $request->module_uuid,
+                'ecu_software_number'  => $result['ecu_software_number'],
+                'file_size'            => $result['file_size'],
+                'patch_map'            => json_encode($result),
+                'patches_count'        => $result['patches_count'],
+                'wildcard_count'       => $result['wildcard_count'],
+                'context_size'         => $this->extractor->getContextSize(),
+                'gap_tolerance'        => $this->extractor->getGapTolerance(),
             ]);
 
             if ($request->ajax()) {
                 return response()->json([
-                    'status'         => true,
-                    'uuid'           => $patch->uuid,
-                    'patches_count'  => $result['patches_count'],
-                    'wildcard_count' => $result['wildcard_count'],
-                    'clusters_count' => count($result['clusters']),
-                    'file_size'      => $result['file_size'],
+                    'status'               => true,
+                    'uuid'                 => $patch->uuid,
+                    'ecu_software_number'  => $result['ecu_software_number'],
+                    'patches_count'        => $result['patches_count'],
+                    'wildcard_count'       => $result['wildcard_count'],
+                    'clusters_count'       => count($result['clusters']),
+                    'file_size'            => $result['file_size'],
                 ]);
             }
 
