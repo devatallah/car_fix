@@ -8,6 +8,7 @@ use App\Models\Brand;
 use App\Models\ECU;
 use App\Models\Script;
 use App\Models\SmartPatch;
+use App\Models\SmartPatchGroup;
 use App\Services\MagicsScriptApplier;
 use App\Services\SmartPatchApplier;
 use App\Services\SmartPatchExtractor;
@@ -96,10 +97,12 @@ class EcuDetectionController extends Controller
 
             if ($request->ajax()) {
                 return response()->json([
-                    'status'        => true,
-                    'session'       => $sessionKey,
-                    'data'          => $carInfo,
-                    'modifications' => $modifications->values(),
+                    'status'         => true,
+                    'session'        => $sessionKey,
+                    'data'           => $carInfo,
+                    'modifications'  => $modifications->values(),
+                    // إذا ما لقى شي → أخبر الـ frontend يطلب الاختيار اليدوي
+                    'needs_manual'   => $modifications->isEmpty(),
                 ]);
             }
 
@@ -139,11 +142,16 @@ class EcuDetectionController extends Controller
             }
 
             // ─── فصل الـ UUIDs حسب النوع ─────────────────────────────────────────
-            $scriptUuids     = [];
-            $smartPatchUuids = [];
+            // sp:uuid  = calibration بعينها (auto-detect)
+            // spg:uuid = group كامل — جرب كل calibrations فيه (manual select)
+            $scriptUuids      = [];
+            $smartPatchUuids  = [];
+            $smartGroupUuids  = [];
 
             foreach ($request->record_uuids as $rawUuid) {
-                if (str_starts_with($rawUuid, 'sp:')) {
+                if (str_starts_with($rawUuid, 'spg:')) {
+                    $smartGroupUuids[] = substr($rawUuid, 4);
+                } elseif (str_starts_with($rawUuid, 'sp:')) {
                     $smartPatchUuids[] = substr($rawUuid, 3);
                 } else {
                     $scriptUuids[] = $rawUuid;
@@ -156,10 +164,20 @@ class EcuDetectionController extends Controller
                 ->with(['files', 'module', 'ecu'])
                 ->get();
 
+            // exact calibrations (auto-detect)
             $smartPatches = SmartPatch::whereIn('uuid', $smartPatchUuids)
                 ->whereNull('deleted_at')
                 ->with(['module', 'ecu'])
                 ->get();
+
+            // group calibrations (manual select) — جيب كل calibrations الـ group
+            $groupPatches = SmartPatch::whereIn('group_uuid', $smartGroupUuids)
+                ->whereNull('deleted_at')
+                ->with(['module', 'ecu'])
+                ->get();
+
+            // ادمج الاثنين — groupPatches تنضاف بنفس المنطق
+            $smartPatches = $smartPatches->merge($groupPatches);
 
             if ($scripts->isEmpty() && $smartPatches->isEmpty()) {
                 return response()->json(['status' => false, 'message' => 'No valid modifications found.'], 422);
@@ -318,7 +336,7 @@ class EcuDetectionController extends Controller
      */
     public function getBrands()
     {
-        $brands = Brand::whereHas('ecus', fn($q) => $q->whereHas('smartPatches'))
+        $brands = Brand::whereHas('ecus', fn($q) => $q->whereHas('smartPatchGroups'))
             ->orderBy('name')
             ->get(['uuid', 'name']);
 
@@ -333,7 +351,7 @@ class EcuDetectionController extends Controller
         $this->validate($request, ['brand_uuid' => 'required|exists:brands,uuid']);
 
         $ecus = ECU::where('brand_uuid', $request->brand_uuid)
-            ->whereHas('smartPatches')
+            ->whereHas('smartPatchGroups')
             ->orderBy('name')
             ->get(['uuid', 'name']);
 
@@ -342,22 +360,25 @@ class EcuDetectionController extends Controller
 
     /**
      * GET /user/detect/manual-solutions?ecu_uuid=X
+     *
+     * يعيد الـ groups (نوع الفيكس) المتاحة لهاذا الـ ECU.
+     * كل group = زر واحد للمستخدم بغض النظر عن عدد الـ calibrations بداخله.
      */
     public function getManualSolutions(Request $request)
     {
         $this->validate($request, ['ecu_uuid' => 'required|exists:ecus,uuid']);
 
-        $smartPatches = SmartPatch::where('ecu_uuid', $request->ecu_uuid)
+        $groups = SmartPatchGroup::where('ecu_uuid', $request->ecu_uuid)
             ->whereNull('deleted_at')
             ->with(['module'])
             ->get();
 
-        $solutions = $smartPatches->map(fn($sp) => [
-            'uuid'        => 'sp:' . $sp->uuid,
-            'module_name' => optional($sp->module)->name ?? 'Unknown Module',
-            'module_uuid' => $sp->module_uuid,
-            'is_free'     => (bool) optional($sp->module)->is_free,
-            'price'       => (float) (optional($sp->module)->price ?? 0),
+        $solutions = $groups->map(fn($g) => [
+            'uuid'        => 'spg:' . $g->uuid,   // prefix = smart patch group
+            'module_name' => optional($g->module)->name ?? 'Unknown Module',
+            'module_uuid' => $g->module_uuid,
+            'is_free'     => (bool) optional($g->module)->is_free,
+            'price'       => (float) (optional($g->module)->price ?? 0),
             'source'      => 'smart_patch',
         ]);
 

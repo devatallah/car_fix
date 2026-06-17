@@ -81,6 +81,11 @@ class ECU extends Model
     {
         return $this->hasMany(SmartPatch::class, 'ecu_uuid', 'uuid');
     }
+
+    public function smartPatchGroups()
+    {
+        return $this->hasMany(SmartPatchGroup::class, 'ecu_uuid', 'uuid');
+    }
     
     /*
     |--------------------------------------------------------------------------

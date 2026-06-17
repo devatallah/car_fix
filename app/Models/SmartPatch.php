@@ -18,12 +18,13 @@ class SmartPatch extends Model
     protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
     protected $appends = ['ecu_name', 'brand_name', 'module_name'];
     protected $casts = [
-        'file_size'      => 'integer',
-        'patches_count'  => 'integer',
-        'wildcard_count' => 'integer',
-        'context_size'   => 'integer',
-        'gap_tolerance'  => 'integer',
+        'file_size'           => 'integer',
+        'patches_count'       => 'integer',
+        'wildcard_count'      => 'integer',
+        'context_size'        => 'integer',
+        'gap_tolerance'       => 'integer',
         'ecu_software_number' => 'string',
+        'group_uuid'          => 'string',
     ];
 
     public static function boot()
@@ -40,6 +41,11 @@ class SmartPatch extends Model
     }
 
     // ─── Relations ────────────────────────────────────────────────────────────
+
+    public function group()
+    {
+        return $this->belongsTo(SmartPatchGroup::class, 'group_uuid', 'uuid')->withTrashed();
+    }
 
     public function ecu()
     {

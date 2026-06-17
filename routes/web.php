@@ -320,10 +320,17 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
 
     Route::group(['prefix' => 'smart_patches'], function () {
         Route::get('/', [SmartPatchController::class, 'index']);
-        Route::post('/', [SmartPatchController::class, 'store']);
-        Route::delete('/{uuid}', [SmartPatchController::class, 'destroy']);
-        Route::get('/indexTable', [SmartPatchController::class, 'indexTable']);
         Route::get('/ecus-by-brand', [SmartPatchController::class, 'getEcusByBrand']);
+
+        // Groups
+        Route::post('/groups', [SmartPatchController::class, 'storeGroup']);
+        Route::delete('/groups/{group_uuid}', [SmartPatchController::class, 'destroyGroup']);
+        Route::get('/groups/indexTable', [SmartPatchController::class, 'groupsTable']);
+
+        // Calibrations under a group
+        Route::post('/groups/{group_uuid}/calibrations', [SmartPatchController::class, 'storeCalibration']);
+        Route::get('/groups/{group_uuid}/calibrations/indexTable', [SmartPatchController::class, 'calibrationsTable']);
+        Route::delete('/calibrations/{uuid}', [SmartPatchController::class, 'destroyCalibration']);
     });
 });
 

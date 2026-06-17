@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ECU;
 use App\Models\Module;
 use App\Models\SmartPatch;
+use App\Models\SmartPatchGroup;
 use App\Services\SmartPatchExtractor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -28,18 +29,46 @@ class SmartPatchController extends Controller
         return view('portals.admin.smart_patches.index', compact('ecus', 'modules'));
     }
 
+    // ─────────────────────────────────────────────────────────────────────────
+    // GROUP endpoints
+    // ─────────────────────────────────────────────────────────────────────────
+
     /**
-     * Upload 3 binary files, run the extractor, save the patch_map.
-     * POST /admin/smart_patches
+     * Create a new Smart Patch Group (ECU + Fix Type).
+     * POST /admin/smart_patches/groups
      */
-    public function store(Request $request)
+    public function storeGroup(Request $request)
     {
         $this->validate($request, [
             'ecu_uuid'    => 'required|exists:ecus,uuid',
             'module_uuid' => 'required|exists:modules,uuid',
-            'ori1'        => 'required|file',
-            'mod'         => 'required|file',
-            'ori2'        => 'required|file',
+        ]);
+
+        $group = SmartPatchGroup::create([
+            'ecu_uuid'    => $request->ecu_uuid,
+            'module_uuid' => $request->module_uuid,
+        ]);
+
+        return response()->json([
+            'status'      => true,
+            'group_uuid'  => $group->uuid,
+            'ecu_name'    => $group->ecu_name,
+            'module_name' => $group->module_name,
+        ]);
+    }
+
+    /**
+     * Add a calibration file-set to an existing group.
+     * POST /admin/smart_patches/groups/{group_uuid}/calibrations
+     */
+    public function storeCalibration(Request $request, string $groupUuid)
+    {
+        $group = SmartPatchGroup::where('uuid', $groupUuid)->firstOrFail();
+
+        $this->validate($request, [
+            'ori1' => 'required|file',
+            'mod'  => 'required|file',
+            'ori2' => 'required|file',
         ]);
 
         try {
@@ -52,8 +81,9 @@ class SmartPatchController extends Controller
             $result = $this->extractor->extract($ori1Content, $modContent, $ori2Content);
 
             $patch = SmartPatch::create([
-                'ecu_uuid'             => $request->ecu_uuid,
-                'module_uuid'          => $request->module_uuid,
+                'group_uuid'           => $group->uuid,
+                'ecu_uuid'             => $group->ecu_uuid,
+                'module_uuid'          => $group->module_uuid,
                 'ecu_software_number'  => $result['ecu_software_number'],
                 'file_size'            => $result['file_size'],
                 'patch_map'            => json_encode($result),
@@ -63,20 +93,15 @@ class SmartPatchController extends Controller
                 'gap_tolerance'        => $this->extractor->getGapTolerance(),
             ]);
 
-            if ($request->ajax()) {
-                return response()->json([
-                    'status'               => true,
-                    'uuid'                 => $patch->uuid,
-                    'ecu_software_number'  => $result['ecu_software_number'],
-                    'patches_count'        => $result['patches_count'],
-                    'wildcard_count'       => $result['wildcard_count'],
-                    'clusters_count'       => count($result['clusters']),
-                    'file_size'            => $result['file_size'],
-                ]);
-            }
-
-            Session::flash('success_message', 'Smart patch created successfully.');
-            return redirect()->back();
+            return response()->json([
+                'status'              => true,
+                'uuid'                => $patch->uuid,
+                'ecu_software_number' => $result['ecu_software_number'],
+                'patches_count'       => $result['patches_count'],
+                'wildcard_count'      => $result['wildcard_count'],
+                'clusters_count'      => count($result['clusters']),
+                'file_size'           => $result['file_size'],
+            ]);
 
         } catch (\InvalidArgumentException $e) {
             return response()->json(['status' => false, 'message' => $e->getMessage()], 422);
@@ -85,15 +110,36 @@ class SmartPatchController extends Controller
         }
     }
 
-    public function destroy(string $uuid)
+    /**
+     * Delete a whole group and all its calibrations.
+     * DELETE /admin/smart_patches/groups/{group_uuid}
+     */
+    public function destroyGroup(string $groupUuid)
     {
-        SmartPatch::whereIn('uuid', explode(',', $uuid))->delete();
+        $group = SmartPatchGroup::where('uuid', $groupUuid)->firstOrFail();
+        SmartPatch::where('group_uuid', $group->uuid)->delete();
+        $group->delete();
+
         return response()->json(['status' => true]);
     }
 
-    public function indexTable(Request $request)
+    /**
+     * Delete a single calibration.
+     * DELETE /admin/smart_patches/calibrations/{uuid}
+     */
+    public function destroyCalibration(string $uuid)
     {
-        $records = SmartPatch::with(['ecu.brand', 'module'])->orderByDesc('id');
+        SmartPatch::where('uuid', $uuid)->delete();
+        return response()->json(['status' => true]);
+    }
+
+    /**
+     * DataTable: list all groups.
+     * GET /admin/smart_patches/groups/indexTable
+     */
+    public function groupsTable(Request $request)
+    {
+        $records = SmartPatchGroup::with(['ecu.brand', 'module'])->orderByDesc('id');
 
         return DataTables::of($records)
             ->filter(function ($query) use ($request) {
@@ -104,13 +150,28 @@ class SmartPatchController extends Controller
                     $query->where('module_uuid', $request->module_uuid);
                 }
             })
-            ->addColumn('ecu_name',   fn($r) => optional($r->ecu)->name)
-            ->addColumn('brand_name', fn($r) => optional(optional($r->ecu)->brand)->name)
-            ->addColumn('module_name', fn($r) => optional($r->module)->name)
+            ->addColumn('ecu_name',            fn($r) => optional($r->ecu)->name)
+            ->addColumn('brand_name',           fn($r) => optional(optional($r->ecu)->brand)->name)
+            ->addColumn('module_name',          fn($r) => optional($r->module)->name)
+            ->addColumn('calibrations_count',   fn($r) => $r->calibrations()->count())
             ->addColumn('action', function ($r) {
-                $s  = '<button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="' . $r->uuid . '">';
-                $s .= 'Delete</button>';
-                return $s;
+                return '<button class="btn btn-sm btn-outline-primary add-calibration-btn" data-group="' . $r->uuid . '">+ Calibration</button> '
+                    . '<button class="btn btn-sm btn-outline-danger delete-group-btn" data-id="' . $r->uuid . '">Delete</button>';
+            })
+            ->make(true);
+    }
+
+    /**
+     * DataTable: list calibrations inside a group.
+     * GET /admin/smart_patches/groups/{group_uuid}/calibrations/indexTable
+     */
+    public function calibrationsTable(Request $request, string $groupUuid)
+    {
+        $records = SmartPatch::where('group_uuid', $groupUuid)->orderByDesc('id');
+
+        return DataTables::of($records)
+            ->addColumn('action', function ($r) {
+                return '<button class="btn btn-sm btn-outline-danger delete-calibration-btn" data-id="' . $r->uuid . '">Delete</button>';
             })
             ->make(true);
     }
