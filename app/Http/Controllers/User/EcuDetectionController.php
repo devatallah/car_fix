@@ -92,36 +92,17 @@ class EcuDetectionController extends Controller
             $swVersion     = $aiAnalysis['sw_version']     ?? null;
             $hwVersion     = $aiAnalysis['hw_version']     ?? null;
 
-            // جلب الـ Scripts — فلترة ذكية متعددة المستويات
-            $scripts = $this->findMatchingScripts($matchedEcu, $fileSize, $partNumber, $calibrationId, $swVersion);
-
-            // جلب الـ Smart Patches المطابقة (ECU + file_size)
+            // جلب الـ Smart Patches المطابقة فقط (ECU + file_size)
             $smartPatches = $this->findMatchingSmartPatches($matchedEcu, $fileSize);
 
-            // دمج الـ modifications من المصدرين
-            $modifications = collect();
-
-            $modifications = $modifications->merge(
-                $scripts->map(fn($script) => [
-                    'uuid'        => $script->uuid,              // UUID عادي = script
-                    'module_name' => optional($script->module)->name ?? 'Unknown Module',
-                    'module_uuid' => $script->module_uuid,
-                    'is_free'     => (bool) optional($script->module)->is_free,
-                    'price'       => (float) (optional($script->module)->price ?? 0),
-                    'source'      => 'script',
-                ])
-            );
-
-            $modifications = $modifications->merge(
-                $smartPatches->map(fn($sp) => [
-                    'uuid'        => 'sp:' . $sp->uuid,          // prefix sp: = smart patch
-                    'module_name' => optional($sp->module)->name ?? 'Unknown Module',
-                    'module_uuid' => $sp->module_uuid,
-                    'is_free'     => (bool) optional($sp->module)->is_free,
-                    'price'       => (float) (optional($sp->module)->price ?? 0),
-                    'source'      => 'smart_patch',
-                ])
-            );
+            $modifications = $smartPatches->map(fn($sp) => [
+                'uuid'        => 'sp:' . $sp->uuid,
+                'module_name' => optional($sp->module)->name ?? 'Unknown Module',
+                'module_uuid' => $sp->module_uuid,
+                'is_free'     => (bool) optional($sp->module)->is_free,
+                'price'       => (float) (optional($sp->module)->price ?? 0),
+                'source'      => 'smart_patch',
+            ]);
 
             // بيانات السيارة — تجي من تحليل الملف مباشرة
             $carInfo = [
@@ -382,30 +363,22 @@ class EcuDetectionController extends Controller
      */
     public function getBrands()
     {
-        // Brands that have ecus with scripts OR smart patches
-        $brands = Brand::whereHas('ecus', function ($q) {
-            $q->where(function ($inner) {
-                $inner->whereHas('scripts')
-                      ->orWhereHas('smartPatches');
-            });
-        })->orderBy('name')->get(['uuid', 'name']);
+        $brands = Brand::whereHas('ecus', fn($q) => $q->whereHas('smartPatches'))
+            ->orderBy('name')
+            ->get(['uuid', 'name']);
 
         return response()->json(['status' => true, 'data' => $brands]);
     }
 
     /**
      * GET /user/detect/ecus?brand_uuid=X
-     * ECUs for a specific brand that have scripts or smart patches.
      */
     public function getEcus(Request $request)
     {
         $this->validate($request, ['brand_uuid' => 'required|exists:brands,uuid']);
 
         $ecus = ECU::where('brand_uuid', $request->brand_uuid)
-            ->where(function ($q) {
-                $q->whereHas('scripts')
-                  ->orWhereHas('smartPatches');
-            })
+            ->whereHas('smartPatches')
             ->orderBy('name')
             ->get(['uuid', 'name']);
 
@@ -414,41 +387,24 @@ class EcuDetectionController extends Controller
 
     /**
      * GET /user/detect/manual-solutions?ecu_uuid=X
-     * Available solutions from both scripts and smart patches.
      */
     public function getManualSolutions(Request $request)
     {
         $this->validate($request, ['ecu_uuid' => 'required|exists:ecus,uuid']);
-
-        $scripts = Script::where('ecu_uuid', $request->ecu_uuid)
-            ->whereNull('deleted_at')
-            ->with(['module'])
-            ->get();
 
         $smartPatches = SmartPatch::where('ecu_uuid', $request->ecu_uuid)
             ->whereNull('deleted_at')
             ->with(['module'])
             ->get();
 
-        $solutions = collect();
-
-        $solutions = $solutions->merge($scripts->map(fn($s) => [
-            'uuid'        => $s->uuid,
-            'module_name' => optional($s->module)->name ?? 'Unknown Module',
-            'module_uuid' => $s->module_uuid,
-            'is_free'     => (bool) optional($s->module)->is_free,
-            'price'       => (float) (optional($s->module)->price ?? 0),
-            'source'      => 'script',
-        ]));
-
-        $solutions = $solutions->merge($smartPatches->map(fn($sp) => [
+        $solutions = $smartPatches->map(fn($sp) => [
             'uuid'        => 'sp:' . $sp->uuid,
             'module_name' => optional($sp->module)->name ?? 'Unknown Module',
             'module_uuid' => $sp->module_uuid,
             'is_free'     => (bool) optional($sp->module)->is_free,
             'price'       => (float) (optional($sp->module)->price ?? 0),
             'source'      => 'smart_patch',
-        ]));
+        ]);
 
         return response()->json(['status' => true, 'data' => $solutions->values()]);
     }
